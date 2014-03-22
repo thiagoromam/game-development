@@ -1,4 +1,2 @@
-HLSLExperiments
-===============
-
 HLSL Experiments
+===============
