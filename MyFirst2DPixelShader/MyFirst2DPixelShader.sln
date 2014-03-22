@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyFirst2DPixelShader", "MyFirst2DPixelShader\MyFirst2DPixelShader\MyFirst2DPixelShader.csproj", "{78813C34-D5BE-4955-B210-ABD089503C2D}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "MyFirst2DPixelShaderContent", "MyFirst2DPixelShader\MyFirst2DPixelShaderContent\MyFirst2DPixelShaderContent.contentproj", "{419DE108-3414-4292-9A44-FAE03D4B8490}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{78813C34-D5BE-4955-B210-ABD089503C2D}.Debug|x86.ActiveCfg = Debug|x86
+		{78813C34-D5BE-4955-B210-ABD089503C2D}.Debug|x86.Build.0 = Debug|x86
+		{78813C34-D5BE-4955-B210-ABD089503C2D}.Release|x86.ActiveCfg = Release|x86
+		{78813C34-D5BE-4955-B210-ABD089503C2D}.Release|x86.Build.0 = Release|x86
+		{419DE108-3414-4292-9A44-FAE03D4B8490}.Debug|x86.ActiveCfg = Debug|x86
+		{419DE108-3414-4292-9A44-FAE03D4B8490}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
