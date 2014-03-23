@@ -1,3 +1,8 @@
+/* Articles:
+http://blog.josack.com/2011/07/my-first-2d-pixel-shaders-part-1.html
+http://blog.josack.com/2011/07/my-first-2d-pixel-shaders-part-2.html
+*/
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -33,7 +38,11 @@ namespace MyFirst2DPixelShader
             {
                 Content.Load<Effect>("GrayScaleEffect"),
                 Content.Load<Effect>("HighContrastEffect"),
-                Content.Load<Effect>("NegativeEffect")
+                Content.Load<Effect>("NegativeEffect"),
+                Content.Load<Effect>("CoordinateBasedEffect"),
+                Content.Load<Effect>("180RotateEffect"),
+                Content.Load<Effect>("HorizontalMirrorEffect"),
+                Content.Load<Effect>("GradientEffect")
             };
         }
 
