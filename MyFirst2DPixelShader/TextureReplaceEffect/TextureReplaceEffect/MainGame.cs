@@ -1,18 +1,16 @@
-/* http://blog.josack.com/2011/08/my-first-2d-pixel-shaders-part-3.html */
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace CuttingEffect
+namespace TextureReplaceEffect
 {
     public class MainGame : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Texture2D _texture;
+        private Texture2D _surgeTexture;
         private Effect _effect;
-        private float _visiblePercent;
+        private Texture2D _rainbowTexture;
 
         public MainGame()
         {
@@ -24,8 +22,10 @@ namespace CuttingEffect
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _texture = Content.Load<Texture2D>("surge");
-            _effect = Content.Load<Effect>("CuttingEffect");
+            _surgeTexture = Content.Load<Texture2D>("surge");
+            _rainbowTexture = Content.Load<Texture2D>("rainbow");
+            _effect = Content.Load<Effect>("TextureReplaceEffect");
+            _effect.Parameters["rainbow"].SetValue(_rainbowTexture);
         }
 
         protected override void Update(GameTime gameTime)
@@ -33,14 +33,6 @@ namespace CuttingEffect
             var state = Keyboard.GetState();
             if (state.IsKeyDown(Keys.Escape))
                 Exit();
-
-            if (state.IsKeyDown(Keys.A))
-                _visiblePercent -= (float) gameTime.ElapsedGameTime.TotalSeconds*0.5f;
-            else if (state.IsKeyDown(Keys.D))
-                _visiblePercent += (float) gameTime.ElapsedGameTime.TotalSeconds*0.5f;
-
-            _visiblePercent = MathHelper.Clamp(_visiblePercent, 0, 100);
-            _effect.Parameters["visiblePercent"].SetValue(_visiblePercent);
 
             base.Update(gameTime);
         }
@@ -50,11 +42,12 @@ namespace CuttingEffect
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            
+            _spriteBatch.Draw(_surgeTexture, Vector2.Zero, Color.White);
 
             _effect.CurrentTechnique.Passes[0].Apply();
 
-            _spriteBatch.Draw(_texture, Vector2.Zero, Color.White);
-            _spriteBatch.Draw(_texture, new Vector2(50, 0), Color.White);
+            _spriteBatch.Draw(_surgeTexture, new Vector2(50, 0), Color.White);
             
             _spriteBatch.End();
 
