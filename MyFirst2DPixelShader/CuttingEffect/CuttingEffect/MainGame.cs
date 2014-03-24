@@ -12,7 +12,7 @@ namespace CuttingEffect
         private SpriteBatch _spriteBatch;
         private Texture2D _texture;
         private Effect _effect;
-        private float _visiblePercent;
+        private float _visiblePercent = .5f;
 
         public MainGame()
         {
@@ -51,9 +51,10 @@ namespace CuttingEffect
 
             _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
+            _spriteBatch.Draw(_texture, Vector2.Zero, Color.White);
+
             _effect.CurrentTechnique.Passes[0].Apply();
 
-            _spriteBatch.Draw(_texture, Vector2.Zero, Color.White);
             _spriteBatch.Draw(_texture, new Vector2(50, 0), Color.White);
             
             _spriteBatch.End();

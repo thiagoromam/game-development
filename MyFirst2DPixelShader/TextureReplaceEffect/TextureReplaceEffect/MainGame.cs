@@ -1,3 +1,5 @@
+/* http://blog.josack.com/2011/08/my-first-2d-pixel-shaders-part-3.html */
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
