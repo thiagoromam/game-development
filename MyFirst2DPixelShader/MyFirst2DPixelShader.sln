@@ -5,7 +5,9 @@ VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyFirst2DPixelShader", "MyFirst2DPixelShader\MyFirst2DPixelShader\MyFirst2DPixelShader.csproj", "{78813C34-D5BE-4955-B210-ABD089503C2D}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "MyFirst2DPixelShaderContent", "MyFirst2DPixelShader\MyFirst2DPixelShaderContent\MyFirst2DPixelShaderContent.contentproj", "{419DE108-3414-4292-9A44-FAE03D4B8490}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedContent", "MyFirst2DPixelShader\MyFirst2DPixelShaderContent\SharedContent.contentproj", "{419DE108-3414-4292-9A44-FAE03D4B8490}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CuttingEffect", "CuttingEffect\CuttingEffect\CuttingEffect.csproj", "{9167C967-997E-4C75-A27B-D923D0855971}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +21,10 @@ Global
 		{78813C34-D5BE-4955-B210-ABD089503C2D}.Release|x86.Build.0 = Release|x86
 		{419DE108-3414-4292-9A44-FAE03D4B8490}.Debug|x86.ActiveCfg = Debug|x86
 		{419DE108-3414-4292-9A44-FAE03D4B8490}.Release|x86.ActiveCfg = Release|x86
+		{9167C967-997E-4C75-A27B-D923D0855971}.Debug|x86.ActiveCfg = Debug|x86
+		{9167C967-997E-4C75-A27B-D923D0855971}.Debug|x86.Build.0 = Debug|x86
+		{9167C967-997E-4C75-A27B-D923D0855971}.Release|x86.ActiveCfg = Release|x86
+		{9167C967-997E-4C75-A27B-D923D0855971}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
