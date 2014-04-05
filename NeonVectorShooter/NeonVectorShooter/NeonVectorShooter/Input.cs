@@ -62,5 +62,44 @@ namespace NeonVectorShooter
 
             return direction;
         }
+
+        public static Vector2 GetAimDirection()
+        {
+            if (_isAimingWithMouse)
+                return GetMouseAimDirection();
+
+            var direction = _gamePadState.ThumbSticks.Right;
+            direction.Y *= -1;
+
+            if (_keyboardState.IsKeyDown(Keys.Left))
+                direction.X -= 1;
+            else if (_keyboardState.IsKeyDown(Keys.Right))
+                direction.X += 1;
+
+            if (_keyboardState.IsKeyDown(Keys.Up))
+                direction.Y -= 1;
+            else if (_keyboardState.IsKeyDown(Keys.Down))
+                direction.Y += 1;
+
+            if (direction != Vector2.Zero)
+                direction.Normalize();
+
+            return direction;
+        }
+
+        private static Vector2 GetMouseAimDirection()
+        {
+            var direction = MousePosition - PlayerShip.Instance.Position;
+
+            if (direction != Vector2.Zero)
+                direction.Normalize();
+
+            return direction;
+        }
+
+        public static bool WasBombButtonPressed()
+        {
+            return WasButtonPressed(Buttons.LeftTrigger) || WasButtonPressed(Buttons.RightTrigger) || WasKeyPressed(Keys.Space);
+        }
     }
 }

@@ -47,6 +47,7 @@ namespace NeonVectorShooter
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            Input.Update();
             EntityManager.Update();
 
             base.Update(gameTime);
@@ -58,6 +59,7 @@ namespace NeonVectorShooter
 
             _spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
             EntityManager.Draw(_spriteBatch);
+            _spriteBatch.Draw(Art.Pointer, Input.MousePosition, Color.White);
             _spriteBatch.End();
 
             base.Draw(gameTime);
