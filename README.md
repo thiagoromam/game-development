@@ -1,2 +1,2 @@
-HLSL Experiments
+Game Development Experiments
 ===============
