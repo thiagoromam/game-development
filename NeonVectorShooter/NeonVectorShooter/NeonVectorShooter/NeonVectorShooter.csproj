@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="Art.cs" />
     <Compile Include="Bullet.cs" />
+    <Compile Include="Enemy.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="EntityManager.cs" />
     <Compile Include="Extensions.cs" />
