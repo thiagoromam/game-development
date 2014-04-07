@@ -15,6 +15,11 @@ namespace NeonVectorShooter
             return new Point((int)value.X, (int)value.Y);
         }
 
+        public static Vector2 ScaleTo(this Vector2 vector, float length)
+        {
+            return vector * (length / vector.Length());
+        }
+
         public static float NextFloat(this Random random, float minValue, float maxValue)
         {
             return (float)random.NextDouble() * (maxValue - minValue) + minValue;

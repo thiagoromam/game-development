@@ -6,6 +6,8 @@ namespace NeonVectorShooter
 {
     public static class EntityManager
     {
+        private static readonly List<Enemy> Enemies;
+        private static readonly List<Bullet> Bullets; 
         private static readonly List<Entity> Entities;
         private static readonly List<Entity> AddedEntities;
         private static bool _isUpdating;
@@ -17,6 +19,8 @@ namespace NeonVectorShooter
 
         static EntityManager()
         {
+            Enemies = new List<Enemy>();
+            Bullets = new List<Bullet>();
             Entities = new List<Entity>();
             AddedEntities = new List<Entity>();
         }
@@ -24,9 +28,25 @@ namespace NeonVectorShooter
         public static void Add(Entity entity)
         {
             if (!_isUpdating)
-                Entities.Add(entity);
+                AddEntity(entity);
             else
                 AddedEntities.Add(entity);
+        }
+
+        private static void AddEntity(Entity entity)
+        {
+            Entities.Add(entity);
+
+            var enemy = entity as Enemy;
+            if (enemy != null)
+            {
+                Enemies.Add(enemy);
+                return;
+            }
+
+            var bullet = entity as Bullet;
+            if (bullet != null) 
+                Bullets.Add(bullet);
         }
 
         public static void Update()

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,6 +7,8 @@ namespace NeonVectorShooter
 {
     public class Enemy : Entity
     {
+        private static Random _random = new Random();
+
         private int _timeUntilStart;
         private readonly List<IEnumerator<int>> _behaviors;
 
@@ -50,7 +52,7 @@ namespace NeonVectorShooter
 
         public void AddBehavior(IEnumerable<int> behavior)
         {
-            _behaviors.Add(behavior);
+            _behaviors.Add(behavior.GetEnumerator());
         }
 
         private void ApplyBehaviors()
@@ -72,6 +74,48 @@ namespace NeonVectorShooter
 
                 yield return 0;
             }
+        }
+
+        public IEnumerable<int> MoveRandomly()
+        {
+            var direction = _random.NextFloat(0, MathHelper.TwoPi);
+
+            while (true)
+            {
+                direction += _random.NextFloat(-0.1f, 0.1f);
+                direction = MathHelper.WrapAngle(direction);
+
+                for (var i = 0; i < 6; ++i)
+                {
+                    Velocity += MathUtil.FromPolar(direction, 0.4f);
+                    Orientation -= 0.05f;
+
+                    var bounds = GameRoot.Viewport.Bounds;
+                    bounds.Inflate(-Image.Width, Image.Height);
+
+                    if (bounds.Contains(Position.ToPoint()))
+                    {
+                        direction = (GameRoot.ScreenSize / 2 - Position).ToAngle();
+                        direction += _random.NextFloat(-MathHelper.PiOver2, MathHelper.PiOver2);
+                    }
+                    
+                    yield return 0;
+                }
+            }
+        }
+
+        public static Enemy CreateSeeker(Vector2 position)
+        {
+            var enemy = new Enemy(Art.Seeker, position);
+            enemy.AddBehavior(enemy.FollowPlayer());
+            return enemy;
+        }
+
+        public static Enemy CreateWanderer(Vector2 position)
+        {
+            var enemy = new Enemy(Art.Wanderer, position);
+            enemy.AddBehavior(enemy.MoveRandomly());
+            return enemy;
         }
     }
 }
