@@ -117,5 +117,11 @@ namespace NeonVectorShooter
             enemy.AddBehavior(enemy.MoveRandomly());
             return enemy;
         }
+
+        public void HandleCollision(Entity other)
+        {
+            var d = Position - other.Position;
+            Velocity += 10 * d / (d.LengthSquared() + 1);
+        }
     }
 }

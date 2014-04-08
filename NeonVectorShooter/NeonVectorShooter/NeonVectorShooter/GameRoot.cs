@@ -49,6 +49,7 @@ namespace NeonVectorShooter
 
             Input.Update();
             EntityManager.Update();
+            EnemySpawner.Update();
 
             base.Update(gameTime);
         }

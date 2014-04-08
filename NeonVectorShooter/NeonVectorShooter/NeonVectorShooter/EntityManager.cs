@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 // ReSharper disable ForCanBeConvertedToForeach
@@ -53,21 +56,64 @@ namespace NeonVectorShooter
         {
             _isUpdating = true;
 
+            HandleCollisions();
+
             for (var i = 0; i < Entities.Count; ++i)
                 Entities[i].Update();
 
             _isUpdating = false;
 
-            Entities.AddRange(AddedEntities);
+            AddedEntities.ForEach(AddEntity);
             AddedEntities.Clear();
 
             Entities.RemoveAll(e => e.IsExpired);
+            Enemies.RemoveAll(e => e.IsExpired);
+            Bullets.RemoveAll(e => e.IsExpired);
         }
 
         public static void Draw(SpriteBatch spriteBatch)
         {
             for (var i = 0; i < Entities.Count; ++i)
                 Entities[i].Draw(spriteBatch);
+        }
+
+        public static bool IsColliding(Entity a, Entity b)
+        {
+            if (a.IsExpired || b.IsExpired)
+                return false;
+
+            var radius = a.Radius + b.Radius;
+            return Vector2.DistanceSquared(a.Position, b.Position) < Math.Pow(radius, 2);
+        }
+
+        public static void HandleCollisions()
+        {
+            for (var i = 0; i < Enemies.Count; i++)
+            {
+                for (var j = i + 1; j < Enemies.Count; j++)
+                {
+                    if (!IsColliding(Enemies[i], Enemies[j])) continue;
+                    Enemies[i].HandleCollision(Enemies[j]);
+                    Enemies[j].HandleCollision(Enemies[i]);
+                }
+            }
+
+            for (var i = 0; i < Enemies.Count; i++)
+            {
+                for (var j = i + 1; j < Bullets.Count; j++)
+                {
+                    if (!IsColliding(Enemies[i], Bullets[j])) continue;
+                    Enemies[i].WasShot();
+                    Bullets[j].IsExpired = true;
+                }
+            }
+
+            if (Enemies.Any(e => e.IsActive && IsColliding(e, PlayerShip.Instance)))
+            {
+                PlayerShip.Instance.Kill();
+                EnemySpawner.Reset();
+                Enemies.ForEach(e => e.WasShot());
+            }
         }
     }
 }

@@ -24,5 +24,10 @@ namespace NeonVectorShooter
         {
             return (float)random.NextDouble() * (maxValue - minValue) + minValue;
         }
+
+        public static Vector2 Next(this Random random, Vector2 vector)
+        {
+            return new Vector2(random.Next((int)vector.X), random.Next((int)vector.Y));
+        }
     }
 }

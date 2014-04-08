@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace NeonVectorShooter
 {
@@ -7,12 +8,17 @@ namespace NeonVectorShooter
     {
         private const int CooldownFrames = 6;
         private int _cooldownRemaining;
-        private Random _random;
+        private readonly Random _random;
+        private int _framesUntilRespaw;
 
         private static PlayerShip _instance;
         public static PlayerShip Instance
         {
             get { return _instance ?? (_instance = new PlayerShip()); }
+        }
+        public bool IsDead
+        {
+            get { return _framesUntilRespaw > 0; }
         }
 
         private PlayerShip()
@@ -25,6 +31,12 @@ namespace NeonVectorShooter
 
         public override void Update()
         {
+            if (IsDead)
+            {
+                _framesUntilRespaw--;
+                return;
+            }
+
             UpdatePosition();
             UpdateFire();
         }
@@ -32,9 +44,9 @@ namespace NeonVectorShooter
         private void UpdatePosition()
         {
             const float speed = 8;
-            Velocity = speed*Input.GetMovimentDirection();
+            Velocity = speed * Input.GetMovimentDirection();
             Position += Velocity;
-            var halfSize = Size/2;
+            var halfSize = Size / 2;
             Position = Vector2.Clamp(Position, halfSize, GameRoot.ScreenSize - halfSize);
 
             if (Velocity.LengthSquared() > 0)
@@ -62,6 +74,17 @@ namespace NeonVectorShooter
 
             if (_cooldownRemaining > 0)
                 _cooldownRemaining--;
+        }
+
+        public void Kill()
+        {
+            _framesUntilRespaw = 60;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (!IsDead)
+                base.Draw(spriteBatch);
         }
     }
 }
