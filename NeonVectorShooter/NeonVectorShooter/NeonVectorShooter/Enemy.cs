@@ -12,6 +12,8 @@ namespace NeonVectorShooter
         private int _timeUntilStart;
         private readonly List<IEnumerator<int>> _behaviors;
 
+        public int PointValue { get; private set; }
+
         public bool IsActive
         {
             get { return _timeUntilStart <= 0; }
@@ -48,6 +50,8 @@ namespace NeonVectorShooter
         public void WasShot()
         {
             IsExpired = true;
+            PlayerStatus.AddPoints(PointValue);
+            PlayerStatus.IncreaseMultiplier();
         }
 
         public void AddBehavior(IEnumerable<int> behavior)
@@ -108,6 +112,7 @@ namespace NeonVectorShooter
         {
             var enemy = new Enemy(Art.Seeker, position);
             enemy.AddBehavior(enemy.FollowPlayer());
+            enemy.PointValue = 2;
             return enemy;
         }
 
@@ -115,6 +120,7 @@ namespace NeonVectorShooter
         {
             var enemy = new Enemy(Art.Wanderer, position);
             enemy.AddBehavior(enemy.MoveRandomly());
+            enemy.PointValue = 1;
             return enemy;
         }
 

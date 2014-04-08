@@ -82,6 +82,7 @@
     <Compile Include="Input.cs" />
     <Compile Include="MathUtil.cs" />
     <Compile Include="PlayerShip.cs" />
+    <Compile Include="PlayerStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="GameRoot.cs" />

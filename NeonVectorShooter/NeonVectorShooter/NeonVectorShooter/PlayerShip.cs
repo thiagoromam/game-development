@@ -33,7 +33,15 @@ namespace NeonVectorShooter
         {
             if (IsDead)
             {
-                _framesUntilRespaw--;
+                if (--_framesUntilRespaw == 0)
+                {
+                    if (PlayerStatus.Lives == 0)
+                    {
+                        PlayerStatus.Reset();
+                        Position = GameRoot.ScreenSize / 2;
+                    }
+                }
+
                 return;
             }
 
@@ -79,6 +87,7 @@ namespace NeonVectorShooter
         public void Kill()
         {
             _framesUntilRespaw = 60;
+            PlayerStatus.RemoveLife();
         }
 
         public override void Draw(SpriteBatch spriteBatch)

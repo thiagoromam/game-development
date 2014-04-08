@@ -50,6 +50,7 @@ namespace NeonVectorShooter
             Input.Update();
             EntityManager.Update();
             EnemySpawner.Update();
+            PlayerStatus.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -59,11 +60,24 @@ namespace NeonVectorShooter
             GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
+            
             EntityManager.Draw(_spriteBatch);
+            
+            _spriteBatch.DrawString(Art.Font, "Lives: " + PlayerStatus.Lives, new Vector2(5), Color.White);
+            DrawRightAlignedString("Score: " + PlayerStatus.Score, 5);
+            DrawRightAlignedString("Multiplier: " + PlayerStatus.Multiplier, 35);
+
             _spriteBatch.Draw(Art.Pointer, Input.MousePosition, Color.White);
+            
             _spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private void DrawRightAlignedString(string text, float y)
+        {
+            var textWidth = Art.Font.MeasureString(text).X;
+            _spriteBatch.DrawString(Art.Font, text, new Vector2(ScreenSize.X - textWidth - 5, y), Color.White);
         }
     }
 }
