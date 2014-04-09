@@ -7,7 +7,7 @@ namespace NeonVectorShooter
 {
     public class Enemy : Entity
     {
-        private static Random _random = new Random();
+        private static readonly Random Random = new Random();
 
         private int _timeUntilStart;
         private readonly List<IEnumerator<int>> _behaviors;
@@ -82,11 +82,11 @@ namespace NeonVectorShooter
 
         public IEnumerable<int> MoveRandomly()
         {
-            var direction = _random.NextFloat(0, MathHelper.TwoPi);
+            var direction = Random.NextFloat(0, MathHelper.TwoPi);
 
             while (true)
             {
-                direction += _random.NextFloat(-0.1f, 0.1f);
+                direction += Random.NextFloat(-0.1f, 0.1f);
                 direction = MathHelper.WrapAngle(direction);
 
                 for (var i = 0; i < 6; ++i)
@@ -100,7 +100,7 @@ namespace NeonVectorShooter
                     if (bounds.Contains(Position.ToPoint()))
                     {
                         direction = (GameRoot.ScreenSize / 2 - Position).ToAngle();
-                        direction += _random.NextFloat(-MathHelper.PiOver2, MathHelper.PiOver2);
+                        direction += Random.NextFloat(-MathHelper.PiOver2, MathHelper.PiOver2);
                     }
                     
                     yield return 0;
@@ -111,7 +111,7 @@ namespace NeonVectorShooter
         public static Enemy CreateSeeker(Vector2 position)
         {
             var enemy = new Enemy(Art.Seeker, position);
-            enemy.AddBehavior(enemy.FollowPlayer());
+            enemy.AddBehavior(enemy.FollowPlayer(0.2f));
             enemy.PointValue = 2;
             return enemy;
         }

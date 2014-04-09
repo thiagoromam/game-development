@@ -67,6 +67,13 @@ namespace NeonVectorShooter
             DrawRightAlignedString("Score: " + PlayerStatus.Score, 5);
             DrawRightAlignedString("Multiplier: " + PlayerStatus.Multiplier, 35);
 
+            if (PlayerStatus.IsGameOver)
+            {
+                var text = string.Format("Game Over\nYour Score: {0}\nHigh Score: {1}", PlayerStatus.Score, PlayerStatus.HighScore);
+                var textSize = Art.Font.MeasureString(text);
+                _spriteBatch.DrawString(Art.Font, text, ScreenSize / 2 - textSize / 2, Color.White);
+            }
+
             _spriteBatch.Draw(Art.Pointer, Input.MousePosition, Color.White);
             
             _spriteBatch.End();

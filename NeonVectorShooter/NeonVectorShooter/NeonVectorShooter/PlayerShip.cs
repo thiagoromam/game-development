@@ -35,7 +35,7 @@ namespace NeonVectorShooter
             {
                 if (--_framesUntilRespaw == 0)
                 {
-                    if (PlayerStatus.Lives == 0)
+                    if (PlayerStatus.IsGameOver)
                     {
                         PlayerStatus.Reset();
                         Position = GameRoot.ScreenSize / 2;
@@ -86,7 +86,7 @@ namespace NeonVectorShooter
 
         public void Kill()
         {
-            _framesUntilRespaw = 60;
+            _framesUntilRespaw = PlayerStatus.IsGameOver ? 300 : 120;
             PlayerStatus.RemoveLife();
         }
 

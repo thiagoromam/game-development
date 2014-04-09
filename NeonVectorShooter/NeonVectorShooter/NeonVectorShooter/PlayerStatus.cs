@@ -1,26 +1,49 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Globalization;
+using System.IO;
+using Microsoft.Xna.Framework;
 
 namespace NeonVectorShooter
 {
     public static class PlayerStatus
     {
+        private const string HighScoreFileName = "highscore.txt";
         private const float MultiplierExpireTime = 0.8f;
         private const int MaxMultiplier = 20;
 
         public static int Lives { get; private set; }
         public static int Score { get; private set; }
         public static int Multiplier { get; private set; }
+        public static int HighScore
+        {
+            get
+            {
+                if (Score > _highScore)
+                    _highScore = Score;
+
+                return _highScore;
+            }
+        }
+
+        public static bool IsGameOver
+        {
+            get { return Lives == 0; }
+        }
 
         private static float _multiplierTimeLeft;
         private static int _scoreForExtraLife;
+        private static int _highScore;
 
         static PlayerStatus()
         {
+            _highScore = LoadHighScore();
             Reset();
         }
 
         public static void Reset()
         {
+            if (Score > _highScore)
+                SaveHighScore(HighScore);
+
             Score = 0;
             Multiplier = 1;
             Lives = 4;
@@ -32,7 +55,7 @@ namespace NeonVectorShooter
         {
             if (Multiplier == 1 || (_multiplierTimeLeft -= (float)gameTime.ElapsedGameTime.TotalSeconds) > 0)
                 return;
-                
+
             _multiplierTimeLeft = MultiplierExpireTime;
             ResetMultiplier();
         }
@@ -42,7 +65,7 @@ namespace NeonVectorShooter
             if (PlayerShip.Instance.IsDead)
                 return;
 
-            Score += basePoints*Multiplier;
+            Score += basePoints * Multiplier;
             while (Score >= _scoreForExtraLife)
             {
                 _scoreForExtraLife += 2000;
@@ -68,6 +91,21 @@ namespace NeonVectorShooter
         public static void RemoveLife()
         {
             Lives--;
+        }
+
+        private static int LoadHighScore()
+        {
+            var score = 0;
+
+            if (File.Exists(HighScoreFileName))
+                int.TryParse(File.ReadAllText(HighScoreFileName), out score);
+
+            return score;
+        }
+
+        private static void SaveHighScore(int score)
+        {
+            File.WriteAllText(HighScoreFileName, score.ToString(CultureInfo.InvariantCulture));
         }
     }
 }
