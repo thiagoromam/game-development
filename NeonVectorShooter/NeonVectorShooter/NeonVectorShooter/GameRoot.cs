@@ -3,6 +3,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace NeonVectorShooter
 {
@@ -34,12 +35,16 @@ namespace NeonVectorShooter
             base.Initialize();
 
             EntityManager.Add(PlayerShip.Instance);
+            
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Play(Sound.Music);
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Art.Load(Content);
+            Sound.Load(Content);
         }
 
         protected override void Update(GameTime gameTime)

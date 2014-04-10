@@ -49,6 +49,7 @@ namespace NeonVectorShooter
 
         public void WasShot()
         {
+            Sound.Explosion.Play(0.5f, Random.NextFloat(-0.2f, 0.2f), 0);
             IsExpired = true;
             PlayerStatus.AddPoints(PointValue);
             PlayerStatus.IncreaseMultiplier();

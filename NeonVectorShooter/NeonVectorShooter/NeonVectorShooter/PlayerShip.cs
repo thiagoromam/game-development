@@ -78,6 +78,8 @@ namespace NeonVectorShooter
 
                 offset = Vector2.Transform(new Vector2(25, 8), aimQuaternion);
                 EntityManager.Add(new Bullet(Position + offset, velocity));
+
+                Sound.Shoot.Play(0.2f, _random.NextFloat(-0.2f, 0.2f), 0);
             }
 
             if (_cooldownRemaining > 0)

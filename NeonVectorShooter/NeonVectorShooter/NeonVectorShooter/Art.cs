@@ -14,12 +14,12 @@ namespace NeonVectorShooter
 
         public static void Load(ContentManager content)
         {
-            Player = content.Load<Texture2D>("Player");
-            Seeker = content.Load<Texture2D>("Seeker");
-            Wanderer = content.Load<Texture2D>("Wanderer");
-            Bullet = content.Load<Texture2D>("Bullet");
-            Pointer = content.Load<Texture2D>("Pointer");
-            Font = content.Load<SpriteFont>("Font");
+            Player = content.Load<Texture2D>("Arts/Player");
+            Seeker = content.Load<Texture2D>("Arts/Seeker");
+            Wanderer = content.Load<Texture2D>("Arts/Wanderer");
+            Bullet = content.Load<Texture2D>("Arts/Bullet");
+            Pointer = content.Load<Texture2D>("Arts/Pointer");
+            Font = content.Load<SpriteFont>("Arts/Font");
         }
     }
 }
