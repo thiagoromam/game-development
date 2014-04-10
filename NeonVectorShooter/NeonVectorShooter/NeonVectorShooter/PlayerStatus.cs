@@ -41,8 +41,8 @@ namespace NeonVectorShooter
 
         public static void Reset()
         {
-            if (Score > _highScore)
-                SaveHighScore(HighScore);
+            if (Score > 0 && Score == HighScore)
+                SaveHighScore(Score);
 
             Score = 0;
             Multiplier = 1;
