@@ -1,32 +1,38 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using NeonVectorShooter.Entities;
+using NeonVectorShooter.Helpers;
 
-namespace NeonVectorShooter
+namespace NeonVectorShooter.Managers
 {
     public static class EnemySpawner
     {
         private static readonly Random Random;
-        private static float _inverseSpawnChance;
+        private static float _inverseSpawnEnemyChance;
+        private const int InverseSpawnBlackHoleChance = 200;
 
         static EnemySpawner()
         {
             Random = new Random();
-            _inverseSpawnChance = 60;
+            _inverseSpawnEnemyChance = 60;
         }
 
         public static void Update()
         {
             if (!PlayerShip.Instance.IsDead && EntityManager.Count < 200)
             {
-                if (Random.Next((int)_inverseSpawnChance) == 0)
+                if (Random.Next((int)_inverseSpawnEnemyChance) == 0)
                     EntityManager.Add(Enemy.CreateSeeker(GetSpawnPosition()));
 
-                if (Random.Next((int)_inverseSpawnChance) == 0)
+                if (Random.Next((int)_inverseSpawnEnemyChance) == 0)
                     EntityManager.Add(Enemy.CreateWanderer(GetSpawnPosition()));
+
+                if (EntityManager.BlackHolesCount < 2 && Random.Next(InverseSpawnBlackHoleChance) == 0)
+                    EntityManager.Add(new BlackHole(GetSpawnPosition()));
             }
 
-            if (_inverseSpawnChance > 20)
-                _inverseSpawnChance -= 0.05f;
+            if (_inverseSpawnEnemyChance > 20)
+                _inverseSpawnEnemyChance -= 0.05f;
         }
 
         private static Vector2 GetSpawnPosition()
@@ -43,7 +49,7 @@ namespace NeonVectorShooter
 
         public static void Reset()
         {
-            _inverseSpawnChance = 60;
+            _inverseSpawnEnemyChance = 60;
         }
     }
 }

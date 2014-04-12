@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace NeonVectorShooter
+namespace NeonVectorShooter.Entities
 {
     public abstract class Entity
     {
@@ -12,6 +12,7 @@ namespace NeonVectorShooter
         public Vector2 Velocity;
         public float Orientation;
         public float Radius = 20;
+        public float Scale = 1;
         public bool IsExpired;
 
         protected Texture2D Image
@@ -26,11 +27,11 @@ namespace NeonVectorShooter
         }
         public Vector2 Size { get; private set; }
 
-        public abstract void Update();
+        public abstract void Update(GameTime gameTime);
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Image, Position, null, Color, Orientation, _origin, 1, SpriteEffects.None, 0);
+            spriteBatch.Draw(Image, Position, null, Color, Orientation, _origin, Scale, SpriteEffects.None, 0);
         }
     }
 }

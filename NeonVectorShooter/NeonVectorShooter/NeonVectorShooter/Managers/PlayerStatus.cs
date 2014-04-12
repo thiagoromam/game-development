@@ -1,8 +1,9 @@
 ﻿using System.Globalization;
 using System.IO;
 using Microsoft.Xna.Framework;
+using NeonVectorShooter.Entities;
 
-namespace NeonVectorShooter
+namespace NeonVectorShooter.Managers
 {
     public static class PlayerStatus
     {

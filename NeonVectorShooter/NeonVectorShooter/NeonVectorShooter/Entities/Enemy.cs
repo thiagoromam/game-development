@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using NeonVectorShooter.Contents;
+using NeonVectorShooter.Helpers;
+using NeonVectorShooter.Managers;
 
-namespace NeonVectorShooter
+namespace NeonVectorShooter.Entities
 {
     public class Enemy : Entity
     {
@@ -29,7 +32,7 @@ namespace NeonVectorShooter
             _behaviors = new List<IEnumerator<int>>();
         }
 
-        public override void Update()
+        public override void Update(GameTime gameTime)
         {
             if (IsActive)
             {

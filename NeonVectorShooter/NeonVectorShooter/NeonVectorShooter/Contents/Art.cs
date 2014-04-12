@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace NeonVectorShooter
+namespace NeonVectorShooter.Contents
 {
     public static class Art
     {
@@ -10,6 +10,7 @@ namespace NeonVectorShooter
         public static Texture2D Wanderer { get; private set; }
         public static Texture2D Bullet { get; private set; }
         public static Texture2D Pointer { get; private set; }
+        public static Texture2D BlackHole { get; private set; }
         public static SpriteFont Font { get; private set; }
 
         public static void Load(ContentManager content)
@@ -19,6 +20,7 @@ namespace NeonVectorShooter
             Wanderer = content.Load<Texture2D>("Arts/Wanderer");
             Bullet = content.Load<Texture2D>("Arts/Bullet");
             Pointer = content.Load<Texture2D>("Arts/Pointer");
+            BlackHole = content.Load<Texture2D>("Arts/BlackHole");
             Font = content.Load<SpriteFont>("Arts/Font");
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace NeonVectorShooter
+namespace NeonVectorShooter.Helpers
 {
     public static class Extensions
     {

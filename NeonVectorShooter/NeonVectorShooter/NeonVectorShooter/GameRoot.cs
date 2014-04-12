@@ -1,9 +1,13 @@
 /* http://gamedevelopment.tutsplus.com/series/cross-platform-vector-shooter-xna--gamedev-10559 */
 
+using BloomPostprocess;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using NeonVectorShooter.Contents;
+using NeonVectorShooter.Entities;
+using NeonVectorShooter.Managers;
 
 namespace NeonVectorShooter
 {
@@ -21,6 +25,7 @@ namespace NeonVectorShooter
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private readonly BloomComponent _bloom;
 
         public GameRoot()
         {
@@ -28,6 +33,10 @@ namespace NeonVectorShooter
             Content.RootDirectory = "Content";
 
             Instance = this;
+
+            _bloom = new BloomComponent(this);
+            Components.Add(_bloom);
+            _bloom.Settings = new BloomSettings(null, 0.25f, 4, 2, 1, 1.5f, 1);
         }
 
         protected override void Initialize()
@@ -53,7 +62,7 @@ namespace NeonVectorShooter
                 Exit();
 
             Input.Update();
-            EntityManager.Update();
+            EntityManager.Update(gameTime);
             EnemySpawner.Update();
             PlayerStatus.Update(gameTime);
 
@@ -62,8 +71,9 @@ namespace NeonVectorShooter
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            _bloom.BeginDraw();
 
+            GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
             
             EntityManager.Draw(_spriteBatch);

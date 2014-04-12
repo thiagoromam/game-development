@@ -1,8 +1,11 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using NeonVectorShooter.Contents;
+using NeonVectorShooter.Helpers;
+using NeonVectorShooter.Managers;
 
-namespace NeonVectorShooter
+namespace NeonVectorShooter.Entities
 {
     public class PlayerShip : Entity
     {
@@ -29,7 +32,7 @@ namespace NeonVectorShooter
             _random = new Random();
         }
 
-        public override void Update()
+        public override void Update(GameTime gameTime)
         {
             if (IsDead)
             {

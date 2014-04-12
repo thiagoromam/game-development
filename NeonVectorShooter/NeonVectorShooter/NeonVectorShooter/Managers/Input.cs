@@ -1,8 +1,9 @@
 ﻿using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using NeonVectorShooter.Entities;
 
-namespace NeonVectorShooter
+namespace NeonVectorShooter.Managers
 {
     public static class Input
     {

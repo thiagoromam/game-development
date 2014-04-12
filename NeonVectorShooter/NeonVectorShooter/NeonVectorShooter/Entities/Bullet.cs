@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using NeonVectorShooter.Contents;
+using NeonVectorShooter.Helpers;
 
-namespace NeonVectorShooter
+namespace NeonVectorShooter.Entities
 {
     public class Bullet : Entity
     {
@@ -13,7 +15,7 @@ namespace NeonVectorShooter
             Radius = 8;
         }
 
-        public override void Update()
+        public override void Update(GameTime gameTime)
         {
             if (Velocity.LengthSquared() > 0)
                 Orientation = Velocity.ToAngle();
