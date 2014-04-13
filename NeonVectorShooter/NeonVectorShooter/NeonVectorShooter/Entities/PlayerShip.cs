@@ -48,20 +48,22 @@ namespace NeonVectorShooter.Entities
                 return;
             }
 
-            UpdatePosition();
             UpdateFire();
+            UpdatePosition();
         }
 
         private void UpdatePosition()
         {
             const float speed = 8;
-            Velocity = speed * Input.GetMovimentDirection();
+            Velocity += speed * Input.GetMovimentDirection();
             Position += Velocity;
             var halfSize = Size / 2;
             Position = Vector2.Clamp(Position, halfSize, GameRoot.ScreenSize - halfSize);
 
             if (Velocity.LengthSquared() > 0)
                 Orientation = Velocity.ToAngle();
+
+            Velocity = Vector2.Zero;
         }
 
         private void UpdateFire()
@@ -76,10 +78,10 @@ namespace NeonVectorShooter.Entities
                 var randomSpreed = _random.NextFloat(-0.04f, 0.04f) + _random.NextFloat(-0.04f, 0.04f);
                 var velocity = MathUtil.FromPolar(aimAngle + randomSpreed, 11);
 
-                var offset = Vector2.Transform(new Vector2(25, -8), aimQuaternion);
+                var offset = Vector2.Transform(new Vector2(35, -8), aimQuaternion);
                 EntityManager.Add(new Bullet(Position + offset, velocity));
 
-                offset = Vector2.Transform(new Vector2(25, 8), aimQuaternion);
+                offset = Vector2.Transform(new Vector2(35, 8), aimQuaternion);
                 EntityManager.Add(new Bullet(Position + offset, velocity));
 
                 Sound.Shoot.Play(0.2f, _random.NextFloat(-0.2f, 0.2f), 0);

@@ -41,13 +41,13 @@ namespace NeonVectorShooter.Entities
             else
             {
                 _timeUntilStart--;
-                Color = Color.White * (1 - _timeUntilStart / 60);
+                Color = Color.White * (1 - _timeUntilStart / 60f);
             }
 
             Position += Velocity;
             Position = Vector2.Clamp(Position, Size / 2, GameRoot.ScreenSize - Size / 2);
 
-            Velocity *= 0.98f;
+            Velocity *= 0.8f;
         }
 
         public void WasShot()
@@ -76,12 +76,15 @@ namespace NeonVectorShooter.Entities
         {
             while (true)
             {
-                Velocity += (PlayerShip.Instance.Position - Position).ScaleTo(acceleration);
+                if (!PlayerShip.Instance.IsDead)
+                    Velocity += (PlayerShip.Instance.Position - Position).ScaleTo(acceleration);
+
                 if (Velocity != Vector2.Zero)
                     Orientation = Velocity.ToAngle();
 
                 yield return 0;
             }
+            // ReSharper disable once FunctionNeverReturns
         }
 
         public IEnumerable<int> MoveRandomly()
@@ -99,23 +102,24 @@ namespace NeonVectorShooter.Entities
                     Orientation -= 0.05f;
 
                     var bounds = GameRoot.Viewport.Bounds;
-                    bounds.Inflate(-Image.Width, Image.Height);
+                    bounds.Inflate(-Image.Width / 2 - 1, Image.Height / 2 - 1);
 
                     if (bounds.Contains(Position.ToPoint()))
                     {
                         direction = (GameRoot.ScreenSize / 2 - Position).ToAngle();
                         direction += Random.NextFloat(-MathHelper.PiOver2, MathHelper.PiOver2);
                     }
-                    
+
                     yield return 0;
                 }
             }
+            // ReSharper disable once FunctionNeverReturns
         }
 
         public static Enemy CreateSeeker(Vector2 position)
         {
             var enemy = new Enemy(Art.Seeker, position);
-            enemy.AddBehavior(enemy.FollowPlayer(0.2f));
+            enemy.AddBehavior(enemy.FollowPlayer());
             enemy.PointValue = 2;
             return enemy;
         }
@@ -132,6 +136,17 @@ namespace NeonVectorShooter.Entities
         {
             var d = Position - other.Position;
             Velocity += 10 * d / (d.LengthSquared() + 1);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (_timeUntilStart > 0)
+            {
+                var factor = _timeUntilStart / 60f;
+                spriteBatch.Draw(Image, Position, null, Color.White * factor, Orientation, Origin, 2 - factor, SpriteEffects.None, 0);
+            }
+
+            base.Draw(spriteBatch);
         }
     }
 }

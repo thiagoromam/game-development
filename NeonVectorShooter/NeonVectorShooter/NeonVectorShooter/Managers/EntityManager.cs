@@ -63,7 +63,9 @@ namespace NeonVectorShooter.Managers
 
             var blackHole = entity as BlackHole;
             if (blackHole != null)
+            {
                 BlackHoles.Add(blackHole);
+            }
         }
 
         public static void Update(GameTime gameTime)
@@ -123,6 +125,9 @@ namespace NeonVectorShooter.Managers
                 }
             }
 
+            if (Enemies.Any(e => e.IsActive && IsColliding(e, PlayerShip.Instance)))
+                KillPlayer();
+
             for (var i = 0; i < BlackHoles.Count; i++)
             {
                 for (var j = 0; j < Enemies.Count; j++)
@@ -142,17 +147,18 @@ namespace NeonVectorShooter.Managers
 
                 if (!BlackHoles[i].IsExpired && IsColliding(BlackHoles[i], PlayerShip.Instance))
                 {
-                    PlayerShip.Instance.Kill();
+                    KillPlayer();
                     break;
                 }
             }
+        }
 
-            if (Enemies.Any(e => e.IsActive && IsColliding(e, PlayerShip.Instance)))
-            {
-                PlayerShip.Instance.Kill();
-                EnemySpawner.Reset();
-                Enemies.ForEach(e => e.WasShot());
-            }
+        private static void KillPlayer()
+        {
+            PlayerShip.Instance.Kill();
+            EnemySpawner.Reset();
+            Enemies.ForEach(e => e.WasShot());
+            BlackHoles.ForEach(b => b.Kill());
         }
 
         public static IEnumerable<Entity> GetNerbyEntities(Vector2 position, float radius)

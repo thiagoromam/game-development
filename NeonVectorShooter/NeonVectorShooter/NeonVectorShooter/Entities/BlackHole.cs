@@ -44,20 +44,17 @@ namespace NeonVectorShooter.Entities
 
             foreach (var entity in entities)
             {
-                Vector2 velocity;
                 if (entity is Bullet)
                 {
-                    velocity = (entity.Position - Position).ScaleTo(0.3f);
+                    entity.Velocity += (entity.Position - Position).ScaleTo(0.3f);
                 }
                 else
                 {
                     var diference = Position - entity.Position;
                     var length = diference.Length();
 
-                    velocity = diference.ScaleTo(MathHelper.Lerp(2, 0, length / 250f));
+                    entity.Velocity += diference.ScaleTo(MathHelper.Lerp(2, 0, length / 250f));
                 }
-
-                entity.Velocity += velocity;
             }
         }
     }

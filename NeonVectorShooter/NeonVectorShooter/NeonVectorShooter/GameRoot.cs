@@ -29,11 +29,10 @@ namespace NeonVectorShooter
 
         public GameRoot()
         {
-            _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-
             Instance = this;
-
+            _graphics = new GraphicsDeviceManager(this) { PreferredBackBufferWidth = 800, PreferredBackBufferHeight = 600 };
+            Content.RootDirectory = "Content";
+            
             _bloom = new BloomComponent(this);
             Components.Add(_bloom);
             _bloom.Settings = new BloomSettings(null, 0.25f, 4, 2, 1, 1.5f, 1);
@@ -44,7 +43,7 @@ namespace NeonVectorShooter
             base.Initialize();
 
             EntityManager.Add(PlayerShip.Instance);
-            
+
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(Sound.Music);
         }
@@ -74,10 +73,15 @@ namespace NeonVectorShooter
             _bloom.BeginDraw();
 
             GraphicsDevice.Clear(Color.Black);
+
             _spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
-            
             EntityManager.Draw(_spriteBatch);
+            _spriteBatch.End();
             
+            base.Draw(gameTime);
+
+            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
+
             _spriteBatch.DrawString(Art.Font, "Lives: " + PlayerStatus.Lives, new Vector2(5), Color.White);
             DrawRightAlignedString("Score: " + PlayerStatus.Score, 5);
             DrawRightAlignedString("Multiplier: " + PlayerStatus.Multiplier, 35);
@@ -90,10 +94,8 @@ namespace NeonVectorShooter
             }
 
             _spriteBatch.Draw(Art.Pointer, Input.MousePosition, Color.White);
-            
-            _spriteBatch.End();
 
-            base.Draw(gameTime);
+            _spriteBatch.End();
         }
 
         private void DrawRightAlignedString(string text, float y)

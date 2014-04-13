@@ -9,12 +9,12 @@ namespace NeonVectorShooter.Managers
     {
         private static readonly Random Random;
         private static float _inverseSpawnEnemyChance;
-        private const int InverseSpawnBlackHoleChance = 200;
+        private const int InverseSpawnBlackHoleChance = 600;
 
         static EnemySpawner()
         {
             Random = new Random();
-            _inverseSpawnEnemyChance = 60;
+            _inverseSpawnEnemyChance = 90;
         }
 
         public static void Update()
@@ -31,8 +31,8 @@ namespace NeonVectorShooter.Managers
                     EntityManager.Add(new BlackHole(GetSpawnPosition()));
             }
 
-            if (_inverseSpawnEnemyChance > 20)
-                _inverseSpawnEnemyChance -= 0.05f;
+            if (_inverseSpawnEnemyChance > 30)
+                _inverseSpawnEnemyChance -= 0.005f;
         }
 
         private static Vector2 GetSpawnPosition()
@@ -49,7 +49,7 @@ namespace NeonVectorShooter.Managers
 
         public static void Reset()
         {
-            _inverseSpawnEnemyChance = 60;
+            _inverseSpawnEnemyChance = 90;
         }
     }
 }
