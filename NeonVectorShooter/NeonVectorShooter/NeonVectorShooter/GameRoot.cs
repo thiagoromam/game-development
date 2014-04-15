@@ -8,11 +8,13 @@ using Microsoft.Xna.Framework.Media;
 using NeonVectorShooter.Contents;
 using NeonVectorShooter.Entities;
 using NeonVectorShooter.Managers;
+using NeonVectorShooter.ParticleSystem;
 
 namespace NeonVectorShooter
 {
     public class GameRoot : Game
     {
+        public static ParticleManager<ParticleState> ParticleManager { get; private set; }
         public static GameRoot Instance { get; private set; }
         public static Viewport Viewport
         {
@@ -32,7 +34,7 @@ namespace NeonVectorShooter
             Instance = this;
             _graphics = new GraphicsDeviceManager(this) { PreferredBackBufferWidth = 800, PreferredBackBufferHeight = 600 };
             Content.RootDirectory = "Content";
-            
+
             _bloom = new BloomComponent(this);
             Components.Add(_bloom);
             _bloom.Settings = new BloomSettings(null, 0.25f, 4, 2, 1, 1.5f, 1);
@@ -46,6 +48,8 @@ namespace NeonVectorShooter
 
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(Sound.Music);
+
+            ParticleManager = new ParticleManager<ParticleState>(1024 * 20, ParticleState.UpdateParticle);
         }
 
         protected override void LoadContent()
@@ -64,6 +68,7 @@ namespace NeonVectorShooter
             EntityManager.Update(gameTime);
             EnemySpawner.Update();
             PlayerStatus.Update(gameTime);
+            ParticleManager.Update();
 
             base.Update(gameTime);
         }
@@ -76,8 +81,9 @@ namespace NeonVectorShooter
 
             _spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
             EntityManager.Draw(_spriteBatch);
+            ParticleManager.Draw(_spriteBatch);
             _spriteBatch.End();
-            
+
             base.Draw(gameTime);
 
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);

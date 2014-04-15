@@ -11,6 +11,7 @@ namespace NeonVectorShooter.Contents
         public static Texture2D Bullet { get; private set; }
         public static Texture2D Pointer { get; private set; }
         public static Texture2D BlackHole { get; private set; }
+        public static Texture2D LineParticle { get; private set; }
         public static SpriteFont Font { get; private set; }
 
         public static void Load(ContentManager content)
@@ -21,6 +22,7 @@ namespace NeonVectorShooter.Contents
             Bullet = content.Load<Texture2D>("Arts/Bullet");
             Pointer = content.Load<Texture2D>("Arts/Pointer");
             BlackHole = content.Load<Texture2D>("Arts/BlackHole");
+            LineParticle = content.Load<Texture2D>("Arts/Laser");
             Font = content.Load<SpriteFont>("Arts/Font");
         }
     }

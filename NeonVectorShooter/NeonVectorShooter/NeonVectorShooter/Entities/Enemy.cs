@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using NeonVectorShooter.Contents;
 using NeonVectorShooter.Helpers;
 using NeonVectorShooter.Managers;
+using NeonVectorShooter.ParticleSystem;
 
 namespace NeonVectorShooter.Entities
 {
@@ -52,10 +53,31 @@ namespace NeonVectorShooter.Entities
 
         public void WasShot()
         {
-            Sound.Explosion.Play(0.5f, Random.NextFloat(-0.2f, 0.2f), 0);
             IsExpired = true;
+
+            var hue1 = Random.NextFloat(0, 6);
+            var hue2 = (hue1 + Random.Next(0, 2)) %6f;
+            var color1 = ColorUtil.HsvToColor(hue1, 0.5f, 1);
+            var color2 = ColorUtil.HsvToColor(hue2, 0.5f, 1);
+
+            for (var i = 0; i < 120; i++)
+            {
+                var speed = 18f * (1f - 1 / Random.NextFloat(1, 10));
+                var state = new ParticleState
+                {
+                    Velocity = Random.Next(speed, speed),
+                    Type = ParticleType.Enemy,
+                    LengthMultiplier = 1
+                };
+
+                var color = Color.Lerp(color1, color2, Random.NextFloat(0, 1));
+                GameRoot.ParticleManager.CreateParticle(Art.LineParticle, Position, color, 190, 1.5f, state);
+            }
+
             PlayerStatus.AddPoints(PointValue);
             PlayerStatus.IncreaseMultiplier();
+
+            Sound.Explosion.Play(0.5f, Random.NextFloat(-0.2f, 0.2f), 0);
         }
 
         public void AddBehavior(IEnumerable<int> behavior)
