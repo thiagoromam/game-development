@@ -24,6 +24,7 @@ namespace NeonVectorShooter
         {
             get { return new Vector2(Viewport.Width, Viewport.Height); }
         }
+        public static GameTime GameTime { get; private set; }
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -64,6 +65,7 @@ namespace NeonVectorShooter
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            GameTime = gameTime;
             Input.Update();
             EntityManager.Update(gameTime);
             EnemySpawner.Update();

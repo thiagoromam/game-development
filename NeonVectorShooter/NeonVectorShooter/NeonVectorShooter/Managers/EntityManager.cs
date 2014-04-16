@@ -12,7 +12,7 @@ namespace NeonVectorShooter.Managers
     {
         private static readonly List<Enemy> Enemies;
         private static readonly List<Bullet> Bullets;
-        private static readonly List<BlackHole> BlackHoles; 
+        public static readonly List<BlackHole> BlackHoles; 
         private static readonly List<Entity> Entities;
         private static readonly List<Entity> AddedEntities;
         private static bool _isUpdating;
@@ -20,10 +20,6 @@ namespace NeonVectorShooter.Managers
         public static int Count
         {
             get { return Entities.Count; }
-        }
-        public static int BlackHolesCount
-        {
-            get { return BlackHoles.Count; }
         }
 
         static EntityManager()

@@ -65,7 +65,7 @@ namespace NeonVectorShooter.Entities
                 var speed = 18f * (1f - 1 / Random.NextFloat(1, 10));
                 var state = new ParticleState
                 {
-                    Velocity = Random.Next(speed, speed),
+                    Velocity = Random.NextVector(speed, speed),
                     Type = ParticleType.Enemy,
                     LengthMultiplier = 1
                 };

@@ -25,12 +25,12 @@ namespace NeonVectorShooter.Helpers
             return (float)random.NextDouble() * (maxValue - minValue) + minValue;
         }
 
-        public static Vector2 Next(this Random random, Vector2 vector)
+        public static Vector2 NextVector(this Random random, Vector2 vector)
         {
             return new Vector2(random.Next((int)vector.X), random.Next((int)vector.Y));
         }
 
-        public static Vector2 Next(this Random random, float minLength, float maxLength)
+        public static Vector2 NextVector(this Random random, float minLength, float maxLength)
         {
             var theta = random.NextDouble() * 2 * Math.PI;
             var lenth = random.NextFloat(minLength, maxLength);

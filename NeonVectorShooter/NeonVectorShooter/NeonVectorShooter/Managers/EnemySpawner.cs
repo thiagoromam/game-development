@@ -27,7 +27,7 @@ namespace NeonVectorShooter.Managers
                 if (Random.Next((int)_inverseSpawnEnemyChance) == 0)
                     EntityManager.Add(Enemy.CreateWanderer(GetSpawnPosition()));
 
-                if (EntityManager.BlackHolesCount < 2 && Random.Next(InverseSpawnBlackHoleChance) == 0)
+                if (EntityManager.BlackHoles.Count < 2 && Random.Next(InverseSpawnBlackHoleChance) == 0)
                     EntityManager.Add(new BlackHole(GetSpawnPosition()));
             }
 
@@ -40,7 +40,7 @@ namespace NeonVectorShooter.Managers
             Vector2 position;
             do
             {
-                position = Random.Next(GameRoot.ScreenSize);
+                position = Random.NextVector(GameRoot.ScreenSize);
 
             } while (Vector2.DistanceSquared(position, PlayerShip.Instance.Position) < Math.Pow(250, 2));
 
