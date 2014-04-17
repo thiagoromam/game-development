@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SonicAcceleration", "SonicAcceleration\SonicAcceleration\SonicAcceleration.csproj", "{F2E26145-D337-4292-9B4E-02EE7D3CC188}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "SonicAccelerationContent", "SonicAcceleration\SonicAccelerationContent\SonicAccelerationContent.contentproj", "{67D16005-F1A3-4043-B5F6-D938D6344B65}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F2E26145-D337-4292-9B4E-02EE7D3CC188}.Debug|x86.ActiveCfg = Debug|x86
+		{F2E26145-D337-4292-9B4E-02EE7D3CC188}.Debug|x86.Build.0 = Debug|x86
+		{F2E26145-D337-4292-9B4E-02EE7D3CC188}.Release|x86.ActiveCfg = Release|x86
+		{F2E26145-D337-4292-9B4E-02EE7D3CC188}.Release|x86.Build.0 = Release|x86
+		{67D16005-F1A3-4043-B5F6-D938D6344B65}.Debug|x86.ActiveCfg = Debug|x86
+		{67D16005-F1A3-4043-B5F6-D938D6344B65}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
