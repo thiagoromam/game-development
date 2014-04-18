@@ -22,14 +22,14 @@ namespace SonicAcceleration
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(
-                _sonic.Texture, 
-                _position, 
-                _sonic.Source, 
-                _sonic.Color, 
-                0, 
-                _sonic.Origin, 
-                1,
-                _sonic.Right ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 
+                _sonic.Texture,
+                _position,
+                _sonic.Source,
+                _sonic.Color,
+                0,
+                _sonic.Origin,
+                2,
+                SpriteEffects.None,
                 1
             );
         }

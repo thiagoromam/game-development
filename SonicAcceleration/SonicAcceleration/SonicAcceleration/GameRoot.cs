@@ -42,6 +42,7 @@ namespace SonicAcceleration
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            _sonic.Update(gameTime);
             base.Update(gameTime);
         }
 
