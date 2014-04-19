@@ -5,6 +5,7 @@ namespace SonicAcceleration.SonicAnimations
         Idle,
         Waiting,
         Walking,
-        Running
+        Running,
+        Stopping
     }
 }

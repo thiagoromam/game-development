@@ -50,7 +50,7 @@ namespace SonicAcceleration
 
             if (state.IsKeyDown(Keys.Right))
             {
-                _animations.CurrentType = AnimationType.Running;
+                _animations.CurrentType = AnimationType.Stopping;
                 _inativeTime = 0;
             }
             else
