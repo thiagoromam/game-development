@@ -6,6 +6,7 @@ namespace SonicAcceleration.Animations
     {
         private readonly IAnimationFrame[] _frames;
         private int _index;
+        private float _velocityFactor = 1;
 
         public Animation(IAnimationFrame[] frames)
         {
@@ -25,6 +26,11 @@ namespace SonicAcceleration.Animations
             get { return CurrentFrame.FrameInformation; }
         }
         public int Iterations { get; private set; }
+        public float VelocityFactor
+        {
+            private get { return _velocityFactor; }
+            set { _velocityFactor = value; }
+        }
 
         public void Reset()
         {
@@ -59,6 +65,7 @@ namespace SonicAcceleration.Animations
                 Iterations++;
             }
 
+            CurrentFrame.VelocityFactor = VelocityFactor;
             CurrentFrame.Reset(millisecondsExceeded);
         }
     }

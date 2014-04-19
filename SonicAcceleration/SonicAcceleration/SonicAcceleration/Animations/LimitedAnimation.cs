@@ -28,6 +28,10 @@ namespace SonicAcceleration.Animations
         {
             get { return _animation.Iterations; }
         }
+        public float VelocityFactor
+        {
+            set { _animation.VelocityFactor = value; }
+        }
         int IAnimationFrame.TotalMilliseconds
         {
             get { return _totalMilliseconds; }

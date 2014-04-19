@@ -27,6 +27,10 @@ namespace SonicAcceleration.SonicAnimations
         {
             get { return _animation.Iterations; }
         }
+        public float VelocityFactor
+        {
+            set { _animation.VelocityFactor = value; }
+        }
 
         public void Reset()
         {

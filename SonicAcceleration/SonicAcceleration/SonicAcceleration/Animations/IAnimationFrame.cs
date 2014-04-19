@@ -7,6 +7,7 @@ namespace SonicAcceleration.Animations
         FrameInformation FrameInformation { get; }
         int TotalMilliseconds { get; }
         int MillisecondsExceeded { get; }
+        float VelocityFactor { set; }
         bool Finished { get; }
 
         void Reset(int? millisecondsExceededFromOtherFrame = null);

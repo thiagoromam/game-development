@@ -11,6 +11,7 @@ namespace SonicAcceleration
         private readonly AnimationsManager _animations;
         private int _inativeTime;
         private float _rotation;
+        private Vector2 _velocity;
 
         public Sonic()
         {
@@ -50,8 +51,31 @@ namespace SonicAcceleration
 
             if (state.IsKeyDown(Keys.Right))
             {
-                _animations.CurrentType = AnimationType.Stopping;
+                if (_velocity.X < 6)
+                    _velocity.X += 1.25f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            else
+            {
+                _velocity *= 0.98f;
+            }
+
+            if (_velocity.X < 0.0001f)
+                _velocity.X = 0;
+            else
                 _inativeTime = 0;
+
+
+            if (_velocity.X > 0)
+            {
+                if (_velocity.X < 4)
+                {
+                    _animations.CurrentType = AnimationType.Walking;
+                    _animations.Current.VelocityFactor = 1 - (_velocity.X * 0.1625f);
+                }
+                else
+                {
+                    _animations.CurrentType = AnimationType.Running;
+                }
             }
             else
             {

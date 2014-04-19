@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using SonicAcceleration.Animations;
 
 namespace SonicAcceleration.SonicAnimations
@@ -21,7 +20,7 @@ namespace SonicAcceleration.SonicAnimations
                 new AnimationFrame(new FrameInformation(399, 474, 40, 28, MathHelper.PiOver2), milliseconds),
                 new AnimationFrame(new FrameInformation(279, 152, 37, 40), milliseconds),
                 new AnimationFrame(new FrameInformation(228, 152, 38, 40), milliseconds),
-                new AnimationFrame(new FrameInformation(98, 152, 26, 40), milliseconds), 
+                new AnimationFrame(new FrameInformation(98, 152, 26, 40), milliseconds)
             };
             _animation = new Animation(frames);
         }
@@ -33,6 +32,10 @@ namespace SonicAcceleration.SonicAnimations
         public int Iterations
         {
             get { return _animation.Iterations; }
+        }
+        public float VelocityFactor
+        {
+            set { _animation.VelocityFactor = value; }
         }
 
         public void Reset()

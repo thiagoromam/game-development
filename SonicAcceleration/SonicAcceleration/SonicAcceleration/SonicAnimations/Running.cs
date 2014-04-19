@@ -15,7 +15,7 @@ namespace SonicAcceleration.SonicAnimations
                 new AnimationFrame(new FrameInformation(103, 206, 32, 36), milliseconds),
                 new AnimationFrame(new FrameInformation(60, 206, 32, 36), milliseconds),
                 new AnimationFrame(new FrameInformation(462, 765, 32, 36), milliseconds),
-                new AnimationFrame(new FrameInformation(16, 206, 32, 36), milliseconds), 
+                new AnimationFrame(new FrameInformation(16, 206, 32, 36), milliseconds) 
             };
             _animation = new Animation(frames);
         }
@@ -28,7 +28,11 @@ namespace SonicAcceleration.SonicAnimations
         {
             get { return _animation.Iterations; }
         }
-        
+        public float VelocityFactor
+        {
+            set { _animation.VelocityFactor = value; }
+        }
+
         public void Reset()
         {
             _animation.Reset();

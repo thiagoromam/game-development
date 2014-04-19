@@ -16,6 +16,7 @@ namespace SonicAcceleration.Animations
         public FrameInformation FrameInformation { get; private set; }
         public int TotalMilliseconds { get; private set; }
         public int MillisecondsExceeded { get; private set; }
+        public float VelocityFactor { private get; set; }
         public bool Finished
         {
             get { return _millisecondsUntilNextFrame <= 0; }
@@ -23,7 +24,7 @@ namespace SonicAcceleration.Animations
 
         public void Reset(int? millisecondsExcededFromOtherFrame)
         {
-            _millisecondsUntilNextFrame = TotalMilliseconds;
+            _millisecondsUntilNextFrame = (int)(TotalMilliseconds * VelocityFactor);
             _millisecondsUntilNextFrame -= millisecondsExcededFromOtherFrame ?? 0;
 
             MillisecondsExceeded = 0;

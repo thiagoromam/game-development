@@ -6,6 +6,7 @@ namespace SonicAcceleration.Animations
     {
         FrameInformation FrameInformation { get; }
         int Iterations { get; }
+        float VelocityFactor { set; }
 
         void Reset();
         void Initialize();
