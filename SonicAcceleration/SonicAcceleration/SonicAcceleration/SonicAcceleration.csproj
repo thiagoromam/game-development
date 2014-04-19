@@ -81,6 +81,7 @@
     <Compile Include="Animations\LimitedAnimation.cs" />
     <Compile Include="SonicAnimations\AnimationType.cs" />
     <Compile Include="SonicAnimations\Idle.cs" />
+    <Compile Include="SonicAnimations\Running.cs" />
     <Compile Include="SonicAnimations\Waiting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

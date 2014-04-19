@@ -4,6 +4,7 @@ namespace SonicAcceleration.SonicAnimations
     {
         Idle,
         Waiting,
-        Walking
+        Walking,
+        Running
     }
 }
