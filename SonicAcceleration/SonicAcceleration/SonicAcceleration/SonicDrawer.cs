@@ -29,7 +29,7 @@ namespace SonicAcceleration
                 _sonic.Rotation,
                 _sonic.Origin,
                 2,
-                SpriteEffects.None,
+                _sonic.Right ? SpriteEffects.None : SpriteEffects.FlipHorizontally,
                 1
             );
         }

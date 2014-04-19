@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -17,6 +18,7 @@ namespace SonicAcceleration
         {
             Color = Color.White;
             _animations = new AnimationsManager { CurrentType = AnimationType.Idle };
+            Right = true;
         }
 
         public Texture2D Texture { get; private set; }
@@ -28,10 +30,15 @@ namespace SonicAcceleration
         {
             get { return _animations.Current.FrameInformation.Origin; }
         }
+        public bool Right { get; private set; }
 
         public float Rotation
         {
-            get { return _rotation + _animations.Current.FrameInformation.Rotation; }
+            get
+            {
+                var rotation = _rotation + _animations.Current.FrameInformation.Rotation;
+                return Right ? rotation : -rotation;
+            }
         }
         public Color Color { get; private set; }
 
@@ -49,28 +56,49 @@ namespace SonicAcceleration
         {
             var state = Keyboard.GetState();
 
+            var keyPressed = false;
+
             if (state.IsKeyDown(Keys.Right))
             {
-                if (_velocity.X < 6)
-                    _velocity.X += 1.25f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Right = true;
+                keyPressed = true;
+            }
+            else if (state.IsKeyDown(Keys.Left))
+            {
+                Right = false;
+                keyPressed = true;
+            }
+
+            var velocityX = Math.Abs(_velocity.X);
+
+            if (keyPressed)
+            {
+                if (velocityX < 10)
+                {
+                    var velocityToIncrease = 1.25f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    _velocity.X += Right ? velocityToIncrease : -velocityToIncrease;
+                }
+
+                velocityX = Math.Abs(_velocity.X);
             }
             else
             {
-                _velocity *= 0.98f;
+                if (velocityX > 4)
+                    _velocity.X *= 0.98f;
+                else if (velocityX > 0.1f)
+                    _velocity.X *= 0.97f;
+                else
+                    _velocity.X *= 0.5f;
             }
 
-            if (_velocity.X < 0.0001f)
-                _velocity.X = 0;
-            else
+            if (velocityX > 0.00001f)
+            {
                 _inativeTime = 0;
 
-
-            if (_velocity.X > 0)
-            {
-                if (_velocity.X < 4)
+                if (velocityX < 4)
                 {
                     _animations.CurrentType = AnimationType.Walking;
-                    _animations.Current.VelocityFactor = 1 - (_velocity.X * 0.1625f);
+                    _animations.Current.VelocityFactor = 1 - (velocityX * 0.1625f);
                 }
                 else
                 {
