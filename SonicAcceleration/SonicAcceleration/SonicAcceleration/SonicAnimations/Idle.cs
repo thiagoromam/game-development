@@ -5,7 +5,7 @@ namespace SonicAcceleration.SonicAnimations
 {
     public class Idle : IAnimation
     {
-        private readonly Animation _animation;
+        private readonly IAnimation _animation;
 
         public Idle()
         {

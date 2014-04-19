@@ -86,6 +86,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="GameRoot.cs" />
     <Compile Include="Sonic.cs" />
+    <Compile Include="SonicAnimations\Walking.cs" />
     <Compile Include="SonicControlTracker.cs" />
     <Compile Include="SonicDrawer.cs" />
   </ItemGroup>

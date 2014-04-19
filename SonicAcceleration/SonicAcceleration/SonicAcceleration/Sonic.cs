@@ -10,6 +10,7 @@ namespace SonicAcceleration
     {
         private readonly AnimationsManager _animations;
         private int _inativeTime;
+        private float _rotation;
 
         public Sonic()
         {
@@ -25,6 +26,11 @@ namespace SonicAcceleration
         public Vector2 Origin
         {
             get { return _animations.Current.FrameInformation.Origin; }
+        }
+
+        public float Rotation
+        {
+            get { return _rotation + _animations.Current.FrameInformation.Rotation; }
         }
         public Color Color { get; private set; }
 
@@ -44,6 +50,7 @@ namespace SonicAcceleration
 
             if (state.IsKeyDown(Keys.Right))
             {
+                _animations.CurrentType = AnimationType.Walking;
                 _inativeTime = 0;
             }
             else

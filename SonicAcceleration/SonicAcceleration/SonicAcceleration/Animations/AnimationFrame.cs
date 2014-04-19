@@ -6,9 +6,9 @@ namespace SonicAcceleration.Animations
     {
         private int _millisecondsUntilNextFrame;
 
-        public AnimationFrame(FrameInformation source, int totalMilliseconds)
+        public AnimationFrame(FrameInformation information, int totalMilliseconds)
         {
-            FrameInformation = source;
+            FrameInformation = information;
             TotalMilliseconds = totalMilliseconds;
             _millisecondsUntilNextFrame = totalMilliseconds;
         }

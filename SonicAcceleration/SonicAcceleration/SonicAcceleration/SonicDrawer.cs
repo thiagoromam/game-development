@@ -26,7 +26,7 @@ namespace SonicAcceleration
                 _position,
                 _sonic.Source,
                 _sonic.Color,
-                0,
+                _sonic.Rotation,
                 _sonic.Origin,
                 2,
                 SpriteEffects.None,

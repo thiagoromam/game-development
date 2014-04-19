@@ -13,6 +13,7 @@ namespace SonicAcceleration.SonicAnimations
             _animations = new Dictionary<AnimationType, IAnimation>();
             _animations[AnimationType.Idle] = new Idle();
             _animations[AnimationType.Waiting] = new Waiting();
+            _animations[AnimationType.Walking] = new Walking();
         }
 
         public AnimationType CurrentType

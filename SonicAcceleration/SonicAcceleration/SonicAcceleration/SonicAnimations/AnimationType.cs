@@ -3,6 +3,7 @@ namespace SonicAcceleration.SonicAnimations
     public enum AnimationType
     {
         Idle,
-        Waiting
+        Waiting,
+        Walking
     }
 }
