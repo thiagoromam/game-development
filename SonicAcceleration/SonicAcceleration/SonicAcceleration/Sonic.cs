@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -13,6 +12,7 @@ namespace SonicAcceleration
         private int _inativeTime;
         private float _rotation;
         private Vector2 _velocity;
+        private bool _invertingDirection;
 
         public Sonic()
         {
@@ -54,51 +54,71 @@ namespace SonicAcceleration
 
         public void Update(GameTime gameTime)
         {
+            UpdateVelocity(gameTime);
+            UpdateAnimation(gameTime);
+        }
+
+        private void UpdateVelocity(GameTime gameTime)
+        {
             var state = Keyboard.GetState();
-
-            var keyPressed = false;
-
+            
             if (state.IsKeyDown(Keys.Right))
             {
-                Right = true;
-                keyPressed = true;
+                if (Right)
+                    IncreaseVelocity(gameTime);
+                else if (InvertDirection())
+                    Right = true;
             }
             else if (state.IsKeyDown(Keys.Left))
             {
-                Right = false;
-                keyPressed = true;
-            }
-
-            var velocityX = Math.Abs(_velocity.X);
-
-            if (keyPressed)
-            {
-                if (velocityX < 10)
-                {
-                    var velocityToIncrease = 1.25f * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    _velocity.X += Right ? velocityToIncrease : -velocityToIncrease;
-                }
-
-                velocityX = Math.Abs(_velocity.X);
+                if (!Right)
+                    IncreaseVelocity(gameTime);
+                else if (InvertDirection())
+                    Right = false;
             }
             else
             {
-                if (velocityX > 4)
+                _invertingDirection = false;
+
+                if (_velocity.X > 4)
                     _velocity.X *= 0.98f;
-                else if (velocityX > 0.1f)
+                else if (_velocity.X > 0.1f)
                     _velocity.X *= 0.97f;
                 else
+                {
                     _velocity.X *= 0.5f;
+                    if (_velocity.X < 0.000001f)
+                        _velocity.X = 0;
+                }
             }
+        }
+        private void IncreaseVelocity(GameTime gameTime)
+        {
+            if (_velocity.X < 10)
+                _velocity.X += 1.25f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        }
+        private bool InvertDirection()
+        {
+            _velocity.X *= 0.6f;
+            _invertingDirection = _velocity.X > 0.0001f;
 
-            if (velocityX > 0.00001f)
+            return !_invertingDirection;
+        }
+
+        private void UpdateAnimation(GameTime gameTime)
+        {
+            if (_invertingDirection)
+            {
+                _animations.CurrentType = AnimationType.Stopping;
+            }
+            else if (_velocity.X > 0)
             {
                 _inativeTime = 0;
 
-                if (velocityX < 4)
+                if (_velocity.X < 4)
                 {
                     _animations.CurrentType = AnimationType.Walking;
-                    _animations.Current.VelocityFactor = 1 - (velocityX * 0.1625f);
+                    _animations.Current.VelocityFactor = 1 - (_velocity.X * 0.1625f);
                 }
                 else
                 {

@@ -9,7 +9,7 @@ namespace SonicAcceleration.SonicAnimations
 
         public Stopping()
         {
-            const int milliseconds = 30;
+            const int milliseconds = 50;
             IAnimationFrame[] frames =
             {
                 new AnimationFrame(new FrameInformation(94, 106, 36, 37), milliseconds),
