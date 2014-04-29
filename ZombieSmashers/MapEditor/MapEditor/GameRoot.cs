@@ -14,6 +14,7 @@ namespace MapEditor
         private Text _text;
         private Map _map;
         private Texture2D[] _mapsTex;
+        private Texture2D _nullTex;
 
         public GameRoot()
         {
