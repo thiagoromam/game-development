@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZombieSmashers", "ZombieSmashers\ZombieSmashers\ZombieSmashers.csproj", "{720F9E91-FFD5-42E9-BDAF-E1C8CB5F8236}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "ZombieSmashersContent", "ZombieSmashers\ZombieSmashersContent\ZombieSmashersContent.contentproj", "{24811106-732B-4532-9D5E-B868F41F3D27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditor", "MapEditor\MapEditor\MapEditor.csproj", "{AEC1B7A0-BF64-4503-876D-D06D57559609}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{720F9E91-FFD5-42E9-BDAF-E1C8CB5F8236}.Debug|x86.ActiveCfg = Debug|x86
+		{720F9E91-FFD5-42E9-BDAF-E1C8CB5F8236}.Debug|x86.Build.0 = Debug|x86
+		{720F9E91-FFD5-42E9-BDAF-E1C8CB5F8236}.Release|x86.ActiveCfg = Release|x86
+		{720F9E91-FFD5-42E9-BDAF-E1C8CB5F8236}.Release|x86.Build.0 = Release|x86
+		{24811106-732B-4532-9D5E-B868F41F3D27}.Debug|x86.ActiveCfg = Debug|x86
+		{24811106-732B-4532-9D5E-B868F41F3D27}.Release|x86.ActiveCfg = Release|x86
+		{AEC1B7A0-BF64-4503-876D-D06D57559609}.Debug|x86.ActiveCfg = Debug|x86
+		{AEC1B7A0-BF64-4503-876D-D06D57559609}.Debug|x86.Build.0 = Debug|x86
+		{AEC1B7A0-BF64-4503-876D-D06D57559609}.Release|x86.ActiveCfg = Release|x86
+		{AEC1B7A0-BF64-4503-876D-D06D57559609}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
