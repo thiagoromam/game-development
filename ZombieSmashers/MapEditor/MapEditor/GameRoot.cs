@@ -13,9 +13,8 @@ namespace MapEditor
 
         private Text _text;
         private Map _map;
-        private Texture2D[] _mapsTex;
-        private Texture2D _nullTex;
-
+        private MouseControl _mouseControl;
+        
         public GameRoot()
         {
             _graphics = new GraphicsDeviceManager(this)
@@ -29,6 +28,7 @@ namespace MapEditor
         protected override void Initialize()
         {
             _map = new Map();
+            _mouseControl = new MouseControl();
             base.Initialize();
         }
 
@@ -36,13 +36,9 @@ namespace MapEditor
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            var arial = Content.Load<SpriteFont>("Text/Arial");
-            _text = new Text(arial, _spriteBatch);
+            Art.LoadContent(Content);
 
-            _nullTex = Content.Load<Texture2D>("Images/1x1");
-            _mapsTex = new Texture2D[1];
-            for (var i = 0; i < _mapsTex.Length; i++)
-                _mapsTex[i] = Content.Load<Texture2D>("Images/Maps/maps" + (i + 1));
+            _text = new Text(Art.Arial, _spriteBatch);
         }
 
         protected override void UnloadContent()
@@ -51,9 +47,11 @@ namespace MapEditor
 
         protected override void Update(GameTime gameTime)
         {
-            var state = Keyboard.GetState();
-            if (state.IsKeyDown(Keys.Escape))
+            var keyboardState = Keyboard.GetState();
+            if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
+            
+            _mouseControl.Update();
 
             base.Update(gameTime);
         }
@@ -63,6 +61,7 @@ namespace MapEditor
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             DrawMapSegments();
+            _mouseControl.Draw(_spriteBatch);
 
             base.Draw(gameTime);
         }
@@ -72,7 +71,7 @@ namespace MapEditor
             var destination = new Rectangle();
 
             _spriteBatch.Begin();
-            _spriteBatch.Draw(_nullTex, new Rectangle(500, 20, 280, 550), new Color(0, 0, 0, 100));
+            _spriteBatch.Draw(Art.Null, new Rectangle(500, 20, 280, 550), new Color(0, 0, 0, 100));
             _spriteBatch.End();
 
             _text.Size = 0.8f;
@@ -98,7 +97,7 @@ namespace MapEditor
                     destination.Width = (int)(segment.Source.Width / (float)segment.Source.Height * 45.0f);
                 }
 
-                _spriteBatch.Draw(_mapsTex[segment.Index], destination, segment.Source, Color.White);
+                _spriteBatch.Draw(Art.Maps[segment.Index], destination, segment.Source, Color.White);
                 _spriteBatch.End();
 
                 _text.Color = Color.White;
