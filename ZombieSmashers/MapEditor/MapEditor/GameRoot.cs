@@ -1,3 +1,4 @@
+using MapEditor.Helpers;
 using MapEditor.MapClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,6 +18,7 @@ namespace MapEditor
 
         private int _currentLayer = 1;
         private int _mouseDragSegment = -1;
+        private readonly string[] _layers = { "back", "mid", "fore", "map" };
 
         public GameRoot()
         {
@@ -77,11 +79,21 @@ namespace MapEditor
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            DrawMapSegments();
             _map.Draw(_spriteBatch, Vector2.Zero);
+            DrawMapSegments();
+            DrawText();
             _mouseControl.Draw(_spriteBatch);
-            
+
             base.Draw(gameTime);
+        }
+
+        private void DrawText()
+        {
+            var layerName = _layers[_currentLayer];
+            var clicked = _text.DrawClickable(layerName, new Vector2(5, 5), _mouseControl.Position, _mouseControl.MouseClick);
+
+            if (clicked)
+                _currentLayer = (_currentLayer + 1) % 3;
         }
 
         private void DrawMapSegments()

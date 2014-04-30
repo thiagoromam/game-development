@@ -30,9 +30,7 @@ namespace MapEditor
             _position.X = state.X;
             _position.Y = state.Y;
             RightMouseDown = state.LeftButton == ButtonState.Pressed;
-
-            if (previousMouseDown && !RightMouseDown)
-                MouseClick = true;
+            MouseClick = previousMouseDown && !RightMouseDown;
         }
         
         public void Draw(SpriteBatch spriteBatch)
