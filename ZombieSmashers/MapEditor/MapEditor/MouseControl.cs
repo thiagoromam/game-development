@@ -6,18 +6,33 @@ namespace MapEditor
 {
     public class MouseControl
     {
+        private Vector2 _position;
+        private Vector2 _previousPosition;
+
         public bool MouseClick { get; private set; }
         public bool RightMouseDown { get; private set; }
-        public Vector2 Position { get; private set; }
+        public Vector2 Position
+        {
+            get { return _position; }
+        }
+        public Vector2 PreviousPosition
+        {
+            get { return _previousPosition; }
+        }
 
         public void Update()
         {
+            _previousPosition = _position;
+
             var state = Mouse.GetState();
             var previousMouseDown = RightMouseDown;
 
-            Position = new Vector2(state.X, state.Y);
+            _position.X = state.X;
+            _position.Y = state.Y;
             RightMouseDown = state.LeftButton == ButtonState.Pressed;
-            MouseClick = previousMouseDown && !RightMouseDown;
+
+            if (previousMouseDown && !RightMouseDown)
+                MouseClick = true;
         }
         
         public void Draw(SpriteBatch spriteBatch)

@@ -14,7 +14,10 @@ namespace MapEditor
         private Text _text;
         private Map _map;
         private MouseControl _mouseControl;
-        
+
+        private int _currentLayer = 1;
+        private int _mouseDragSegment = -1;
+
         public GameRoot()
         {
             _graphics = new GraphicsDeviceManager(this)
@@ -50,8 +53,22 @@ namespace MapEditor
             var keyboardState = Keyboard.GetState();
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
-            
+
             _mouseControl.Update();
+
+            if (_mouseDragSegment > -1)
+            {
+                if (!_mouseControl.RightMouseDown)
+                {
+                    _mouseDragSegment = -1;
+                }
+                else
+                {
+                    var segment = _map.Segments[_currentLayer, _mouseDragSegment];
+                    segment.Location.X += (_mouseControl.Position.X - _mouseControl.PreviousPosition.X);
+                    segment.Location.Y += (_mouseControl.Position.Y - _mouseControl.PreviousPosition.Y);
+                }
+            }
 
             base.Update(gameTime);
         }
@@ -61,8 +78,9 @@ namespace MapEditor
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             DrawMapSegments();
+            _map.Draw(_spriteBatch, Vector2.Zero);
             _mouseControl.Draw(_spriteBatch);
-
+            
             base.Draw(gameTime);
         }
 
@@ -77,7 +95,7 @@ namespace MapEditor
             _text.Size = 0.8f;
             for (var i = 0; i < 9; i++)
             {
-                var segment = _map.Segments[i];
+                var segment = _map.Definitions[i];
                 if (segment == null)
                     continue;
 
@@ -101,7 +119,29 @@ namespace MapEditor
                 _spriteBatch.End();
 
                 _text.Color = Color.White;
+
                 _text.Draw(segment.Name, new Vector2(destination.X + 50, destination.Y));
+
+                if (_mouseControl.RightMouseDown)
+                {
+                    if (_mouseControl.Position.X > destination.X &&
+                        _mouseControl.Position.X < 780 &&
+                        _mouseControl.Position.Y > destination.Y &&
+                        _mouseControl.Position.Y < destination.Y + 45)
+                    {
+                        if (_mouseDragSegment == -1)
+                        {
+                            var f = _map.AddSegment(_currentLayer, i);
+                            if (f <= -1)
+                                continue;
+
+                            var mapSegment = _map.Segments[_currentLayer, f];
+                            mapSegment.Location.X = (_mouseControl.Position.X - segment.Source.Width / 4f);
+                            mapSegment.Location.Y = (_mouseControl.Position.Y - segment.Source.Height / 4f);
+                            _mouseDragSegment = f;
+                        }
+                    }
+                }
             }
         }
     }
