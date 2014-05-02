@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="Art.cs" />
     <Compile Include="Helpers\IntHelper.cs" />
+    <Compile Include="Helpers\RectangleHelper.cs" />
     <Compile Include="Helpers\Vector2Helper.cs" />
     <Compile Include="MapClasses\Map.cs" />
     <Compile Include="MapClasses\SegmentDefinition.cs" />

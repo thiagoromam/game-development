@@ -1,4 +1,3 @@
-using MapEditor.Helpers;
 using MapEditor.MapClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,6 +18,8 @@ namespace MapEditor
         private int _currentLayer = 1;
         private int _mouseDragSegment = -1;
         private readonly string[] _layers = { "back", "mid", "fore", "map" };
+        private readonly float[] _layersScalar = { 0.375f, 0.5f, 0.625f };
+        private Vector2 _scroll;
 
         public GameRoot()
         {
@@ -58,18 +59,25 @@ namespace MapEditor
 
             _mouseControl.Update();
 
+            if (_mouseControl.RightButtonPressed && _mouseControl.Position.X < 500)
+            {
+                var f = _map.GetHoveredSegment(_currentLayer, _scroll, _mouseControl.Position);
+
+                if (f != -1)
+                    _mouseDragSegment = f;
+            }
+
             if (_mouseDragSegment > -1)
             {
-                if (!_mouseControl.RightMouseDown)
-                {
+                if (!_mouseControl.RightButtonPressed)
                     _mouseDragSegment = -1;
-                }
                 else
-                {
-                    var segment = _map.Segments[_currentLayer, _mouseDragSegment];
-                    segment.Location.X += (_mouseControl.Position.X - _mouseControl.PreviousPosition.X);
-                    segment.Location.Y += (_mouseControl.Position.Y - _mouseControl.PreviousPosition.Y);
-                }
+                    _map.Segments[_currentLayer, _mouseDragSegment].Location += _mouseControl.Position - _mouseControl.PreviousPosition;
+            }
+
+            if (_mouseControl.MiddleButtonPressed)
+            {
+                _scroll -= (_mouseControl.Position - _mouseControl.PreviousPosition) * 2;
             }
 
             base.Update(gameTime);
@@ -79,7 +87,7 @@ namespace MapEditor
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _map.Draw(_spriteBatch, Vector2.Zero);
+            _map.Draw(_spriteBatch, _scroll);
             DrawMapSegments();
             DrawText();
             _mouseControl.Draw(_spriteBatch);
@@ -90,7 +98,7 @@ namespace MapEditor
         private void DrawText()
         {
             var layerName = _layers[_currentLayer];
-            var clicked = _text.DrawClickable(layerName, new Vector2(5, 5), _mouseControl.Position, _mouseControl.MouseClick);
+            var clicked = _text.DrawClickable(layerName, new Vector2(5, 5), _mouseControl.Position, _mouseControl.RightButtonClick);
 
             if (clicked)
                 _currentLayer = (_currentLayer + 1) % 3;
@@ -134,7 +142,7 @@ namespace MapEditor
 
                 _text.Draw(segment.Name, new Vector2(destination.X + 50, destination.Y));
 
-                if (_mouseControl.RightMouseDown)
+                if (_mouseControl.RightButtonPressed)
                 {
                     if (_mouseControl.Position.X > destination.X &&
                         _mouseControl.Position.X < 780 &&
@@ -148,8 +156,7 @@ namespace MapEditor
                                 continue;
 
                             var mapSegment = _map.Segments[_currentLayer, f];
-                            mapSegment.Location.X = (_mouseControl.Position.X - segment.Source.Width / 4f);
-                            mapSegment.Location.Y = (_mouseControl.Position.Y - segment.Source.Height / 4f);
+                            mapSegment.Location = _mouseControl.Position - segment.SourceLength / 4 + _scroll * _layersScalar[_currentLayer];
                             _mouseDragSegment = f;
                         }
                     }

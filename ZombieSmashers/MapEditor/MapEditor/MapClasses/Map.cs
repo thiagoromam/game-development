@@ -12,6 +12,8 @@ namespace MapEditor.MapClasses
         private readonly MapSegment[,] _segments;
         private readonly int _segmentsDimension0Length;
         private readonly int _segmentsDimension1Length;
+        private readonly float[] _scales = { 0.75f, 1, 1.25f };
+        private readonly Color[] _colors = { Color.Gray, Color.White, Color.DarkGray };
 
         public Map()
         {
@@ -98,23 +100,7 @@ namespace MapEditor.MapClasses
 
             for (var l = 0; l < _segmentsDimension0Length; l++)
             {
-                float scale;
-                Color color;
-                switch (l)
-                {
-                    case 0:
-                        color = Color.Gray;
-                        scale = 0.75f;
-                        break;
-                    case 2:
-                        color = Color.DarkGray;
-                        scale = 1.25f;
-                        break;
-                    default:
-                        scale = 1;
-                        color = Color.White;
-                        break;
-                }
+                var scale = _scales[l];
 
                 scale *= 0.5f;
 
@@ -129,11 +115,35 @@ namespace MapEditor.MapClasses
                     destination.Width = (int)(definition.Source.Width * scale);
                     destination.Height = (int)(definition.Source.Height * scale);
 
-                    spriteBatch.Draw(Art.Maps[definition.Index], destination, definition.Source, color);
+                    spriteBatch.Draw(Art.Maps[definition.Index], destination, definition.Source, _colors[l]);
                 }
             }
 
             spriteBatch.End();
+        }
+
+        public int GetHoveredSegment(int layer, Vector2 scroll, Vector2 position)
+        {
+            var scale = _scales[layer];
+
+            for (var i = _segmentsDimension1Length - 1; i >= 0; i--)
+            {
+                var segment = Segments[layer, i];
+                if (segment == null) continue;
+
+                var definition = Definitions[segment.Index];
+                var destination = new Rectangle(
+                    (int)(segment.Location.X - scroll.X * scale),
+                    (int)(segment.Location.Y - scroll.Y * scale),
+                    (int)(definition.Source.Width * scale),
+                    (int)(definition.Source.Height * scale)
+                );
+
+                if (destination.Contains(position))
+                    return i;
+            }
+
+            return -1;
         }
     }
 }

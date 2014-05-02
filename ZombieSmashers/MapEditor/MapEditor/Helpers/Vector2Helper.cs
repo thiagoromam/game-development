@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace MapEditor.Helpers
+﻿namespace MapEditor.Helpers
 {
     public static class Vector2Helper
     {
