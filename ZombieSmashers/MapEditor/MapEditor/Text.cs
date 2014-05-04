@@ -8,13 +8,15 @@ namespace MapEditor
     {
         private readonly SpriteFont _font;
         private readonly SpriteBatch _spriteBatch;
+        private readonly MouseControl _mouseControl;
 
-        public Text(SpriteFont font, SpriteBatch spriteBatch)
+        public Text(SpriteFont font, SpriteBatch spriteBatch, MouseControl mouseControl)
         {
             Size = 1;
             Color = Color.White;
             _font = font;
             _spriteBatch = spriteBatch;
+            _mouseControl = mouseControl;
         }
 
         public float Size { get; set; }
@@ -27,16 +29,16 @@ namespace MapEditor
             _spriteBatch.End();
         }
 
-        public bool DrawClickable(string text, Vector2 textPosition, Vector2 mousePosition, bool mouseClick)
+        public bool DrawClickable(string text, Vector2 textPosition)
         {
             Color = Color.White;
 
             var clicked = false;
 
-            if (_font.Intersects(text, textPosition, Size, mousePosition))
+            if (_font.Intersects(text, textPosition, Size, _mouseControl.Position))
             {
                 Color = Color.Yellow;
-                if (mouseClick)
+                if (_mouseControl.LeftButtonClick)
                     clicked = true;
             }
 

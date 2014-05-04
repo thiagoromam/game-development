@@ -10,17 +10,25 @@ namespace MapEditor.MapClasses
     {
         private readonly SegmentDefinition[] _definitions;
         private readonly MapSegment[,] _segments;
-        private readonly int _segmentsDimension0Length;
-        private readonly int _segmentsDimension1Length;
+        private readonly int _maxSegmentsDimension0Index;
+        private readonly int _maxSegmentsDimension1Index;
+        private readonly int[,] _grid;
+        public readonly int MaxGridDimension0Index;
+        public readonly int MaxGridDimension1Index;
         private readonly float[] _scales = { 0.75f, 1, 1.25f };
         private readonly Color[] _colors = { Color.Gray, Color.White, Color.DarkGray };
 
         public Map()
         {
             _definitions = new SegmentDefinition[512];
+
             _segments = new MapSegment[3, 64];
-            _segmentsDimension0Length = _segments.GetLength(0);
-            _segmentsDimension1Length = _segments.GetLength(1);
+            _maxSegmentsDimension0Index = _segments.GetLength(0) - 1;
+            _maxSegmentsDimension1Index = _segments.GetLength(1) - 1;
+
+            _grid = new int[20, 20];
+            MaxGridDimension0Index = _grid.GetLength(0) - 1;
+            MaxGridDimension1Index = _grid.GetLength(1) - 1;
 
             ReadDefinitions();
         }
@@ -33,10 +41,14 @@ namespace MapEditor.MapClasses
         {
             get { return _segments; }
         }
+        public int[,] Grid
+        {
+            get { return _grid; }
+        }
 
         public int AddSegment(int layer, int index)
         {
-            for (var i = 0; i < _segmentsDimension1Length; i++)
+            for (var i = 0; i <= _maxSegmentsDimension1Index; i++)
             {
                 if (_segments[layer, i] != null) continue;
 
@@ -98,13 +110,13 @@ namespace MapEditor.MapClasses
 
             spriteBatch.Begin();
 
-            for (var l = 0; l < _segmentsDimension0Length; l++)
+            for (var l = 0; l <= _maxSegmentsDimension0Index; l++)
             {
                 var scale = _scales[l];
 
                 scale *= 0.5f;
 
-                for (var i = 0; i < _segmentsDimension1Length; i++)
+                for (var i = 0; i <= _maxSegmentsDimension1Index; i++)
                 {
                     var segment = _segments[l, i];
                     if (segment == null) continue;
@@ -126,7 +138,7 @@ namespace MapEditor.MapClasses
         {
             var scale = _scales[layer];
 
-            for (var i = _segmentsDimension1Length - 1; i >= 0; i--)
+            for (var i = _maxSegmentsDimension1Index; i >= 0; i--)
             {
                 var segment = Segments[layer, i];
                 if (segment == null) continue;

@@ -10,9 +10,10 @@ namespace MapEditor
         private Vector2 _previousPosition;
         private MouseState _lastState;
 
-        public bool RightButtonClick { get; private set; }
-        public bool RightButtonPressed { get; private set; }
+        public bool LeftButtonClick { get; private set; }
+        public bool LeftButtonPressed { get; private set; }
         public bool MiddleButtonPressed { get; private set; }
+        public bool RightButtonClick { get; set; }
         public Vector2 Position
         {
             get { return _position; }
@@ -31,13 +32,14 @@ namespace MapEditor
             _position.X = state.X;
             _position.Y = state.Y;
 
-            RightButtonPressed = state.LeftButton == ButtonState.Pressed;
+            LeftButtonPressed = state.LeftButton == ButtonState.Pressed;
             MiddleButtonPressed = state.MiddleButton == ButtonState.Pressed;
-            RightButtonClick = _lastState.LeftButton == ButtonState.Pressed && !RightButtonPressed;
+            LeftButtonClick = _lastState.LeftButton == ButtonState.Pressed && !LeftButtonPressed;
+            RightButtonClick = _lastState.RightButton == ButtonState.Pressed && state.RightButton == ButtonState.Released;
 
             _lastState = state;
         }
-        
+
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();

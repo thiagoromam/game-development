@@ -72,7 +72,9 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AreaRectangle.cs" />
     <Compile Include="Art.cs" />
+    <Compile Include="DrawingMode.cs" />
     <Compile Include="Helpers\IntHelper.cs" />
     <Compile Include="Helpers\RectangleHelper.cs" />
     <Compile Include="Helpers\Vector2Helper.cs" />

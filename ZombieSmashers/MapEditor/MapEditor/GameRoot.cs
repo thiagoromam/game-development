@@ -1,3 +1,4 @@
+using MapEditor.Helpers;
 using MapEditor.MapClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,9 +18,13 @@ namespace MapEditor
 
         private int _currentLayer = 1;
         private int _mouseDragSegment = -1;
-        private readonly string[] _layers = { "back", "mid", "fore", "map" };
+        private readonly string[] _mapLayers = { "back", "mid", "fore", "map" };
         private readonly float[] _layersScalar = { 0.375f, 0.5f, 0.625f };
+        private readonly Color _gridColor = new Color(255, 0, 0, 100);
         private Vector2 _scroll;
+        private DrawingMode _drawingMode;
+        private readonly string[] _drawingLayers = { "select", "colision" };
+        private AreaRectangle _editArea;
 
         public GameRoot()
         {
@@ -35,6 +40,8 @@ namespace MapEditor
         {
             _map = new Map();
             _mouseControl = new MouseControl();
+            _drawingMode = DrawingMode.SegmentSelection;
+            _editArea = new AreaRectangle(100, 50, 400, 450, new Color(255, 255, 255, 100));
             base.Initialize();
         }
 
@@ -44,7 +51,7 @@ namespace MapEditor
 
             Art.LoadContent(Content);
 
-            _text = new Text(Art.Arial, _spriteBatch);
+            _text = new Text(Art.Arial, _spriteBatch, _mouseControl);
         }
 
         protected override void UnloadContent()
@@ -59,17 +66,36 @@ namespace MapEditor
 
             _mouseControl.Update();
 
-            if (_mouseControl.RightButtonPressed && _mouseControl.Position.X < 500)
+            if (CanEdit())
             {
-                var f = _map.GetHoveredSegment(_currentLayer, _scroll, _mouseControl.Position);
+                if (_drawingMode == DrawingMode.SegmentSelection)
+                {
+                    if (_mouseControl.LeftButtonPressed)
+                    {
+                        var f = _map.GetHoveredSegment(_currentLayer, _scroll, _mouseControl.Position);
 
-                if (f != -1)
-                    _mouseDragSegment = f;
+                        if (f != -1)
+                            _mouseDragSegment = f;
+                    }
+                }
+                else if (_drawingMode == DrawingMode.CollisionMap)
+                {
+                    var x = (int)(_mouseControl.Position.X + _scroll.X / 2) / 32;
+                    var y = (int)(_mouseControl.Position.Y + _scroll.Y / 2) / 32;
+
+                    if (x.Between(0, _map.MaxGridDimension0Index) && y.Between(0, _map.MaxGridDimension1Index))
+                    {
+                        if (_mouseControl.LeftButtonClick)
+                            _map.Grid[x, y] = 1;
+                        else if (_mouseControl.RightButtonClick)
+                            _map.Grid[x, y] = 0;
+                    }
+                }
             }
 
             if (_mouseDragSegment > -1)
             {
-                if (!_mouseControl.RightButtonPressed)
+                if (!_mouseControl.LeftButtonPressed)
                     _mouseDragSegment = -1;
                 else
                     _map.Segments[_currentLayer, _mouseDragSegment].Location += _mouseControl.Position - _mouseControl.PreviousPosition;
@@ -82,14 +108,20 @@ namespace MapEditor
 
             base.Update(gameTime);
         }
-
+        
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _map.Draw(_spriteBatch, _scroll);
-            DrawMapSegments();
+
+            if (_drawingMode == DrawingMode.SegmentSelection)
+                DrawMapSegments();
+
+            DrawGrid();
+            _editArea.Draw(_spriteBatch);
             DrawText();
+
             _mouseControl.Draw(_spriteBatch);
 
             base.Draw(gameTime);
@@ -97,11 +129,11 @@ namespace MapEditor
 
         private void DrawText()
         {
-            var layerName = _layers[_currentLayer];
-            var clicked = _text.DrawClickable(layerName, new Vector2(5, 5), _mouseControl.Position, _mouseControl.RightButtonClick);
-
-            if (clicked)
+            if (_text.DrawClickable(_mapLayers[_currentLayer], new Vector2(5, 5)))
                 _currentLayer = (_currentLayer + 1) % 3;
+
+            if (_text.DrawClickable(_drawingLayers[(int)_drawingMode], new Vector2(5, 25)))
+                _drawingMode = (DrawingMode)((int)(_drawingMode + 1) % 2);
         }
 
         private void DrawMapSegments()
@@ -142,7 +174,7 @@ namespace MapEditor
 
                 _text.Draw(segment.Name, new Vector2(destination.X + 50, destination.Y));
 
-                if (_mouseControl.RightButtonPressed)
+                if (_mouseControl.LeftButtonPressed)
                 {
                     if (_mouseControl.Position.X > destination.X &&
                         _mouseControl.Position.X < 780 &&
@@ -162,6 +194,54 @@ namespace MapEditor
                     }
                 }
             }
+        }
+
+        private void DrawGrid()
+        {
+            _spriteBatch.Begin();
+
+            for (var x = 0; x <= _map.MaxGridDimension0Index; x++)
+            {
+                for (var y = 0; y <= _map.MaxGridDimension1Index; y++)
+                {
+                    Rectangle destination;
+                    destination.X = x * 32 - (int)(_scroll.X / 2);
+                    destination.Y = y * 32 - (int)(_scroll.Y / 2);
+
+                    var xIsLessThanMaxIndice = x < _map.MaxGridDimension0Index;
+                    var yIsLessThanMaxIndice = y < _map.MaxGridDimension1Index;
+
+                    if (xIsLessThanMaxIndice)
+                    {
+                        destination.Width = 32;
+                        destination.Height = 1;
+                        _spriteBatch.Draw(Art.Null, destination, _gridColor);
+                    }
+
+                    if (yIsLessThanMaxIndice)
+                    {
+                        destination.Width = 1;
+                        destination.Height = 32;
+                        _spriteBatch.Draw(Art.Null, destination, _gridColor);
+                    }
+
+                    if (xIsLessThanMaxIndice && yIsLessThanMaxIndice && _map.Grid[x, y] == 1)
+                    {
+                        destination.Width = 32;
+                        destination.Height = 32;
+                        _spriteBatch.Draw(Art.Null, destination, _gridColor);
+                    }
+                }
+            }
+
+
+
+            _spriteBatch.End();
+        }
+
+        private bool CanEdit()
+        {
+            return _editArea.Area.Contains(_mouseControl.Position);
         }
     }
 }
