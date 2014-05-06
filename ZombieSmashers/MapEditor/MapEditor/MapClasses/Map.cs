@@ -15,6 +15,7 @@ namespace MapEditor.MapClasses
         private readonly int[,] _grid;
         public readonly int MaxGridDimension0Index;
         public readonly int MaxGridDimension1Index;
+        private readonly Ledge[] _ledges;
         private readonly float[] _scales = { 0.75f, 1, 1.25f };
         private readonly Color[] _colors = { Color.Gray, Color.White, Color.DarkGray };
 
@@ -30,6 +31,8 @@ namespace MapEditor.MapClasses
             MaxGridDimension0Index = _grid.GetLength(0) - 1;
             MaxGridDimension1Index = _grid.GetLength(1) - 1;
 
+            _ledges = new Ledge[16];
+
             ReadDefinitions();
         }
 
@@ -44,6 +47,10 @@ namespace MapEditor.MapClasses
         public int[,] Grid
         {
             get { return _grid; }
+        }
+        public Ledge[] Ledges
+        {
+            get { return _ledges; }
         }
 
         public int AddSegment(int layer, int index)

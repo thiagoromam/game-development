@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace MapEditor
+namespace MapEditor.MapClasses
 {
     public class MapSegment
     {

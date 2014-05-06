@@ -3,6 +3,7 @@
     public enum DrawingMode
     {
         SegmentSelection,
-        CollisionMap
+        CollisionMap,
+        Ledge
     }
 }
