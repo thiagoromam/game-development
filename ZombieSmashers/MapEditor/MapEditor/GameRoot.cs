@@ -1,3 +1,6 @@
+// ReSharper disable ForCanBeConvertedToForeach
+
+using System.Linq;
 using MapEditor.Helpers;
 using MapEditor.MapClasses;
 using Microsoft.Xna.Framework;
@@ -15,6 +18,9 @@ namespace MapEditor
         private Text _text;
         private Map _map;
         private MouseControl _mouseControl;
+
+        private KeyboardState _lastState;
+        private EditingMode _editingMode;
 
         private int _currentLayer = 1;
         private int _mouseDragSegment = -1;
@@ -90,14 +96,14 @@ namespace MapEditor
                 _scroll -= (_mouseControl.Position - _mouseControl.PreviousPosition) * 2;
             }
 
+            UpdateKeys();
+
             base.Update(gameTime);
         }
-
         private bool CanEdit()
         {
             return _editArea.Area.Contains(_mouseControl.Position);
         }
-
         private void CheckSegmentUpdates()
         {
             if (!_mouseControl.LeftButtonPressed) return;
@@ -106,7 +112,6 @@ namespace MapEditor
             if (f != -1)
                 _mouseDragSegment = f;
         }
-
         private void CheckCollisionMapUpdates()
         {
             if (!_mouseControl.LeftButtonClick && !_mouseControl.RightButtonClick) return;
@@ -121,17 +126,68 @@ namespace MapEditor
             else if (_mouseControl.RightButtonClick)
                 _map.Grid[x, y] = 0;
         }
-
         private void CheckLedgesUpdates()
         {
             if (!_mouseControl.LeftButtonClick) return;
 
             var ledge = _map.Ledges[_currentLedge] ?? (_map.Ledges[_currentLedge] = new Ledge());
-            
+
             if (ledge.TotalNodes >= 15) return;
 
             ledge.Nodes[ledge.TotalNodes] = _mouseControl.Position + _scroll / 2;
             ledge.TotalNodes++;
+        }
+        private void UpdateKeys()
+        {
+            var state = Keyboard.GetState();
+
+            var currentKeys = state.GetPressedKeys();
+            var lastKeys = _lastState.GetPressedKeys();
+
+            for (var i = 0; i < currentKeys.Length; i++)
+            {
+                var key = currentKeys[i];
+                if (!lastKeys.Contains(key))
+                {
+                    PressKey(key);
+                }
+            }
+
+            _lastState = state;
+        }
+        private void PressKey(Keys key)
+        {
+            string t;
+            switch (_editingMode)
+            {
+                case EditingMode.Path:
+                    t = _map.Path;
+                    break;
+                default:
+                    return;
+            }
+
+            switch (key)
+            {
+                case Keys.Back:
+                    if (t.Length > 0)
+                        t = t.Remove(t.Length - 1);
+                    break;
+                case Keys.Enter:
+                    _editingMode = EditingMode.None;
+                    break;
+                default:
+                    var charKey = key == Keys.OemPeriod ? '.' : (char) key;
+                    t = (t + charKey).ToLower();
+                    break;
+            }
+
+            switch (_editingMode)
+            {
+                case EditingMode.Path:
+                    _map.Path = t;
+                    break;
+            }
         }
 
         protected override void Draw(GameTime gameTime)
@@ -155,7 +211,6 @@ namespace MapEditor
 
             base.Draw(gameTime);
         }
-
         private void DrawText()
         {
             if (_text.DrawClickable(_mapLayers[_currentLayer], new Vector2(5, 5)))
@@ -163,8 +218,10 @@ namespace MapEditor
 
             if (_text.DrawClickable(_drawingLayers[(int)_drawingMode], new Vector2(5, 25)))
                 _drawingMode = (DrawingMode)((int)(_drawingMode + 1) % 3);
-        }
 
+            if (_text.Draw(_map.Path + "*", 5, 45, _editingMode != EditingMode.Path))
+                _editingMode = EditingMode.Path;
+        }
         private void DrawMapSegments()
         {
             var destination = new Rectangle();
@@ -224,7 +281,6 @@ namespace MapEditor
                 }
             }
         }
-
         private void DrawGrid()
         {
             _spriteBatch.Begin();
@@ -267,7 +323,6 @@ namespace MapEditor
 
             _spriteBatch.End();
         }
-
         private void DrawLedges()
         {
             var rectangle = new Rectangle(32, 0, 32, 32);
@@ -280,7 +335,7 @@ namespace MapEditor
             {
                 var ledge = _map.Ledges[i];
                 if (ledge == null) continue;
-                
+
                 for (var n = 0; n < ledge.TotalNodes; ++n)
                 {
                     var tVector = ledge.Nodes[n] - _scroll / 2;
@@ -308,7 +363,6 @@ namespace MapEditor
 
             _spriteBatch.End();
         }
-
         private void DrawLedgePallete()
         {
             for (var i = 0; i < _map.Ledges.Length; i++)

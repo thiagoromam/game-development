@@ -33,6 +33,7 @@ namespace MapEditor.MapClasses
 
             _ledges = new Ledge[16];
 
+            Path = "maps.zdx";
             ReadDefinitions();
         }
 
@@ -52,6 +53,7 @@ namespace MapEditor.MapClasses
         {
             get { return _ledges; }
         }
+        public string Path { get; set; }
 
         public int AddSegment(int layer, int index)
         {

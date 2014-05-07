@@ -75,6 +75,7 @@
     <Compile Include="AreaRectangle.cs" />
     <Compile Include="Art.cs" />
     <Compile Include="DrawingMode.cs" />
+    <Compile Include="EditingMode.cs" />
     <Compile Include="Helpers\EnumerableHelper.cs" />
     <Compile Include="Helpers\IntHelper.cs" />
     <Compile Include="Helpers\RectangleHelper.cs" />

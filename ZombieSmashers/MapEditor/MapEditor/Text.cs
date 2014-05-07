@@ -22,6 +22,17 @@ namespace MapEditor
         public float Size { get; set; }
         public Color Color { get; set; }
 
+        public bool Draw(string text, float x, float y, bool clickable)
+        {
+            var position = new Vector2(x, y);
+
+            if (clickable)
+                return DrawClickable(text, position);
+            
+            Draw(text, position);
+            return false;
+        }
+
         public void Draw(string text, Vector2 position)
         {
             _spriteBatch.Begin();
