@@ -1,10 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MapEditor.Ioc.Api.Input;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace MapEditor
+namespace MapEditor.Input
 {
-    public class MouseControl
+    public class MouseControl : IMouseInput, IMouseComponent
     {
         private Vector2 _position;
         private Vector2 _previousPosition;

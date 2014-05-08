@@ -1,4 +1,6 @@
 ﻿using MapEditor.Helpers;
+using MapEditor.Ioc;
+using MapEditor.Ioc.Api.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -8,15 +10,15 @@ namespace MapEditor
     {
         private readonly SpriteFont _font;
         private readonly SpriteBatch _spriteBatch;
-        private readonly MouseControl _mouseControl;
+        private readonly IMouseInput _mouseInput;
 
-        public Text(SpriteFont font, SpriteBatch spriteBatch, MouseControl mouseControl)
+        public Text(SpriteFont font, SpriteBatch spriteBatch)
         {
             Size = 1;
             Color = Color.White;
             _font = font;
             _spriteBatch = spriteBatch;
-            _mouseControl = mouseControl;
+            _mouseInput = App.Container.Resolve<IMouseInput>();
         }
 
         public float Size { get; set; }
@@ -46,10 +48,10 @@ namespace MapEditor
 
             var clicked = false;
 
-            if (_font.Intersects(text, textPosition, Size, _mouseControl.Position))
+            if (_font.Intersects(text, textPosition, Size, _mouseInput.Position))
             {
                 Color = Color.Yellow;
-                if (_mouseControl.LeftButtonClick)
+                if (_mouseInput.LeftButtonClick)
                     clicked = true;
             }
 

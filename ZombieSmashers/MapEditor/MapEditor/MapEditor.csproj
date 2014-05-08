@@ -60,6 +60,9 @@
     <XnaCompressContent>true</XnaCompressContent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Funq.Portable">
+      <HintPath>..\..\Libraries\Funq.Portable.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
@@ -74,17 +77,39 @@
   <ItemGroup>
     <Compile Include="AreaRectangle.cs" />
     <Compile Include="Art.cs" />
+    <Compile Include="Editor\Buttons\File\MapPathEditor.cs" />
+    <Compile Include="Editor\Buttons\Map\DrawingModeButton.cs" />
+    <Compile Include="Editor\Buttons\Map\MapLayerButton.cs" />
+    <Compile Include="Editor\GuiManager.cs" />
+    <Compile Include="Editor\Settings.cs" />
+    <Compile Include="Editor\GuiText.cs" />
+    <Compile Include="Gui\Controls\Button.cs" />
+    <Compile Include="Editor\Buttons\File\LoadButton.cs" />
+    <Compile Include="Editor\Buttons\File\SaveButton.cs" />
     <Compile Include="DrawingMode.cs" />
     <Compile Include="EditingMode.cs" />
+    <Compile Include="Gui\Controls\FlipTextButton.cs" />
+    <Compile Include="Gui\Controls\FlipTextOption.cs" />
+    <Compile Include="Gui\Controls\TextEditor.cs" />
+    <Compile Include="Gui\IControl.cs" />
+    <Compile Include="Gui\IControlComponent.cs" />
+    <Compile Include="Gui\ITextControl.cs" />
     <Compile Include="Helpers\EnumerableHelper.cs" />
     <Compile Include="Helpers\IntHelper.cs" />
     <Compile Include="Helpers\RectangleHelper.cs" />
     <Compile Include="Helpers\Vector2Helper.cs" />
+    <Compile Include="Input\KeyboardInput.cs" />
+    <Compile Include="Ioc\Api\Gui\IGuiText.cs" />
+    <Compile Include="Ioc\Api\Input\IMouseInput.cs" />
+    <Compile Include="Ioc\Api\Input\IMouseComponent.cs" />
+    <Compile Include="Ioc\Api\Settings\IReadableSettings.cs" />
+    <Compile Include="Ioc\Api\Settings\ISettings.cs" />
+    <Compile Include="Ioc\App.cs" />
     <Compile Include="MapClasses\Ledge.cs" />
     <Compile Include="MapClasses\Map.cs" />
     <Compile Include="MapClasses\SegmentDefinition.cs" />
     <Compile Include="MapClasses\MapSegment.cs" />
-    <Compile Include="MouseControl.cs" />
+    <Compile Include="Input\MouseControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="GameRoot.cs" />

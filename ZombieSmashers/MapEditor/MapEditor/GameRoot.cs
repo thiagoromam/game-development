@@ -1,11 +1,15 @@
-// ReSharper disable ForCanBeConvertedToForeach
-
-using System.Linq;
+using MapEditor.Editor;
 using MapEditor.Helpers;
+using MapEditor.Input;
+using MapEditor.Ioc;
+using MapEditor.Ioc.Api.Input;
+using MapEditor.Ioc.Api.Settings;
 using MapEditor.MapClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+// ReSharper disable ForCanBeConvertedToForeach
 
 namespace MapEditor
 {
@@ -15,21 +19,20 @@ namespace MapEditor
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        private ISettings _settings;
+        private IMouseComponent _mouseComponent;
+        private IMouseInput _mouseInput;
+        private KeyboardInput _keyboardInput;
+
         private Text _text;
         private Map _map;
-        private MouseControl _mouseControl;
 
-        private KeyboardState _lastState;
-        private EditingMode _editingMode;
+        private GuiManager _guiManager;
 
-        private int _currentLayer = 1;
         private int _mouseDragSegment = -1;
-        private readonly string[] _mapLayers = { "back", "mid", "fore", "map" };
         private readonly float[] _layersScalar = { 0.375f, 0.5f, 0.625f };
         private readonly Color _gridColor = new Color(255, 0, 0, 100);
         private Vector2 _scroll;
-        private DrawingMode _drawingMode;
-        private readonly string[] _drawingLayers = { "select", "colision", "ledge" };
         private AreaRectangle _editArea;
         private int _currentLedge;
 
@@ -46,9 +49,10 @@ namespace MapEditor
         protected override void Initialize()
         {
             _map = new Map();
-            _mouseControl = new MouseControl();
-            _drawingMode = DrawingMode.SegmentSelection;
+            _mouseInput = new MouseControl();
             _editArea = new AreaRectangle(100, 50, 400, 450, new Color(255, 255, 255, 100));
+            _keyboardInput = new KeyboardInput();
+
             base.Initialize();
         }
 
@@ -57,8 +61,14 @@ namespace MapEditor
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             Art.LoadContent(Content);
+            App.Register(_spriteBatch);
 
-            _text = new Text(Art.Arial, _spriteBatch, _mouseControl);
+            _text = new Text(Art.Arial, _spriteBatch);
+            _guiManager = new GuiManager();
+            
+            _mouseComponent = App.Container.Resolve<IMouseComponent>();
+            _mouseInput = App.Container.Resolve<IMouseInput>();
+            _settings = App.Container.Resolve<ISettings>();
         }
 
         protected override void UnloadContent()
@@ -71,11 +81,11 @@ namespace MapEditor
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            _mouseControl.Update();
+            _mouseComponent.Update();
 
             if (CanEdit())
             {
-                switch (_drawingMode)
+                switch (_settings.DrawingMode)
                 {
                     case DrawingMode.SegmentSelection: CheckSegmentUpdates(); break;
                     case DrawingMode.CollisionMap: CheckCollisionMapUpdates(); break;
@@ -85,142 +95,81 @@ namespace MapEditor
 
             if (_mouseDragSegment > -1)
             {
-                if (!_mouseControl.LeftButtonPressed)
+                if (!_mouseInput.LeftButtonPressed)
                     _mouseDragSegment = -1;
                 else
-                    _map.Segments[_currentLayer, _mouseDragSegment].Location += _mouseControl.Position - _mouseControl.PreviousPosition;
+                    _map.Segments[_settings.MapLayer, _mouseDragSegment].Location += _mouseInput.Position - _mouseInput.PreviousPosition;
             }
 
-            if (_mouseControl.MiddleButtonPressed)
+            if (_mouseInput.MiddleButtonPressed)
             {
-                _scroll -= (_mouseControl.Position - _mouseControl.PreviousPosition) * 2;
+                _scroll -= (_mouseInput.Position - _mouseInput.PreviousPosition) * 2;
             }
 
-            UpdateKeys();
+            _keyboardInput.Update();
+            _guiManager.Update();
 
             base.Update(gameTime);
         }
         private bool CanEdit()
         {
-            return _editArea.Area.Contains(_mouseControl.Position);
+            return _editArea.Area.Contains(_mouseInput.Position);
         }
         private void CheckSegmentUpdates()
         {
-            if (!_mouseControl.LeftButtonPressed) return;
+            if (!_mouseInput.LeftButtonPressed) return;
 
-            var f = _map.GetHoveredSegment(_currentLayer, _scroll, _mouseControl.Position);
+            var f = _map.GetHoveredSegment(_settings.MapLayer, _scroll, _mouseInput.Position);
             if (f != -1)
                 _mouseDragSegment = f;
         }
         private void CheckCollisionMapUpdates()
         {
-            if (!_mouseControl.LeftButtonClick && !_mouseControl.RightButtonClick) return;
+            if (!_mouseInput.LeftButtonClick && !_mouseInput.RightButtonClick) return;
 
-            var x = (int)(_mouseControl.Position.X + _scroll.X / 2) / 32;
-            var y = (int)(_mouseControl.Position.Y + _scroll.Y / 2) / 32;
+            var x = (int)(_mouseInput.Position.X + _scroll.X / 2) / 32;
+            var y = (int)(_mouseInput.Position.Y + _scroll.Y / 2) / 32;
 
             if (!x.Between(0, _map.MaxGridDimension0Index) || !y.Between(0, _map.MaxGridDimension1Index)) return;
 
-            if (_mouseControl.LeftButtonClick)
+            if (_mouseInput.LeftButtonClick)
                 _map.Grid[x, y] = 1;
-            else if (_mouseControl.RightButtonClick)
+            else if (_mouseInput.RightButtonClick)
                 _map.Grid[x, y] = 0;
         }
         private void CheckLedgesUpdates()
         {
-            if (!_mouseControl.LeftButtonClick) return;
+            if (!_mouseInput.LeftButtonClick) return;
 
             var ledge = _map.Ledges[_currentLedge] ?? (_map.Ledges[_currentLedge] = new Ledge());
 
             if (ledge.TotalNodes >= 15) return;
 
-            ledge.Nodes[ledge.TotalNodes] = _mouseControl.Position + _scroll / 2;
+            ledge.Nodes[ledge.TotalNodes] = _mouseInput.Position + _scroll / 2;
             ledge.TotalNodes++;
         }
-        private void UpdateKeys()
-        {
-            var state = Keyboard.GetState();
-
-            var currentKeys = state.GetPressedKeys();
-            var lastKeys = _lastState.GetPressedKeys();
-
-            for (var i = 0; i < currentKeys.Length; i++)
-            {
-                var key = currentKeys[i];
-                if (!lastKeys.Contains(key))
-                {
-                    PressKey(key);
-                }
-            }
-
-            _lastState = state;
-        }
-        private void PressKey(Keys key)
-        {
-            string t;
-            switch (_editingMode)
-            {
-                case EditingMode.Path:
-                    t = _map.Path;
-                    break;
-                default:
-                    return;
-            }
-
-            switch (key)
-            {
-                case Keys.Back:
-                    if (t.Length > 0)
-                        t = t.Remove(t.Length - 1);
-                    break;
-                case Keys.Enter:
-                    _editingMode = EditingMode.None;
-                    break;
-                default:
-                    var charKey = key == Keys.OemPeriod ? '.' : (char) key;
-                    t = (t + charKey).ToLower();
-                    break;
-            }
-
-            switch (_editingMode)
-            {
-                case EditingMode.Path:
-                    _map.Path = t;
-                    break;
-            }
-        }
-
+        
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _map.Draw(_spriteBatch, _scroll);
+            
+            DrawGrid();
 
-            switch (_drawingMode)
+            switch (_settings.DrawingMode)
             {
                 case DrawingMode.SegmentSelection: DrawMapSegments(); break;
                 case DrawingMode.Ledge: DrawLedgePallete(); break;
             }
 
-            DrawGrid();
             _editArea.Draw(_spriteBatch);
             DrawLedges();
-            DrawText();
+            _guiManager.Draw(_spriteBatch);
 
-            _mouseControl.Draw(_spriteBatch);
+            _mouseComponent.Draw(_spriteBatch);
 
             base.Draw(gameTime);
-        }
-        private void DrawText()
-        {
-            if (_text.DrawClickable(_mapLayers[_currentLayer], new Vector2(5, 5)))
-                _currentLayer = (_currentLayer + 1) % 3;
-
-            if (_text.DrawClickable(_drawingLayers[(int)_drawingMode], new Vector2(5, 25)))
-                _drawingMode = (DrawingMode)((int)(_drawingMode + 1) % 3);
-
-            if (_text.Draw(_map.Path + "*", 5, 45, _editingMode != EditingMode.Path))
-                _editingMode = EditingMode.Path;
         }
         private void DrawMapSegments()
         {
@@ -260,21 +209,21 @@ namespace MapEditor
 
                 _text.Draw(segment.Name, new Vector2(destination.X + 50, destination.Y));
 
-                if (_mouseControl.LeftButtonPressed)
+                if (_mouseInput.LeftButtonPressed)
                 {
-                    if (_mouseControl.Position.X > destination.X &&
-                        _mouseControl.Position.X < 780 &&
-                        _mouseControl.Position.Y > destination.Y &&
-                        _mouseControl.Position.Y < destination.Y + 45)
+                    if (_mouseInput.Position.X > destination.X &&
+                        _mouseInput.Position.X < 780 &&
+                        _mouseInput.Position.Y > destination.Y &&
+                        _mouseInput.Position.Y < destination.Y + 45)
                     {
                         if (_mouseDragSegment == -1)
                         {
-                            var f = _map.AddSegment(_currentLayer, i);
+                            var f = _map.AddSegment(_settings.MapLayer, i);
                             if (f <= -1)
                                 continue;
 
-                            var mapSegment = _map.Segments[_currentLayer, f];
-                            mapSegment.Location = _mouseControl.Position - segment.SourceLength / 4 + _scroll * _layersScalar[_currentLayer];
+                            var mapSegment = _map.Segments[_settings.MapLayer, f];
+                            mapSegment.Location = _mouseInput.Position - segment.SourceLength / 4 + _scroll * _layersScalar[_settings.MapLayer];
                             _mouseDragSegment = f;
                         }
                     }
