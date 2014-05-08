@@ -2,11 +2,11 @@
 
 namespace MapEditor.Editor
 {
-    public class Settings : ISettings, IReadableSettings
+    public class Settings : ISettings, IReadOnlySettings
     {
         public Settings()
         {
-            MapPath = "maps.zdx";
+            MapPath = "maps.zmx";
             DrawingMode = DrawingMode.SegmentSelection;
             MapLayer = 1;
         }

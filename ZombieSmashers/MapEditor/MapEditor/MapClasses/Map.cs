@@ -1,61 +1,62 @@
 ﻿using System;
 using System.IO;
 using MapEditor.Helpers;
+using MapEditor.Ioc.Api.Map;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MapEditor.MapClasses
 {
-    public class Map
+    public class Map : IReadonlyMapData, IMapComponent
     {
-        private readonly SegmentDefinition[] _definitions;
-        private readonly MapSegment[,] _segments;
-        private readonly int _maxSegmentsDimension0Index;
-        private readonly int _maxSegmentsDimension1Index;
-        private readonly int[,] _grid;
-        public readonly int MaxGridDimension0Index;
-        public readonly int MaxGridDimension1Index;
-        private readonly Ledge[] _ledges;
+        private MapSegment[,] _segments;
+        private int[,] _grid;
         private readonly float[] _scales = { 0.75f, 1, 1.25f };
         private readonly Color[] _colors = { Color.Gray, Color.White, Color.DarkGray };
 
         public Map()
         {
-            _definitions = new SegmentDefinition[512];
+            Definitions = new SegmentDefinition[512];
+            Segments = new MapSegment[3, 64];
+            Grid = new int[20, 20];
+            Ledges = new Ledge[16];
 
-            _segments = new MapSegment[3, 64];
-            _maxSegmentsDimension0Index = _segments.GetLength(0) - 1;
-            _maxSegmentsDimension1Index = _segments.GetLength(1) - 1;
-
-            _grid = new int[20, 20];
-            MaxGridDimension0Index = _grid.GetLength(0) - 1;
-            MaxGridDimension1Index = _grid.GetLength(1) - 1;
-
-            _ledges = new Ledge[16];
+            for (var i = 0; i < Ledges.Length; i++)
+                Ledges[i] = new Ledge();
 
             ReadDefinitions();
         }
 
-        public SegmentDefinition[] Definitions
-        {
-            get { return _definitions; }
-        }
+        public SegmentDefinition[] Definitions { get; set; }
         public MapSegment[,] Segments
         {
             get { return _segments; }
+            set
+            {
+                _segments = value;
+                MaxSegmentsDimension0Index = _segments.GetLength(0) - 1;
+                MaxSegmentsDimension1Index = _segments.GetLength(1) - 1;
+            }
         }
         public int[,] Grid
         {
             get { return _grid; }
+            set
+            {
+                _grid = value;
+                MaxGridDimension0Index = _grid.GetLength(0) - 1;
+                MaxGridDimension1Index = _grid.GetLength(1) - 1;
+            }
         }
-        public Ledge[] Ledges
-        {
-            get { return _ledges; }
-        }
+        public Ledge[] Ledges { get; set; }
+        public int MaxGridDimension0Index { get; private set; }
+        public int MaxGridDimension1Index { get; private set; }
+        public int MaxSegmentsDimension0Index { get; private set; }
+        public int MaxSegmentsDimension1Index { get; private set; }
 
         public int AddSegment(int layer, int index)
         {
-            for (var i = 0; i <= _maxSegmentsDimension1Index; i++)
+            for (var i = 0; i <= MaxSegmentsDimension1Index; i++)
             {
                 if (_segments[layer, i] != null) continue;
 
@@ -105,10 +106,12 @@ namespace MapEditor.MapClasses
                         Console.WriteLine("read fail: " + name);
 
                     var flags = Convert.ToInt32(reader.ReadLine());
-                    _definitions[curDef] = new SegmentDefinition(name, currentTex, tRect, flags);
+                    Definitions[curDef] = new SegmentDefinition(name, currentTex, tRect, flags);
                 }
                 // ReSharper restore PossibleNullReferenceException
             }
+
+            reader.Close();
         }
 
         public void Draw(SpriteBatch spriteBatch, Vector2 scroll)
@@ -117,18 +120,18 @@ namespace MapEditor.MapClasses
 
             spriteBatch.Begin();
 
-            for (var l = 0; l <= _maxSegmentsDimension0Index; l++)
+            for (var l = 0; l <= MaxSegmentsDimension0Index; l++)
             {
                 var scale = _scales[l];
 
                 scale *= 0.5f;
 
-                for (var i = 0; i <= _maxSegmentsDimension1Index; i++)
+                for (var i = 0; i <= MaxSegmentsDimension1Index; i++)
                 {
                     var segment = _segments[l, i];
                     if (segment == null) continue;
 
-                    var definition = _definitions[segment.Index];
+                    var definition = Definitions[segment.Index];
                     destination.X = (int)(segment.Location.X - scroll.X * scale);
                     destination.Y = (int)(segment.Location.Y - scroll.Y * scale);
                     destination.Width = (int)(definition.Source.Width * scale);
@@ -145,7 +148,7 @@ namespace MapEditor.MapClasses
         {
             var scale = _scales[layer];
 
-            for (var i = _maxSegmentsDimension1Index; i >= 0; i--)
+            for (var i = MaxSegmentsDimension1Index; i >= 0; i--)
             {
                 var segment = Segments[layer, i];
                 if (segment == null) continue;

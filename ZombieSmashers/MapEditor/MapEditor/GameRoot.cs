@@ -3,6 +3,7 @@ using MapEditor.Helpers;
 using MapEditor.Input;
 using MapEditor.Ioc;
 using MapEditor.Ioc.Api.Input;
+using MapEditor.Ioc.Api.Map;
 using MapEditor.Ioc.Api.Settings;
 using MapEditor.MapClasses;
 using Microsoft.Xna.Framework;
@@ -25,7 +26,7 @@ namespace MapEditor
         private KeyboardInput _keyboardInput;
 
         private Text _text;
-        private Map _map;
+        private IMapComponent _map;
 
         private GuiManager _guiManager;
 
@@ -48,8 +49,6 @@ namespace MapEditor
 
         protected override void Initialize()
         {
-            _map = new Map();
-            _mouseInput = new MouseControl();
             _editArea = new AreaRectangle(100, 50, 400, 450, new Color(255, 255, 255, 100));
             _keyboardInput = new KeyboardInput();
 
@@ -69,6 +68,7 @@ namespace MapEditor
             _mouseComponent = App.Container.Resolve<IMouseComponent>();
             _mouseInput = App.Container.Resolve<IMouseInput>();
             _settings = App.Container.Resolve<ISettings>();
+            _map = App.Container.Resolve<IMapComponent>();
         }
 
         protected override void UnloadContent()
@@ -141,7 +141,7 @@ namespace MapEditor
         {
             if (!_mouseInput.LeftButtonClick) return;
 
-            var ledge = _map.Ledges[_currentLedge] ?? (_map.Ledges[_currentLedge] = new Ledge());
+            var ledge = _map.Ledges[_currentLedge];
 
             if (ledge.TotalNodes >= 15) return;
 
@@ -283,7 +283,6 @@ namespace MapEditor
             for (var i = 0; i < _map.Ledges.Length; ++i)
             {
                 var ledge = _map.Ledges[i];
-                if (ledge == null) continue;
 
                 for (var n = 0; n < ledge.TotalNodes; ++n)
                 {
@@ -317,7 +316,6 @@ namespace MapEditor
             for (var i = 0; i < _map.Ledges.Length; i++)
             {
                 var ledge = _map.Ledges[i];
-                if (ledge == null) continue;
 
                 var textPosition = new Vector2(520, 50 + i * 20);
                 var text = "ledge " + i;

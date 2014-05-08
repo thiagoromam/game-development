@@ -1,6 +1,6 @@
 ﻿namespace MapEditor.Ioc.Api.Settings
 {
-    public interface IReadableSettings
+    public interface IReadOnlySettings
     {
         string MapPath { get; }
         DrawingMode DrawingMode { get; }

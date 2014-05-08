@@ -6,5 +6,12 @@ namespace MapEditor.MapClasses
     {
         public Vector2 Location;
         public int Index { get; set; }
+
+        public MapSegment() { }
+        public MapSegment(int index, Vector2 location)
+        {
+            Index = index;
+            Location = location;
+        }
     }
 }
