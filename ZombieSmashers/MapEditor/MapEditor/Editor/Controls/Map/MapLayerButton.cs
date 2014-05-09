@@ -2,7 +2,7 @@
 using MapEditor.Ioc;
 using MapEditor.Ioc.Api.Settings;
 
-namespace MapEditor.Editor.Buttons.Map
+namespace MapEditor.Editor.Controls.Map
 {
     public class MapLayerButton : FlipTextButton<int>
     {
@@ -17,8 +17,8 @@ namespace MapEditor.Editor.Buttons.Map
             AddOption(1, "mid");
             AddOption(2, "fore");
 
-            Value = _settings.MapLayer;
-            Change = v => _settings.MapLayer = v;
+            Value = _settings.CurrentMapLayer;
+            Change = v => _settings.CurrentMapLayer = v;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using MapEditor.Editor.Buttons.File;
-using MapEditor.Editor.Buttons.Map;
+using MapEditor.Editor.Controls.File;
+using MapEditor.Editor.Controls.Map;
+using MapEditor.Editor.Controls.Map.Ledge;
 using MapEditor.Gui;
 using MapEditor.Gui.Controls;
 using Microsoft.Xna.Framework.Graphics;
@@ -24,6 +25,14 @@ namespace MapEditor.Editor
             AddButtons();
             AddFlipButtons();
             AddTextEditors();
+            AddLedgePallet();
+        }
+
+        private void AddLedgePallet()
+        {
+            var ledgePallet = new LedgePallete(520, 50);
+            _components.Add(ledgePallet);
+            _textControls.Add(ledgePallet);
         }
 
         private void AddButtons()

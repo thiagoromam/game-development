@@ -8,17 +8,19 @@ using Microsoft.Xna.Framework;
 
 // ReSharper disable ForCanBeConvertedToForeach
 
-namespace MapEditor.Editor.Buttons.File
+namespace MapEditor.Editor.Controls.File
 {
     public class LoadButton : Button
     {
         private readonly IReadOnlySettings _settings;
         private readonly IMapData _mapData;
+        private readonly ILedgesLoader _ledgesLoader;
 
         public LoadButton(int x, int y) : base(4, x, y)
         {
             _settings = App.Container.Resolve<IReadOnlySettings>();
             _mapData = App.Container.Resolve<IMapData>();
+            _ledgesLoader = App.Container.Resolve<ILedgesLoader>();
         }
 
         public override void Update()
@@ -34,24 +36,13 @@ namespace MapEditor.Editor.Buttons.File
             var mapPath = string.Format("Content/{0}", _settings.MapPath);
             var file = new BinaryReader(System.IO.File.Open(mapPath, FileMode.Open));
 
-            ReadLedges(file);
+            _ledgesLoader.Load(file);
             ReadSegments(file);
             ReadGrid(file);
 
             file.Close();
         }
-
-        private void ReadLedges(BinaryReader file)
-        {
-            for (var i = 0; i < _mapData.Ledges.Length; i++)
-            {
-                var ledge = _mapData.Ledges[i];
-                ledge.TotalNodes = file.ReadInt32();
-                for (var j = 0; j < ledge.TotalNodes; j++)
-                    ledge.Nodes[j] = ReadVector2(file);
-            }
-        }
-
+        
         private void ReadSegments(BinaryReader file)
         {
             for (var l = 0; l <= _mapData.MaxSegmentsDimension0Index; l++)

@@ -7,12 +7,13 @@ namespace MapEditor.Editor
         public Settings()
         {
             MapPath = "maps.zmx";
-            DrawingMode = DrawingMode.SegmentSelection;
-            MapLayer = 1;
+            CurrentDrawingMode = DrawingMode.SegmentSelection;
+            CurrentMapLayer = 1;
         }
 
         public string MapPath { get; set; }
-        public DrawingMode DrawingMode { get; set; }
-        public int MapLayer { get; set; }
+        public DrawingMode CurrentDrawingMode { get; set; }
+        public int CurrentMapLayer { get; set; }
+        public int SelectedLedge { get; set; }
     }
 }

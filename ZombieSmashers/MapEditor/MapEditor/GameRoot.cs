@@ -5,7 +5,6 @@ using MapEditor.Ioc;
 using MapEditor.Ioc.Api.Input;
 using MapEditor.Ioc.Api.Map;
 using MapEditor.Ioc.Api.Settings;
-using MapEditor.MapClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -35,7 +34,6 @@ namespace MapEditor
         private readonly Color _gridColor = new Color(255, 0, 0, 100);
         private Vector2 _scroll;
         private AreaRectangle _editArea;
-        private int _currentLedge;
 
         public GameRoot()
         {
@@ -85,7 +83,7 @@ namespace MapEditor
 
             if (CanEdit())
             {
-                switch (_settings.DrawingMode)
+                switch (_settings.CurrentDrawingMode)
                 {
                     case DrawingMode.SegmentSelection: CheckSegmentUpdates(); break;
                     case DrawingMode.CollisionMap: CheckCollisionMapUpdates(); break;
@@ -98,7 +96,7 @@ namespace MapEditor
                 if (!_mouseInput.LeftButtonPressed)
                     _mouseDragSegment = -1;
                 else
-                    _map.Segments[_settings.MapLayer, _mouseDragSegment].Location += _mouseInput.Position - _mouseInput.PreviousPosition;
+                    _map.Segments[_settings.CurrentMapLayer, _mouseDragSegment].Location += _mouseInput.Position - _mouseInput.PreviousPosition;
             }
 
             if (_mouseInput.MiddleButtonPressed)
@@ -119,7 +117,7 @@ namespace MapEditor
         {
             if (!_mouseInput.LeftButtonPressed) return;
 
-            var f = _map.GetHoveredSegment(_settings.MapLayer, _scroll, _mouseInput.Position);
+            var f = _map.GetHoveredSegment(_settings.CurrentMapLayer, _scroll, _mouseInput.Position);
             if (f != -1)
                 _mouseDragSegment = f;
         }
@@ -141,7 +139,7 @@ namespace MapEditor
         {
             if (!_mouseInput.LeftButtonClick) return;
 
-            var ledge = _map.Ledges[_currentLedge];
+            var ledge = _map.Ledges[_settings.SelectedLedge];
 
             if (ledge.TotalNodes >= 15) return;
 
@@ -157,7 +155,7 @@ namespace MapEditor
             
             DrawGrid();
 
-            switch (_settings.DrawingMode)
+            switch (_settings.CurrentDrawingMode)
             {
                 case DrawingMode.SegmentSelection: DrawMapSegments(); break;
                 case DrawingMode.Ledge: DrawLedgePallete(); break;
@@ -218,12 +216,12 @@ namespace MapEditor
                     {
                         if (_mouseDragSegment == -1)
                         {
-                            var f = _map.AddSegment(_settings.MapLayer, i);
+                            var f = _map.AddSegment(_settings.CurrentMapLayer, i);
                             if (f <= -1)
                                 continue;
 
-                            var mapSegment = _map.Segments[_settings.MapLayer, f];
-                            mapSegment.Location = _mouseInput.Position - segment.SourceLength / 4 + _scroll * _layersScalar[_settings.MapLayer];
+                            var mapSegment = _map.Segments[_settings.CurrentMapLayer, f];
+                            mapSegment.Location = _mouseInput.Position - segment.SourceLength / 4 + _scroll * _layersScalar[_settings.CurrentMapLayer];
                             _mouseDragSegment = f;
                         }
                     }
@@ -288,7 +286,7 @@ namespace MapEditor
                 {
                     var tVector = ledge.Nodes[n] - _scroll / 2;
                     tVector.X -= 5;
-                    var iColor = _currentLedge == i ? Color.Yellow : Color.White;
+                    var iColor = _settings.SelectedLedge == i ? Color.Yellow : Color.White;
 
                     _spriteBatch.Draw(Art.Icons, tVector, rectangle, iColor, 0, Vector2.Zero, 0.35f, SpriteEffects.None, 0);
 
@@ -313,31 +311,31 @@ namespace MapEditor
         }
         private void DrawLedgePallete()
         {
-            for (var i = 0; i < _map.Ledges.Length; i++)
-            {
-                var ledge = _map.Ledges[i];
+            //for (var i = 0; i < _map.Ledges.Length; i++)
+            //{
+            //    var ledge = _map.Ledges[i];
 
-                var textPosition = new Vector2(520, 50 + i * 20);
-                var text = "ledge " + i;
-                if (_currentLedge == i)
-                {
-                    _text.Color = Color.Lime;
-                    _text.Draw(text, textPosition);
-                    _text.Color = Color.White;
-                }
-                else
-                {
-                    if (_text.DrawClickable(text, textPosition))
-                        _currentLedge = i;
-                }
+            //    var textPosition = new Vector2(520, 50 + i * 20);
+            //    var text = "ledge " + i;
+            //    if (_currentLedge == i)
+            //    {
+            //        _text.Color = Color.Lime;
+            //        _text.Draw(text, textPosition);
+            //        _text.Color = Color.White;
+            //    }
+            //    else
+            //    {
+            //        if (_text.DrawClickable(text, textPosition))
+            //            _currentLedge = i;
+            //    }
 
-                textPosition.X = 620;
-                _text.Draw("n" + ledge.TotalNodes, textPosition);
+            //    textPosition.X = 620;
+            //    _text.Draw("n" + ledge.TotalNodes, textPosition);
 
-                textPosition.X = 680;
-                if (_text.DrawClickable("f" + ledge.Flags, textPosition))
-                    ledge.Flags = (ledge.Flags + 1) % 2;
-            }
+            //    textPosition.X = 680;
+            //    if (_text.DrawClickable("f" + ledge.Flags, textPosition))
+            //        ledge.Flags = (ledge.Flags + 1) % 2;
+            //}
         }
     }
 }

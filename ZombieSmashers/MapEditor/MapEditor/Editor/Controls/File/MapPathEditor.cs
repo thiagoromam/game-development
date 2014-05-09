@@ -2,7 +2,7 @@
 using MapEditor.Ioc;
 using MapEditor.Ioc.Api.Settings;
 
-namespace MapEditor.Editor.Buttons.File
+namespace MapEditor.Editor.Controls.File
 {
     public class MapPathEditor : TextEditor
     {

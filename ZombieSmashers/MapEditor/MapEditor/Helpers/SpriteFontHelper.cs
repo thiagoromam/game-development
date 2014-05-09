@@ -9,7 +9,7 @@ namespace MapEditor.Helpers
         {
             if (value.X >= textPosition.X && value.Y >= textPosition.Y)
             {
-                var end = (font.MeasureString(text) + textPosition) * scale;
+                var end = textPosition + font.MeasureString(text) * scale;
 
                 if (value.X <= end.X && value.Y <= end.Y)
                     return true;

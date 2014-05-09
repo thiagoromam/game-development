@@ -77,19 +77,23 @@
   <ItemGroup>
     <Compile Include="AreaRectangle.cs" />
     <Compile Include="Art.cs" />
-    <Compile Include="Editor\Buttons\File\MapPathEditor.cs" />
-    <Compile Include="Editor\Buttons\Map\DrawingModeButton.cs" />
-    <Compile Include="Editor\Buttons\Map\MapLayerButton.cs" />
+    <Compile Include="Editor\Controls\File\MapPathEditor.cs" />
+    <Compile Include="Editor\Controls\Map\DrawingModeButton.cs" />
+    <Compile Include="Editor\Controls\Map\Ledge\LedgePallete.cs" />
+    <Compile Include="Editor\Controls\Map\Ledge\LedgeSelector.cs" />
+    <Compile Include="Editor\Controls\Map\MapLayerButton.cs" />
     <Compile Include="Editor\GuiManager.cs" />
     <Compile Include="Editor\Settings.cs" />
     <Compile Include="Editor\GuiText.cs" />
     <Compile Include="Gui\Controls\Button.cs" />
-    <Compile Include="Editor\Buttons\File\LoadButton.cs" />
-    <Compile Include="Editor\Buttons\File\SaveButton.cs" />
+    <Compile Include="Editor\Controls\File\LoadButton.cs" />
+    <Compile Include="Editor\Controls\File\SaveButton.cs" />
     <Compile Include="DrawingMode.cs" />
     <Compile Include="EditingMode.cs" />
     <Compile Include="Gui\Controls\FlipTextButton.cs" />
     <Compile Include="Gui\Controls\FlipTextOption.cs" />
+    <Compile Include="Gui\Controls\RadioButtonList.cs" />
+    <Compile Include="Gui\Controls\RadioButtonOption.cs" />
     <Compile Include="Gui\Controls\TextEditor.cs" />
     <Compile Include="Gui\IControl.cs" />
     <Compile Include="Gui\IControlComponent.cs" />
@@ -102,6 +106,7 @@
     <Compile Include="Ioc\Api\Gui\IGuiText.cs" />
     <Compile Include="Ioc\Api\Input\IMouseInput.cs" />
     <Compile Include="Ioc\Api\Input\IMouseComponent.cs" />
+    <Compile Include="Ioc\Api\Map\ILedgesLoader.cs" />
     <Compile Include="Ioc\Api\Map\IMapComponent.cs" />
     <Compile Include="Ioc\Api\Map\IMapData.cs" />
     <Compile Include="Ioc\Api\Settings\IReadOnlySettings.cs" />
@@ -116,6 +121,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="GameRoot.cs" />
+    <Compile Include="Routines\Load\LedgesLoader.cs" />
     <Compile Include="Text.cs" />
     <Compile Include="Helpers\SpriteFontHelper.cs" />
   </ItemGroup>

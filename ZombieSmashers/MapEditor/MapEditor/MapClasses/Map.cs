@@ -49,6 +49,7 @@ namespace MapEditor.MapClasses
             }
         }
         public Ledge[] Ledges { get; set; }
+
         public int MaxGridDimension0Index { get; private set; }
         public int MaxGridDimension1Index { get; private set; }
         public int MaxSegmentsDimension0Index { get; private set; }

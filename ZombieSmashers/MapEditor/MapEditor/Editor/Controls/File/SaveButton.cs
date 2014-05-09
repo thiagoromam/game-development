@@ -5,7 +5,7 @@ using MapEditor.Ioc.Api.Map;
 using MapEditor.Ioc.Api.Settings;
 
 // ReSharper disable ForCanBeConvertedToForeach
-namespace MapEditor.Editor.Buttons.File
+namespace MapEditor.Editor.Controls.File
 {
     public class SaveButton : Button
     {
@@ -45,6 +45,7 @@ namespace MapEditor.Editor.Buttons.File
                 var ledge = _mapData.Ledges[i];
 
                 file.Write(ledge.TotalNodes);
+                file.Write(ledge.Flags);
 
                 for (var j = 0; j < ledge.TotalNodes; j++)
                 {

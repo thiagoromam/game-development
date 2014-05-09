@@ -6,6 +6,7 @@ using MapEditor.Ioc.Api.Input;
 using MapEditor.Ioc.Api.Map;
 using MapEditor.Ioc.Api.Settings;
 using MapEditor.MapClasses;
+using MapEditor.Routines.Load;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MapEditor.Ioc
@@ -17,6 +18,7 @@ namespace MapEditor.Ioc
         private static MouseControl _mouseControl;
         private static GuiText _guiText;
         private static Map _map;
+        private static LedgesLoader _ledgesLoader;
 
         static App()
         {
@@ -33,11 +35,13 @@ namespace MapEditor.Ioc
             Container.Register(c => (IMapData)_map);
             Container.Register(c => (IReadonlyMapData)_map);
             Container.Register(c => (IMapComponent)_map);
+            Container.Register(c => (ILedgesLoader)_ledgesLoader);
 
             _map = new Map();
             _settings = new Settings();
             _mouseControl = new MouseControl();
             _guiText = new GuiText(spriteBatch);
+            _ledgesLoader = new LedgesLoader();
         }
     }
 }

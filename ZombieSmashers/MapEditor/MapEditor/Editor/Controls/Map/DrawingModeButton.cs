@@ -2,7 +2,7 @@
 using MapEditor.Ioc;
 using MapEditor.Ioc.Api.Settings;
 
-namespace MapEditor.Editor.Buttons.Map
+namespace MapEditor.Editor.Controls.Map
 {
     public class DrawingModeButton : FlipTextButton<DrawingMode>
     {
@@ -17,8 +17,8 @@ namespace MapEditor.Editor.Buttons.Map
             AddOption(DrawingMode.CollisionMap, "colision");
             AddOption(DrawingMode.Ledge, "ledge");
 
-            Value = _settings.DrawingMode;
-            Change = v => _settings.DrawingMode = v;
+            Value = _settings.CurrentDrawingMode;
+            Change = v => _settings.CurrentDrawingMode = v;
         }
     }
 }

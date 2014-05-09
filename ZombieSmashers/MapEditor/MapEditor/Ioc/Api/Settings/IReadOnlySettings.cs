@@ -3,7 +3,8 @@
     public interface IReadOnlySettings
     {
         string MapPath { get; }
-        DrawingMode DrawingMode { get; }
-        int MapLayer { get; }
+        DrawingMode CurrentDrawingMode { get; }
+        int CurrentMapLayer { get; }
+        int SelectedLedge { get; }
     }
 }
