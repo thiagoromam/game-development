@@ -12,6 +12,7 @@ namespace MapEditor.Input
         private MouseState _lastState;
 
         public bool LeftButtonClick { get; private set; }
+        public bool LeftButtonDown { get; private set; }
         public bool LeftButtonPressed { get; private set; }
         public bool MiddleButtonPressed { get; private set; }
         public bool RightButtonClick { get; set; }
@@ -35,6 +36,7 @@ namespace MapEditor.Input
 
             LeftButtonPressed = state.LeftButton == ButtonState.Pressed;
             MiddleButtonPressed = state.MiddleButton == ButtonState.Pressed;
+            LeftButtonDown = _lastState.LeftButton == ButtonState.Released && LeftButtonPressed;
             LeftButtonClick = _lastState.LeftButton == ButtonState.Pressed && !LeftButtonPressed;
             RightButtonClick = _lastState.RightButton == ButtonState.Pressed && state.RightButton == ButtonState.Released;
 
