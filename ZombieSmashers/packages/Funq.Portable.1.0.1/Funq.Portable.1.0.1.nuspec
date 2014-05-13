@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Funq.Portable</id>
+    <version>1.0.1</version>
+    <title>Funq DI Portable</title>
+    <authors>Thiago Romam</authors>
+    <owners>Thiago Romam</owners>
+    <projectUrl>https://github.com/thiagoromam/FunqPortable</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Fork of Funq to support multiples plataforms</description>
+    <releaseNotes />
+    <copyright>Copyright  2014</copyright>
+    <language>en-US</language>
+    <tags>dependency injection windows windows8 windowsphone xamarin.android xamarin.ios mobile portable pcl</tags>
+    <references>
+      <reference file="Funq.Portable.dll" />
+    </references>
+  </metadata>
+</package>

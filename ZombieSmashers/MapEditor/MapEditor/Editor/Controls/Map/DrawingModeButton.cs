@@ -1,24 +1,22 @@
-﻿using MapEditor.Gui.Controls;
-using MapEditor.Ioc;
+﻿using Funq.Fast;
+using GraphicalUserInterfaceLib.Controls;
 using MapEditor.Ioc.Api.Settings;
 
 namespace MapEditor.Editor.Controls.Map
 {
     public class DrawingModeButton : FlipTextButton<DrawingMode>
     {
-        private readonly ISettings _settings;
-
         public DrawingModeButton(int x, int y)
             : base(x, y)
         {
-            _settings = App.Container.Resolve<ISettings>();
+            var settings = DependencyInjection.Resolve<ISettings>();
 
             AddOption(DrawingMode.SegmentSelection, "select");
             AddOption(DrawingMode.CollisionMap, "colision");
             AddOption(DrawingMode.Ledge, "ledge");
 
-            Value = _settings.CurrentDrawingMode;
-            Change = v => _settings.CurrentDrawingMode = v;
+            Value = settings.CurrentDrawingMode;
+            Change = v => settings.CurrentDrawingMode = v;
         }
     }
 }

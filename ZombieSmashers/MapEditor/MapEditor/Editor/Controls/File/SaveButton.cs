@@ -1,21 +1,20 @@
 ﻿using System.IO;
-using MapEditor.Gui.Controls;
-using MapEditor.Ioc;
+using Funq.Fast;
 using MapEditor.Ioc.Api.Map;
 using MapEditor.Ioc.Api.Settings;
 
 // ReSharper disable ForCanBeConvertedToForeach
 namespace MapEditor.Editor.Controls.File
 {
-    public class SaveButton : Button
+    public class SaveButton : DefaultButton
     {
         private readonly IReadOnlySettings _settings;
         private readonly IReadonlyMapData _mapData;
 
         public SaveButton(int x, int y) : base(3, x, y)
         {
-            _settings = App.Container.Resolve<IReadOnlySettings>();
-            _mapData = App.Container.Resolve<IReadonlyMapData>();
+            _settings = DependencyInjection.Resolve<IReadOnlySettings>();
+            _mapData = DependencyInjection.Resolve<IReadonlyMapData>();
         }
 
         public override void Update()

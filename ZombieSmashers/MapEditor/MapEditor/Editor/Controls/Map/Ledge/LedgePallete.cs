@@ -1,10 +1,10 @@
-﻿using MapEditor.Gui;
-using MapEditor.Gui.Controls;
-using MapEditor.Ioc;
-using MapEditor.Ioc.Api.Gui;
+﻿using Funq.Fast;
+using GraphicalUserInterfaceLib.Api;
+using GraphicalUserInterfaceLib.Controls;
 using MapEditor.Ioc.Api.Map;
 using MapEditor.Ioc.Api.Settings;
 using Microsoft.Xna.Framework;
+using TextLib.Api;
 
 // ReSharper disable ForCanBeConvertedToForeach
 namespace MapEditor.Editor.Controls.Map.Ledge
@@ -15,7 +15,7 @@ namespace MapEditor.Editor.Controls.Map.Ledge
         private readonly int _x;
         private readonly int _y;
         private readonly IReadonlyMapData _mapData;
-        private readonly IGuiText _text;
+        private readonly IText _text;
         private readonly LedgeSelector _ledgeSelector;
         private readonly FlipTextButton<int>[] _ledgeFlagsButtons;
         private readonly IReadOnlySettings _settings;
@@ -24,14 +24,14 @@ namespace MapEditor.Editor.Controls.Map.Ledge
         {
             _x = x;
             _y = y;
-            _mapData = App.Container.Resolve<IReadonlyMapData>();
-            _text = App.Container.Resolve<IGuiText>();
-            _settings = App.Container.Resolve<IReadOnlySettings>();
-            _ledgeSelector = new LedgeSelector(x, y, YIncrement, _mapData);
+            _mapData = DependencyInjection.Resolve<IReadonlyMapData>();
+            _text = DependencyInjection.Resolve<IText>();
+            _settings = DependencyInjection.Resolve<IReadOnlySettings>();
+            _ledgeSelector = new LedgeSelector(x, y, YIncrement);
             _ledgeFlagsButtons = new FlipTextButton<int>[_mapData.Ledges.Length];
             CreateLedgeFlagsButtons();
-            
-            var ledgesLoader = App.Container.Resolve<ILedgesLoader>();
+
+            var ledgesLoader = DependencyInjection.Resolve<ILedgesLoader>();
             ledgesLoader.LedgesLoaded += UpdateLedgeFlagsButtonValues;
         }
 

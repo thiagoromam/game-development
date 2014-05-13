@@ -1,13 +1,15 @@
+using Funq.Fast;
+using KeyboardLib.Api;
 using MapEditor.Editor;
-using MapEditor.Helpers;
-using MapEditor.Input;
+using Helpers;
 using MapEditor.Ioc;
-using MapEditor.Ioc.Api.Input;
 using MapEditor.Ioc.Api.Map;
 using MapEditor.Ioc.Api.Settings;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MouseLib.Api;
+using TextLib.Api;
 
 // ReSharper disable ForCanBeConvertedToForeach
 
@@ -22,12 +24,13 @@ namespace MapEditor
         private ISettings _settings;
         private IMouseComponent _mouseComponent;
         private IMouseInput _mouseInput;
-        private KeyboardInput _keyboardInput;
+        private IMouseDrawer _mouseDrawer;
+        private IKeyboardComponent _keyboardComponent;
 
-        private Text _text;
+        private IText _text;
         private IMapComponent _map;
 
-        private GuiManager _guiManager;
+        private EditorGuiManager _guiManager;
 
         private int _mouseDragSegment = -1;
         private readonly float[] _layersScalar = { 0.375f, 0.5f, 0.625f };
@@ -48,7 +51,14 @@ namespace MapEditor
         protected override void Initialize()
         {
             _editArea = new AreaRectangle(100, 50, 400, 450, new Color(255, 255, 255, 100));
-            _keyboardInput = new KeyboardInput();
+
+            App.Register();
+            _mouseComponent = DependencyInjection.Resolve<IMouseComponent>();
+            _mouseInput = DependencyInjection.Resolve<IMouseInput>();
+            _mouseDrawer = DependencyInjection.Resolve<IMouseDrawer>();
+            _settings = DependencyInjection.Resolve<ISettings>();
+            _map = DependencyInjection.Resolve<IMapComponent>();
+            _keyboardComponent = DependencyInjection.Resolve<IKeyboardComponent>();
 
             base.Initialize();
         }
@@ -58,15 +68,19 @@ namespace MapEditor
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             Art.LoadContent(Content);
+
             App.Register(_spriteBatch);
 
-            _text = new Text(Art.Arial, _spriteBatch);
-            _guiManager = new GuiManager();
-            
-            _mouseComponent = App.Container.Resolve<IMouseComponent>();
-            _mouseInput = App.Container.Resolve<IMouseInput>();
-            _settings = App.Container.Resolve<ISettings>();
-            _map = App.Container.Resolve<IMapComponent>();
+            _text = DependencyInjection.Resolve<IText>();
+            _guiManager = new EditorGuiManager();
+
+            var textContent = DependencyInjection.Resolve<ITextContent>();
+            textContent.Font = Art.Arial;
+            textContent.Size = 0.8f;
+
+            _mouseDrawer.Texture = Art.Icons;
+            _mouseDrawer.Source = new Rectangle(0, 0, 32, 32);
+            _mouseDrawer.Origin = Vector2.Zero;
         }
 
         protected override void UnloadContent()
@@ -84,7 +98,7 @@ namespace MapEditor
             UpdateDragSegment();
             UpdateScroll();
 
-            _keyboardInput.Update();
+            _keyboardComponent.Update();
             _guiManager.Update();
 
             base.Update(gameTime);
@@ -173,7 +187,7 @@ namespace MapEditor
             DrawLedges();
             _guiManager.Draw(_spriteBatch);
 
-            _mouseComponent.Draw(_spriteBatch);
+            _mouseDrawer.Draw(_spriteBatch);
 
             base.Draw(gameTime);
         }
@@ -185,7 +199,6 @@ namespace MapEditor
             _spriteBatch.Draw(Art.Null, new Rectangle(500, 20, 280, 550), new Color(0, 0, 0, 100));
             _spriteBatch.End();
 
-            _text.Size = 0.8f;
             for (var i = 0; i < 9; i++)
             {
                 var segment = _map.Definitions[i];
@@ -210,8 +223,6 @@ namespace MapEditor
 
                 _spriteBatch.Draw(Art.Maps[segment.Index], destination, segment.Source, Color.White);
                 _spriteBatch.End();
-
-                _text.Color = Color.White;
 
                 _text.Draw(segment.Name, new Vector2(destination.X + 50, destination.Y));
 

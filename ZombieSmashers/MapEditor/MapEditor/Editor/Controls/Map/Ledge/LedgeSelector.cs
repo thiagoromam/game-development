@@ -1,24 +1,23 @@
-﻿using MapEditor.Gui.Controls;
-using MapEditor.Ioc;
+﻿using Funq.Fast;
+using GraphicalUserInterfaceLib.Controls;
 using MapEditor.Ioc.Api.Map;
 using MapEditor.Ioc.Api.Settings;
 using Microsoft.Xna.Framework;
 
 namespace MapEditor.Editor.Controls.Map.Ledge
 {
-    public class LedgeSelector : RadioButtonList<int>
+    public class LedgeSelector : TextButtonList<int>
     {
-        private readonly ISettings _settings;
-
-        public LedgeSelector(int x, int y, int yIncrement, IReadonlyMapData mapData)
+        public LedgeSelector(int x, int y, int yIncrement)
         {
-            _settings = App.Container.Resolve<ISettings>();
-            
+            var settings = DependencyInjection.Resolve<ISettings>();
+            var mapData = DependencyInjection.Resolve<IReadonlyMapData>();
+
             for (var i = 0; i < mapData.Ledges.Length; i++)
                 AddOption(i, "ledge " + i, new Vector2(x, y + i * yIncrement));
 
-            Value = _settings.SelectedLedge;
-            Change = v => _settings.SelectedLedge = v;
+            Value = settings.SelectedLedge;
+            Change = v => settings.SelectedLedge = v;
         }
     }
 }

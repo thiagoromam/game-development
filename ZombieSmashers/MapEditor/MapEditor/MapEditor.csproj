@@ -60,23 +60,21 @@
     <XnaCompressContent>true</XnaCompressContent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Funq.Portable">
-      <HintPath>..\..\Libraries\Funq.Portable.dll</HintPath>
+    <Reference Include="Funq.Portable, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Funq.Portable.1.0.1\lib\Funq.Portable.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
-    <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AreaRectangle.cs" />
     <Compile Include="Art.cs" />
+    <Compile Include="Editor\Controls\DefaultButton.cs" />
     <Compile Include="Editor\Controls\File\MapPathEditor.cs" />
     <Compile Include="Editor\Controls\Map\DrawingModeButton.cs" />
     <Compile Include="Editor\Controls\Map\Ledge\LedgePallete.cs" />
@@ -84,28 +82,10 @@
     <Compile Include="Editor\Controls\Map\MapLayerButton.cs" />
     <Compile Include="Editor\GuiManager.cs" />
     <Compile Include="Editor\Settings.cs" />
-    <Compile Include="Editor\GuiText.cs" />
-    <Compile Include="Gui\Controls\Button.cs" />
     <Compile Include="Editor\Controls\File\LoadButton.cs" />
     <Compile Include="Editor\Controls\File\SaveButton.cs" />
     <Compile Include="DrawingMode.cs" />
     <Compile Include="EditingMode.cs" />
-    <Compile Include="Gui\Controls\FlipTextButton.cs" />
-    <Compile Include="Gui\Controls\FlipTextOption.cs" />
-    <Compile Include="Gui\Controls\RadioButtonList.cs" />
-    <Compile Include="Gui\Controls\RadioButtonOption.cs" />
-    <Compile Include="Gui\Controls\TextEditor.cs" />
-    <Compile Include="Gui\IControl.cs" />
-    <Compile Include="Gui\IControlComponent.cs" />
-    <Compile Include="Gui\ITextControl.cs" />
-    <Compile Include="Helpers\EnumerableHelper.cs" />
-    <Compile Include="Helpers\IntHelper.cs" />
-    <Compile Include="Helpers\RectangleHelper.cs" />
-    <Compile Include="Helpers\Vector2Helper.cs" />
-    <Compile Include="Input\KeyboardInput.cs" />
-    <Compile Include="Ioc\Api\Gui\IGuiText.cs" />
-    <Compile Include="Ioc\Api\Input\IMouseInput.cs" />
-    <Compile Include="Ioc\Api\Input\IMouseComponent.cs" />
     <Compile Include="Ioc\Api\Map\ILedgesLoader.cs" />
     <Compile Include="Ioc\Api\Map\IMapComponent.cs" />
     <Compile Include="Ioc\Api\Map\IMapData.cs" />
@@ -117,13 +97,10 @@
     <Compile Include="MapClasses\Map.cs" />
     <Compile Include="MapClasses\SegmentDefinition.cs" />
     <Compile Include="MapClasses\MapSegment.cs" />
-    <Compile Include="Input\MouseControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="GameRoot.cs" />
     <Compile Include="Routines\Load\LedgesLoader.cs" />
-    <Compile Include="Text.cs" />
-    <Compile Include="Helpers\SpriteFontHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
@@ -132,9 +109,29 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ZombieSmashers\ZombieSmashersContent\ZombieSmashersContent.contentproj">
+    <ProjectReference Include="..\..\GraphicalUserInterfaceLib\GraphicalUserInterfaceLib.csproj">
+      <Project>{79e7513d-8e54-483e-9408-af19b90b8c24}</Project>
+      <Name>GraphicalUserInterfaceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Helpers\Helpers.csproj">
+      <Project>{64e0e6a9-80b6-4ae8-91cf-61a3c66dba55}</Project>
+      <Name>Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\KeyboardLib\KeyboardLib.csproj">
+      <Project>{4C1F08D3-B61E-4DD3-9BA7-2D8EC071B783}</Project>
+      <Name>KeyboardLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MouseLib\MouseLib.csproj">
+      <Project>{c3cc48ce-5faa-4135-a317-3856e64230c5}</Project>
+      <Name>MouseLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TextLib\TextLib.csproj">
+      <Project>{e5b96545-ea95-4a80-8ffd-b36cb49b4004}</Project>
+      <Name>TextLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ZombieSmashers\ZombieSmashersContent\SharedContent.contentproj">
       <Project>{24811106-732B-4532-9D5E-B868F41F3D27}</Project>
-      <Name>ZombieSmashersContent</Name>
+      <Name>SharedContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
   </ItemGroup>
@@ -165,7 +162,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

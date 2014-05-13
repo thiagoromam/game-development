@@ -1,19 +1,17 @@
-﻿using MapEditor.Gui.Controls;
-using MapEditor.Ioc;
+﻿using Funq.Fast;
+using GraphicalUserInterfaceLib.Controls;
 using MapEditor.Ioc.Api.Settings;
 
 namespace MapEditor.Editor.Controls.File
 {
     public class MapPathEditor : TextEditor
     {
-        private readonly ISettings _settings;
-
         public MapPathEditor(int x, int y) : base(x, y)
         {
-            _settings = App.Container.Resolve<ISettings>();
+            var settings = DependencyInjection.Resolve<ISettings>();
 
-            Text = _settings.MapPath;
-            Change = v => _settings.MapPath = v;
+            Text = settings.MapPath;
+            Change = v => settings.MapPath = v;
         }
     }
 }

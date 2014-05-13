@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using MapEditor.Helpers;
+using Helpers;
 using MapEditor.Ioc.Api.Map;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

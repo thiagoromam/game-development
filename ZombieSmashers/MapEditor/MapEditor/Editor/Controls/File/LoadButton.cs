@@ -1,6 +1,5 @@
 ﻿using System.IO;
-using MapEditor.Gui.Controls;
-using MapEditor.Ioc;
+using Funq.Fast;
 using MapEditor.Ioc.Api.Map;
 using MapEditor.Ioc.Api.Settings;
 using MapEditor.MapClasses;
@@ -10,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace MapEditor.Editor.Controls.File
 {
-    public class LoadButton : Button
+    public class LoadButton : DefaultButton
     {
         private readonly IReadOnlySettings _settings;
         private readonly IMapData _mapData;
@@ -18,9 +17,9 @@ namespace MapEditor.Editor.Controls.File
 
         public LoadButton(int x, int y) : base(4, x, y)
         {
-            _settings = App.Container.Resolve<IReadOnlySettings>();
-            _mapData = App.Container.Resolve<IMapData>();
-            _ledgesLoader = App.Container.Resolve<ILedgesLoader>();
+            _settings = DependencyInjection.Resolve<IReadOnlySettings>();
+            _mapData = DependencyInjection.Resolve<IMapData>();
+            _ledgesLoader = DependencyInjection.Resolve<ILedgesLoader>();
         }
 
         public override void Update()

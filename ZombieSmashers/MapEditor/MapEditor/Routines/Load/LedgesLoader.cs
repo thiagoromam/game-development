@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using MapEditor.Ioc;
+using Funq.Fast;
 using MapEditor.Ioc.Api.Map;
 using Microsoft.Xna.Framework;
 
@@ -13,7 +13,7 @@ namespace MapEditor.Routines.Load
 
         public LedgesLoader()
         {
-            _mapData = App.Container.Resolve<IMapData>();
+            _mapData = DependencyInjection.Resolve<IMapData>();
         }
 
         public void Load(BinaryReader file)

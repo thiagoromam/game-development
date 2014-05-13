@@ -83,9 +83,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ZombieSmashersContent\ZombieSmashersContent.contentproj">
-      <Name>ZombieSmashersContent</Name>
+    <ProjectReference Include="..\ZombieSmashersContent\SharedContent.contentproj">
+      <Name>SharedContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>
+      <Project>{24811106-732B-4532-9D5E-B868F41F3D27}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
