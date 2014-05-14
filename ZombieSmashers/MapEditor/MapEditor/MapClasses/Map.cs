@@ -19,10 +19,7 @@ namespace MapEditor.MapClasses
             Definitions = new SegmentDefinition[512];
             Segments = new MapSegment[3, 64];
             Grid = new int[20, 20];
-            Ledges = new Ledge[16];
-
-            for (var i = 0; i < Ledges.Length; i++)
-                Ledges[i] = new Ledge();
+            Ledges = EnumerableHelper.Array<Ledge>(16);
 
             ReadDefinitions();
         }
