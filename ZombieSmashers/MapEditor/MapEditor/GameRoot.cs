@@ -9,6 +9,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MouseLib.Api;
+using SharedLib;
+using SharedLib.Mouse;
 using TextLib.Api;
 
 // ReSharper disable ForCanBeConvertedToForeach
@@ -67,20 +69,14 @@ namespace MapEditor
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Art.LoadContent(Content);
-
             App.Register(_spriteBatch);
+
+            Art.LoadContent(Content);
+            SharedArt.LoadContent(Content);
+            LibContent.SetContents();
 
             _text = DependencyInjection.Resolve<IText>();
             _guiManager = new EditorGuiManager();
-
-            var textContent = DependencyInjection.Resolve<ITextContent>();
-            textContent.Font = Art.Arial;
-            textContent.Size = 0.8f;
-
-            _mouseDrawer.Texture = Art.Icons;
-            _mouseDrawer.Source = new Rectangle(0, 0, 32, 32);
-            _mouseDrawer.Origin = Vector2.Zero;
         }
 
         protected override void UnloadContent()
@@ -196,7 +192,7 @@ namespace MapEditor
             var destination = new Rectangle();
 
             _spriteBatch.Begin();
-            _spriteBatch.Draw(Art.Null, new Rectangle(500, 20, 280, 550), new Color(0, 0, 0, 100));
+            _spriteBatch.Draw(SharedArt.Null, new Rectangle(500, 20, 280, 550), new Color(0, 0, 0, 100));
             _spriteBatch.End();
 
             for (var i = 0; i < 9; i++)
@@ -266,21 +262,21 @@ namespace MapEditor
                     {
                         destination.Width = 32;
                         destination.Height = 1;
-                        _spriteBatch.Draw(Art.Null, destination, _gridColor);
+                        _spriteBatch.Draw(SharedArt.Null, destination, _gridColor);
                     }
 
                     if (yIsLessThanMaxIndice)
                     {
                         destination.Width = 1;
                         destination.Height = 32;
-                        _spriteBatch.Draw(Art.Null, destination, _gridColor);
+                        _spriteBatch.Draw(SharedArt.Null, destination, _gridColor);
                     }
 
                     if (xIsLessThanMaxIndice && yIsLessThanMaxIndice && _map.Grid[x, y] == 1)
                     {
                         destination.Width = 32;
                         destination.Height = 32;
-                        _spriteBatch.Draw(Art.Null, destination, _gridColor);
+                        _spriteBatch.Draw(SharedArt.Null, destination, _gridColor);
                     }
                 }
             }
@@ -307,7 +303,7 @@ namespace MapEditor
                     tVector.X -= 5;
                     var iColor = _settings.SelectedLedge == i ? Color.Yellow : Color.White;
 
-                    _spriteBatch.Draw(Art.Icons, tVector, rectangle, iColor, 0, Vector2.Zero, 0.35f, SpriteEffects.None, 0);
+                    _spriteBatch.Draw(SharedArt.Icons, tVector, rectangle, iColor, 0, Vector2.Zero, 0.35f, SpriteEffects.None, 0);
 
                     if (n < ledge.TotalNodes - 1)
                     {
@@ -320,7 +316,7 @@ namespace MapEditor
                         {
                             var xVector = iVectorPart * (x / 20f) + tVector;
                             var xColor = ledge.Flags == 0 ? softColor : hardColor;
-                            _spriteBatch.Draw(Art.Icons, xVector, rectangle, xColor, 0, Vector2.Zero, 0.25f, SpriteEffects.None, 0);
+                            _spriteBatch.Draw(SharedArt.Icons, xVector, rectangle, xColor, 0, Vector2.Zero, 0.25f, SpriteEffects.None, 0);
                         }
                     }
                 }

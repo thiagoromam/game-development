@@ -14,8 +14,8 @@ namespace GraphicalUserInterfaceLib.Controls
         private readonly List<FlipTextOption> _options;
         private readonly IText _text;
         private readonly IMouseInput _mouseInput;
-        private readonly Vector2 _position;
         private bool _hover;
+        public Vector2 Position;
         public Action<T> Change;
         private int _current;
 
@@ -23,7 +23,7 @@ namespace GraphicalUserInterfaceLib.Controls
         {
             _text = DependencyInjection.Resolve<IText>();
             _mouseInput = DependencyInjection.Resolve<IMouseInput>();
-            _position = new Vector2(x, y);
+            Position = new Vector2(x, y);
             _options = new List<FlipTextOption>();
         }
 
@@ -41,7 +41,7 @@ namespace GraphicalUserInterfaceLib.Controls
         {
             var option = _options[_current];
 
-            _hover = _text.MouseIntersects(option.Text, _position);
+            _hover = _text.MouseIntersects(option.Text, Position);
             var clicked = _hover && _mouseInput.LeftButtonClick;
             if (!clicked) return;
 
@@ -53,7 +53,7 @@ namespace GraphicalUserInterfaceLib.Controls
 
         public void Draw()
         {
-            _text.Draw(_options[_current].Text, _position, _hover ? Color.Yellow : Color.White);
+            _text.Draw(_options[_current].Text, Position, _hover ? Color.Yellow : Color.White);
         }
     }
 }

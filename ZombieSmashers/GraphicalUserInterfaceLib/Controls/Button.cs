@@ -1,4 +1,5 @@
-﻿using Funq.Fast;
+﻿using System;
+using Funq.Fast;
 using GraphicalUserInterfaceLib.Api.Controls;
 using Helpers;
 using Microsoft.Xna.Framework;
@@ -11,13 +12,16 @@ namespace GraphicalUserInterfaceLib.Controls
     {
         private readonly Texture2D _texture;
         private readonly Rectangle _source;
-        private readonly Rectangle _destination;
-        private readonly Rectangle _destinationHover;
         private readonly IMouseInput _mouseInput;
+        private Rectangle _destinationHover;
+        private Rectangle _destination;
+        private Vector2 _position;
+        public Action Click;
         private bool _hover;
 
         public Button(Texture2D texture, Rectangle source, int x, int y)
         {
+            _position = new Vector2(x, y);
             _texture = texture;
             _source = source;
             _destination = new Rectangle(x, y, source.Width, source.Height);
@@ -30,12 +34,24 @@ namespace GraphicalUserInterfaceLib.Controls
             _destinationHover.Height += 2;
         }
 
-        public bool Clicked { get; private set; }
+        public Vector2 Position
+        {
+            get { return _position; }
+            set
+            {
+                _position = value;
+                _destination.X = (int) value.X;
+                _destination.Y = (int) value.Y;
+                _destinationHover.X = _destination.X - 1;
+                _destinationHover.Y = _destination.Y - 1;
+            }
+        }
 
-        public virtual void Update()
+        public void Update()
         {
             _hover = _destination.Contains(_mouseInput.Position);
-            Clicked = _hover && _mouseInput.LeftButtonClick;
+            if (_hover && _mouseInput.LeftButtonClick && Click != null)
+                Click();
         }
 
         public void Draw(SpriteBatch spriteBatch)

@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ProjectGuid>{79E7513D-8E54-483E-9408-AF19B90B8C24}</ProjectGuid>
+    <ProjectGuid>{499EDC9A-B3B7-4097-AD15-1A3DC4B37C16}</ProjectGuid>
     <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GraphicalUserInterfaceLib</RootNamespace>
-    <AssemblyName>GraphicalUserInterfaceLib</AssemblyName>
+    <RootNamespace>SharedLib</RootNamespace>
+    <AssemblyName>SharedLib</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
     <XnaProfile>Reach</XnaProfile>
-    <XnaCrossPlatformGroupID>49aa8e3f-6b78-4e8e-9822-43c71300813a</XnaCrossPlatformGroupID>
+    <XnaCrossPlatformGroupID>e6402c9c-a468-45db-9c29-3894c78b8fa3</XnaCrossPlatformGroupID>
     <XnaOutputType>Library</XnaOutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -47,61 +47,37 @@
       <HintPath>..\packages\Funq.Portable.1.0.1\lib\Funq.Portable.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
-    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
-    <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\Controls\ITextButton.cs" />
-    <Compile Include="Api\Controls\IButton.cs" />
-    <Compile Include="Api\Controls\ITextButtonList.cs" />
-    <Compile Include="Api\Controls\ITextEditor.cs" />
-    <Compile Include="Api\IControl.cs" />
-    <Compile Include="Api\IControlComponent.cs" />
-    <Compile Include="Api\ITextControl.cs" />
-    <Compile Include="App.cs" />
-    <Compile Include="Controls\Button.cs" />
-    <Compile Include="Controls\FlipTextButton.cs" />
-    <Compile Include="Controls\FlipTextOption.cs" />
-    <Compile Include="Api\Controls\IFlipTextButton.cs" />
-    <Compile Include="Controls\TextButton.cs" />
-    <Compile Include="Controls\TextButtonList.cs" />
-    <Compile Include="Controls\TextButtonOption.cs" />
-    <Compile Include="Controls\TextEditor.cs" />
-    <Compile Include="GuiManager.cs" />
+    <Compile Include="Gui\IconButton.cs" />
+    <Compile Include="SharedArt.cs" />
+    <Compile Include="Mouse\MouseContent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Helpers\Helpers.csproj">
-      <Project>{64e0e6a9-80b6-4ae8-91cf-61a3c66dba55}</Project>
-      <Name>Helpers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\KeyboardLib\KeyboardLib.csproj">
-      <Project>{4c1f08d3-b61e-4dd3-9ba7-2d8ec071b783}</Project>
-      <Name>KeyboardLib</Name>
+    <ProjectReference Include="..\GraphicalUserInterfaceLib\GraphicalUserInterfaceLib.csproj">
+      <Project>{79e7513d-8e54-483e-9408-af19b90b8c24}</Project>
+      <Name>GraphicalUserInterfaceLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\MouseLib\MouseLib.csproj">
       <Project>{c3cc48ce-5faa-4135-a317-3856e64230c5}</Project>
       <Name>MouseLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\TextLib\TextLib.csproj">
-      <Project>{e5b96545-ea95-4a80-8ffd-b36cb49b4004}</Project>
+      <Project>{E5B96545-EA95-4A80-8FFD-B36CB49B4004}</Project>
       <Name>TextLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

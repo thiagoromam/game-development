@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SharedLib;
 
 namespace MapEditor
 {
@@ -26,10 +27,10 @@ namespace MapEditor
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(Art.Null, _left, _color);
-            spriteBatch.Draw(Art.Null, _top, _color);
-            spriteBatch.Draw(Art.Null, _right, _color);
-            spriteBatch.Draw(Art.Null, _bottom, _color);
+            spriteBatch.Draw(SharedArt.Null, _left, _color);
+            spriteBatch.Draw(SharedArt.Null, _top, _color);
+            spriteBatch.Draw(SharedArt.Null, _right, _color);
+            spriteBatch.Draw(SharedArt.Null, _bottom, _color);
             spriteBatch.End();
         }
     }

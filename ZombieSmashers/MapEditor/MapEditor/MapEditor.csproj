@@ -74,7 +74,6 @@
   <ItemGroup>
     <Compile Include="AreaRectangle.cs" />
     <Compile Include="Art.cs" />
-    <Compile Include="Editor\Controls\DefaultButton.cs" />
     <Compile Include="Editor\Controls\File\MapPathEditor.cs" />
     <Compile Include="Editor\Controls\Map\DrawingModeButton.cs" />
     <Compile Include="Editor\Controls\Map\Ledge\LedgePallete.cs" />
@@ -124,6 +123,10 @@
     <ProjectReference Include="..\..\MouseLib\MouseLib.csproj">
       <Project>{c3cc48ce-5faa-4135-a317-3856e64230c5}</Project>
       <Name>MouseLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SharedContentLib\SharedLib.csproj">
+      <Project>{499edc9a-b3b7-4097-ad15-1a3dc4b37c16}</Project>
+      <Name>SharedLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\TextLib\TextLib.csproj">
       <Project>{e5b96545-ea95-4a80-8ffd-b36cb49b4004}</Project>

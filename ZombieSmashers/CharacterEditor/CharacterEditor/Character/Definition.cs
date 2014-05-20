@@ -2,7 +2,7 @@
 
 namespace CharacterEditor.Character
 {
-    public class Definition
+    public class CharacterDefinition
     {
         public string Path;
         public int HeadIndex;
@@ -10,7 +10,7 @@ namespace CharacterEditor.Character
         public int LegsIndex;
         public int WeaponIndex;
 
-        public Definition()
+        public CharacterDefinition()
         {
             Path = "char";
 

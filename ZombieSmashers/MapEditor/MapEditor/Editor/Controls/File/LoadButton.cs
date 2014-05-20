@@ -4,12 +4,13 @@ using MapEditor.Ioc.Api.Map;
 using MapEditor.Ioc.Api.Settings;
 using MapEditor.MapClasses;
 using Microsoft.Xna.Framework;
+using SharedLib.Gui;
 
 // ReSharper disable ForCanBeConvertedToForeach
 
 namespace MapEditor.Editor.Controls.File
 {
-    public class LoadButton : DefaultButton
+    public class LoadButton : IconButton
     {
         private readonly IReadOnlySettings _settings;
         private readonly IMapData _mapData;
@@ -20,14 +21,8 @@ namespace MapEditor.Editor.Controls.File
             _settings = DependencyInjection.Resolve<IReadOnlySettings>();
             _mapData = DependencyInjection.Resolve<IMapData>();
             _ledgesLoader = DependencyInjection.Resolve<ILedgesLoader>();
-        }
 
-        public override void Update()
-        {
-            base.Update();
-
-            if (Clicked)
-                Load();
+            Click = Load;
         }
 
         private void Load()

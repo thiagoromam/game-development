@@ -5,7 +5,6 @@ namespace CharacterEditor
 {
     public static class Art
     {
-        public static SpriteFont Font { get; private set; }
         public static Texture2D[] Heads { get; private set; }
         public static Texture2D[] Torsos { get; private set; }
         public static Texture2D[] Legs { get; private set; }
@@ -13,8 +12,6 @@ namespace CharacterEditor
 
         public static void LoadContent(ContentManager content)
         {
-            Font = content.Load<SpriteFont>("Text/Arial");
-
             Heads = new Texture2D[1];
             Torsos = new Texture2D[1];
             Legs = new Texture2D[1];

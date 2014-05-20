@@ -1,12 +1,12 @@
 ﻿using GraphicalUserInterfaceLib.Controls;
 using Microsoft.Xna.Framework;
 
-namespace MapEditor.Editor.Controls
+namespace SharedLib.Gui
 {
-    public class DefaultButton : Button
+    public class IconButton : Button
     {
-        public DefaultButton(int index, int x, int y)
-            : base(Art.Icons, CalculateSource(index), x, y)
+        public IconButton(int index, int x, int y)
+            : base(SharedArt.Icons, CalculateSource(index), x, y)
         {
         }
 

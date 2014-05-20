@@ -25,9 +25,17 @@ namespace GraphicalUserInterfaceLib.Controls
             _options = new List<TextButtonOption>();
         }
 
-        public void AddOption(T value, string text, Vector2 position)
+        public TextButtonOption AddOption(T value, string text, Vector2 position)
         {
-            _options.Add(new TextButtonOption(value, text, position));
+            var option = new TextButtonOption(value, text, position);
+            _options.Add(option);
+            return option;
+        }
+        public TextButtonOption AddOption(Vector2 position)
+        {
+            var option = new TextButtonOption(position);
+            _options.Add(option);
+            return option;
         }
 
         public T Value
