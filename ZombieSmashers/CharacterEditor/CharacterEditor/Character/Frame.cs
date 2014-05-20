@@ -1,4 +1,5 @@
-﻿using Helpers;
+﻿using System;
+using Helpers;
 
 namespace CharacterEditor.Character
 {
@@ -13,5 +14,13 @@ namespace CharacterEditor.Character
         }
 
         public Part[] Parts { get; private set; }
+
+        public event Action PartsChanged;
+
+        public void NotifyPartsChanged()
+        {
+            var handler = PartsChanged;
+            if (handler != null) handler();
+        }
     }
 }

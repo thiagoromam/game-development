@@ -29,6 +29,7 @@ namespace CharacterEditor.Editor.Controls.Part
             frame.Parts[_settings.SelectedPartIndex] = frame.Parts[_settings.SelectedPartIndex - 1];
             frame.Parts[_settings.SelectedPartIndex - 1] = aux;
             _settings.SelectedPartIndex--;
+            frame.NotifyPartsChanged();
         }
     }
 }

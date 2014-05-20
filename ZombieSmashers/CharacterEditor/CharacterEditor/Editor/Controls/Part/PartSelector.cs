@@ -1,4 +1,5 @@
-﻿using CharacterEditor.Ioc.Api.Settings;
+﻿using System;
+using CharacterEditor.Ioc.Api.Settings;
 using Funq.Fast;
 using GraphicalUserInterfaceLib.Controls;
 using Microsoft.Xna.Framework;
@@ -7,22 +8,37 @@ namespace CharacterEditor.Editor.Controls.Part
 {
     public class PartSelector : TextButtonList<int>
     {
+        private readonly TextButtonOption[] _options;
         private readonly ISettings _settings;
 
         public PartSelector(int x, int y, int yIncrement)
         {
             _settings = DependencyInjection.Resolve<ISettings>();
+            _options = new TextButtonOption[_settings.SelectedFrame.Parts.Length];
 
             for (var i = 0; i < _settings.SelectedFrame.Parts.Length; i++)
             {
-                var arrayIndex = i;
                 var part = _settings.SelectedFrame.Parts[i];
-                var option = AddOption(arrayIndex, GetStringValue(part, arrayIndex), new Vector2(x, y + arrayIndex * yIncrement));
-                part.IndexChanged += () => option.Text = GetStringValue(part, arrayIndex);
+                var option = AddOption(i, GetStringValue(part, i), new Vector2(x, y + i * yIncrement));
+                var iCopy = i;
+                part.IndexChanged += () => option.Text = GetStringValue(part, iCopy);
+                _options[i] = option;
             }
 
             Value = _settings.SelectedPartIndex;
             Change += v => _settings.SelectedPartIndex = v;
+
+            _settings.SelectedFrame.PartsChanged += UpdateOptions;
+        }
+
+        private void UpdateOptions()
+        {
+            for (var i = 0; i < _options.Length; i++)
+            {
+                var option = _options[i];
+                var part = _settings.SelectedFrame.Parts[i];
+                option.Text = GetStringValue(part, i);
+            }
         }
 
         private static string GetStringValue(Character.Part part, int i)

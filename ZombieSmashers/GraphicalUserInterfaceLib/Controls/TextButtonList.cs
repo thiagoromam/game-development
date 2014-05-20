@@ -12,11 +12,12 @@ namespace GraphicalUserInterfaceLib.Controls
     public partial class TextButtonList<T> : ITextButtonList
     {
         private readonly List<TextButtonOption> _options;
-        private int _current;
+        private readonly IMouseInput _mouseInput;
+        private readonly IText _text;
+        private int _currentIndex;
+        private T _currentValue;
         private int? _hover;
         public Action<T> Change;
-        private readonly IText _text;
-        private readonly IMouseInput _mouseInput;
 
         public TextButtonList()
         {
@@ -40,7 +41,14 @@ namespace GraphicalUserInterfaceLib.Controls
 
         public T Value
         {
-            set { _current = _options.IndexOf(_options.Single(o => Equals(o.Value, value))); }
+            set
+            {
+                if (Equals(value, _currentValue))
+                    return;
+
+                _currentValue = value;
+                _currentIndex = _options.IndexOf(_options.Single(o => Equals(o.Value, value)));
+            }
         }
 
         public void Update()
@@ -49,7 +57,7 @@ namespace GraphicalUserInterfaceLib.Controls
 
             for (var i = 0; i < _options.Count; i++)
             {
-                if (i == _current) continue;
+                if (i == _currentIndex) continue;
 
                 var option = _options[i];
                 if (_text.MouseIntersects(option.Text, option.Position))
@@ -57,10 +65,10 @@ namespace GraphicalUserInterfaceLib.Controls
                     _hover = i;
                     if (!_mouseInput.LeftButtonClick) continue;
 
-                    _current = i;
+                    _currentIndex = i;
 
                     if (Change != null)
-                        Change(_options[_current].Value);
+                        Change(_options[_currentIndex].Value);
                 }
             }
         }
@@ -70,7 +78,7 @@ namespace GraphicalUserInterfaceLib.Controls
             for (var i = 0; i < _options.Count; i++)
             {
                 var option = _options[i];
-                _text.Draw(option.Text, option.Position, i == _current ? Color.Lime : _hover == i ? Color.Yellow : Color.White);
+                _text.Draw(option.Text, option.Position, i == _currentIndex ? Color.Lime : _hover == i ? Color.Yellow : Color.White);
             }
         }
     }
