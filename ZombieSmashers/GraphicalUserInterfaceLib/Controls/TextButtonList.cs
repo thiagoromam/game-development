@@ -43,9 +43,6 @@ namespace GraphicalUserInterfaceLib.Controls
         {
             set
             {
-                if (Equals(value, _currentValue))
-                    return;
-
                 _currentValue = value;
                 _currentIndex = _options.IndexOf(_options.Single(o => Equals(o.Value, value)));
             }

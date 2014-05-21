@@ -57,7 +57,7 @@ namespace CharacterEditor.Editor.Controls.Icons
             {
                 var item = _items[i];
                 if (_mouseInput.LeftButtonClick && item.Destination.Contains(_mouseInput.Position))
-                    _characterDefinition.Frames[_settings.SelectedFrameIndex].Parts[_settings.SelectedPartIndex].Index = item.Index;
+                    _settings.SelectedPart.Index = item.Index;
             }
         }
 
