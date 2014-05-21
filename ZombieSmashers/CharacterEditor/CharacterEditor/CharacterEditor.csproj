@@ -97,6 +97,7 @@
     <Compile Include="Ioc\Api\Settings\IReadonlySettings.cs" />
     <Compile Include="Ioc\Api\Settings\ISettings.cs" />
     <Compile Include="Ioc\App.cs" />
+    <Compile Include="CharacterBoard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="GameRoot.cs" />

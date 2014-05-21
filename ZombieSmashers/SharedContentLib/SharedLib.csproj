@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AreaRectangle.cs" />
     <Compile Include="Gui\IconButton.cs" />
     <Compile Include="SharedArt.cs" />
     <Compile Include="Mouse\MouseContent.cs" />

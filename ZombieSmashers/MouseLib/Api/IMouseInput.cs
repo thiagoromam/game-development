@@ -8,7 +8,8 @@ namespace MouseLib.Api
         bool LeftButtonDown { get; }
         bool LeftButtonPressed { get; }
         bool MiddleButtonPressed { get; }
-        bool RightButtonClick { get; set; }
+        bool RightButtonClick { get; }
+        bool RightButtonPressed { get; }
         Vector2 Position { get; }
         Vector2 PreviousPosition { get; }
     }

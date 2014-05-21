@@ -14,7 +14,8 @@ namespace MouseLib
         public bool LeftButtonDown { get; private set; }
         public bool LeftButtonPressed { get; private set; }
         public bool MiddleButtonPressed { get; private set; }
-        public bool RightButtonClick { get; set; }
+        public bool RightButtonClick { get; private set; }
+        public bool RightButtonPressed { get; private set; }
         public Vector2 Position
         {
             get { return _position; }
@@ -23,7 +24,7 @@ namespace MouseLib
         {
             get { return _previousPosition; }
         }
-
+        
         public void Update()
         {
             var state = Mouse.GetState();
@@ -34,10 +35,11 @@ namespace MouseLib
             _position.Y = state.Y;
 
             LeftButtonPressed = state.LeftButton == ButtonState.Pressed;
-            MiddleButtonPressed = state.MiddleButton == ButtonState.Pressed;
             LeftButtonDown = _lastState.LeftButton == ButtonState.Released && LeftButtonPressed;
             LeftButtonClick = _lastState.LeftButton == ButtonState.Pressed && !LeftButtonPressed;
-            RightButtonClick = _lastState.RightButton == ButtonState.Pressed && state.RightButton == ButtonState.Released;
+            MiddleButtonPressed = state.MiddleButton == ButtonState.Pressed;
+            RightButtonPressed = state.RightButton == ButtonState.Pressed;
+            RightButtonClick = _lastState.RightButton == ButtonState.Pressed && !RightButtonPressed;
 
             _lastState = state;
         }

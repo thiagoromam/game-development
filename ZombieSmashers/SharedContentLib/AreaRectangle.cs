@@ -1,8 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SharedLib;
 
-namespace MapEditor
+namespace SharedLib
 {
     public class AreaRectangle
     {

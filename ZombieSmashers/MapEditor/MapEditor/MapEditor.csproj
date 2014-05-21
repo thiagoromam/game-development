@@ -72,7 +72,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AreaRectangle.cs" />
     <Compile Include="Art.cs" />
     <Compile Include="Editor\Controls\File\MapPathEditor.cs" />
     <Compile Include="Editor\Controls\Map\DrawingModeButton.cs" />
