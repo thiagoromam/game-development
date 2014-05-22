@@ -2,16 +2,16 @@
 
 namespace CharacterEditor.Editor.Controls.Icons
 {
-    partial class IconsPallete
+    partial class IconsPalette
     {
-        private struct PalleteItem
+        private struct IconPaletteItem
         {
             public readonly int Index;
             public readonly int TextureIndex;
             public readonly Rectangle Source;
             public readonly Rectangle Destination;
 
-            public PalleteItem(int index, int textureIndex, Rectangle source, Rectangle destination)
+            public IconPaletteItem(int index, int textureIndex, Rectangle source, Rectangle destination)
             {
                 Index = index;
                 TextureIndex = textureIndex;

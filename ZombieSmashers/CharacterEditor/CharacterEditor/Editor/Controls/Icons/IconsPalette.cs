@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using CharacterEditor.Character;
-using CharacterEditor.Ioc.Api.Editor;
 using CharacterEditor.Ioc.Api.Settings;
 using Funq.Fast;
+using GraphicalUserInterfaceLib.Api;
 using Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,16 +12,16 @@ using SharedLib;
 // ReSharper disable ForCanBeConvertedToForeach
 namespace CharacterEditor.Editor.Controls.Icons
 {
-    public partial class IconsPallete : IIconsPalleteComponent
+    public partial class IconsPalette : IControlComponent, IControl
     {
         private readonly CharacterDefinition _characterDefinition;
-        private readonly List<PalleteItem> _items;
+        private readonly List<IconPaletteItem> _items;
         private readonly IMouseInput _mouseInput;
         private readonly IReadonlySettings _settings;
         
-        public IconsPallete()
+        public IconsPalette()
         {
-            _items = new List<PalleteItem>();
+            _items = new List<IconPaletteItem>();
             _characterDefinition = DependencyInjection.Resolve<CharacterDefinition>();
             _mouseInput = DependencyInjection.Resolve<IMouseInput>();
             _settings = DependencyInjection.Resolve<IReadonlySettings>();
@@ -46,7 +46,7 @@ namespace CharacterEditor.Editor.Controls.Icons
                         }
                     }
 
-                    _items.Add(new PalleteItem(i + 64 * l, l, source, destination));
+                    _items.Add(new IconPaletteItem(i + 64 * l, l, source, destination));
                 }
             }
         }

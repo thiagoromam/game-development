@@ -16,10 +16,6 @@ namespace GraphicalUserInterfaceLib.Controls
                 Text = text;
                 Position = position;
             }
-            public TextButtonOption(Vector2 position)
-            {
-                Position = position;
-            }
         }
     }
 }

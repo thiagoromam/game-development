@@ -19,12 +19,12 @@ namespace GraphicalUserInterfaceLib.Controls
         public Action Click;
         private bool _hover;
 
-        public Button(Texture2D texture, Rectangle source, int x, int y)
+        public Button(Texture2D texture, Rectangle source, int x, int y, float scale)
         {
             _position = new Vector2(x, y);
             _texture = texture;
             _source = source;
-            _destination = new Rectangle(x, y, source.Width, source.Height);
+            _destination = new Rectangle(x, y, (int)(source.Width * scale), (int)(source.Height * scale));
             _mouseInput = DependencyInjection.Resolve<IMouseInput>();
 
             _destinationHover = _destination;
@@ -40,8 +40,8 @@ namespace GraphicalUserInterfaceLib.Controls
             set
             {
                 _position = value;
-                _destination.X = (int) value.X;
-                _destination.Y = (int) value.Y;
+                _destination.X = (int)value.X;
+                _destination.Y = (int)value.Y;
                 _destinationHover.X = _destination.X - 1;
                 _destinationHover.Y = _destination.Y - 1;
             }

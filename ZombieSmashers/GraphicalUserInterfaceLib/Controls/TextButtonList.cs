@@ -15,7 +15,6 @@ namespace GraphicalUserInterfaceLib.Controls
         private readonly IMouseInput _mouseInput;
         private readonly IText _text;
         private int _currentIndex;
-        private T _currentValue;
         private int? _hover;
         public Action<T> Change;
 
@@ -32,18 +31,11 @@ namespace GraphicalUserInterfaceLib.Controls
             _options.Add(option);
             return option;
         }
-        public TextButtonOption AddOption(Vector2 position)
-        {
-            var option = new TextButtonOption(position);
-            _options.Add(option);
-            return option;
-        }
 
         public T Value
         {
             set
             {
-                _currentValue = value;
                 _currentIndex = _options.IndexOf(_options.Single(o => Equals(o.Value, value)));
             }
         }

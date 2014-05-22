@@ -1,14 +1,15 @@
-﻿using CharacterEditor.Ioc.Api.Editor;
-using CharacterEditor.Ioc.Api.Settings;
+﻿using CharacterEditor.Ioc.Api.Settings;
 using Funq.Fast;
+using GraphicalUserInterfaceLib.Api;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace CharacterEditor.Editor.Controls.Part
 {
-    public class PartsPallete : IPartsPalleteComponent
+    public class PartsPalette : IControlComponent, IControl
     {
         private const int YIncrement = 15;
+        private const int SwapButtonsYAddition = 5;
         private const int X = 600;
         private const int Y = 5;
         private readonly IReadonlySettings _settings;
@@ -19,13 +20,13 @@ namespace CharacterEditor.Editor.Controls.Part
         private readonly ResetButton _resetButton;
         private readonly DeleteButton _deleteButton;
 
-        public PartsPallete()
+        public PartsPalette()
         {
             _settings = DependencyInjection.Resolve<IReadonlySettings>();
             
             _partSelector = new PartSelector(X, Y, YIncrement);
-            _swapUpButton = new SwapUpButton(X + 100, Y);
-            _swapDownButton = new SwapDownButton(X + 120, Y);
+            _swapUpButton = new SwapUpButton(X + 100, Y + SwapButtonsYAddition);
+            _swapDownButton = new SwapDownButton(X + 120, Y + SwapButtonsYAddition);
             _mirrorButton = new MirrorButton(X + 140, Y);
             _resetButton = new ResetButton(X + 162, Y);
             _deleteButton = new DeleteButton(X + 180, Y);
@@ -41,8 +42,8 @@ namespace CharacterEditor.Editor.Controls.Part
             _deleteButton.UpdateControl(_settings.SelectedPart);
 
             var y = Y + _settings.SelectedPartIndex * YIncrement;
-            _swapUpButton.Position = new Vector2(_swapUpButton.Position.X, y);
-            _swapDownButton.Position = new Vector2(_swapDownButton.Position.X, y);
+            _swapUpButton.Position = new Vector2(_swapUpButton.Position.X, y + SwapButtonsYAddition);
+            _swapDownButton.Position = new Vector2(_swapDownButton.Position.X, y + SwapButtonsYAddition);
             _mirrorButton.Position.Y = y;
             _resetButton.Position.Y = y;
             _deleteButton.Position.Y = y;

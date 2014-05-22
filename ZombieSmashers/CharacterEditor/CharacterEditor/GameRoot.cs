@@ -1,5 +1,5 @@
+using CharacterEditor.Editor;
 using CharacterEditor.Ioc;
-using CharacterEditor.Ioc.Api.Editor;
 using Funq.Fast;
 using Helpers;
 using Microsoft.Xna.Framework;
@@ -21,11 +21,10 @@ namespace CharacterEditor
         private IMouseComponent _mouseComponent;
         private IMouseDrawer _mouseDrawer;
         private IMouseInput _mouseInput;
-        private IIconsPalleteComponent _iconsIconsPallete;
         private IText _text;
         private ITextContent _textContent;
-        private IPartsPalleteComponent _partsPallete;
         private CharacterBoard _characterBoard;
+        private GuiManager _guiManager;
 
         public GameRoot()
         {
@@ -44,7 +43,6 @@ namespace CharacterEditor
             _mouseInput = DependencyInjection.Resolve<IMouseInput>();
             _mouseComponent = DependencyInjection.Resolve<IMouseComponent>();
             _mouseDrawer = DependencyInjection.Resolve<IMouseDrawer>();
-            _iconsIconsPallete = DependencyInjection.Resolve<IIconsPalleteComponent>();
             _characterBoard = new CharacterBoard();
 
             base.Initialize();
@@ -60,8 +58,8 @@ namespace CharacterEditor
             App.Register(_spriteBatch);
             LibContent.SetContents();
 
+            _guiManager = new GuiManager();
             _text = DependencyInjection.Resolve<IText>();
-            _partsPallete = DependencyInjection.Resolve<IPartsPalleteComponent>();
             _textContent = DependencyInjection.Resolve<ITextContent>();
             _textContent.Size = 0.75f;
         }
@@ -76,8 +74,7 @@ namespace CharacterEditor
                 Exit();
 
             _mouseComponent.Update();
-            _iconsIconsPallete.Update();
-            _partsPallete.Update();
+            _guiManager.Update();
             _characterBoard.Update();
 
             base.Update(gameTime);
@@ -91,8 +88,7 @@ namespace CharacterEditor
             _spriteBatch.Draw(SharedArt.Null, new Rectangle(590, 0, 300, 600), new Color(0, 0, 0, 0.5f));
             _spriteBatch.End();
 
-            _iconsIconsPallete.Draw(_spriteBatch);
-            _partsPallete.Draw(_spriteBatch);
+            _guiManager.Draw(_spriteBatch);
             _characterBoard.Draw(_spriteBatch);
             _mouseDrawer.Draw(_spriteBatch);
 

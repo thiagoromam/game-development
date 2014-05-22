@@ -5,8 +5,8 @@ namespace SharedLib.Gui
 {
     public class IconButton : Button
     {
-        public IconButton(int index, int x, int y)
-            : base(SharedArt.Icons, CalculateSource(index), x, y)
+        public IconButton(int index, int x, int y, float scale = 1)
+            : base(SharedArt.Icons, CalculateSource(index), x, y, scale)
         {
         }
 

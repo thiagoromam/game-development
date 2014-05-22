@@ -10,7 +10,7 @@ namespace CharacterEditor.Editor.Controls.Part
         private readonly ISettings _settings;
         private readonly CharacterDefinition _characterDefinition;
 
-        public SwapUpButton(int x, int y) : base(1, x, y)
+        public SwapUpButton(int x, int y) : base(1, x, y, 0.5f)
         {
             _settings = DependencyInjection.Resolve<ISettings>();
             _characterDefinition = DependencyInjection.Resolve<CharacterDefinition>();
