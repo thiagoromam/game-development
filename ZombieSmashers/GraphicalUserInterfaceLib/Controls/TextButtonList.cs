@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Funq.Fast;
 using GraphicalUserInterfaceLib.Api.Controls;
@@ -11,12 +10,15 @@ namespace GraphicalUserInterfaceLib.Controls
 {
     public partial class TextButtonList<T> : ITextButtonList
     {
+        public delegate void ChangeHandler(T previousValue, T newValue);
+        
         private readonly List<TextButtonOption> _options;
         private readonly IMouseInput _mouseInput;
         private readonly IText _text;
         private int _currentIndex;
         private int? _hover;
-        public Action<T> Change;
+        public ChangeHandler Change; 
+        private T _currentValue;
 
         public TextButtonList()
         {
@@ -34,13 +36,15 @@ namespace GraphicalUserInterfaceLib.Controls
 
         public T Value
         {
+            get { return _currentValue; }
             set
             {
+                _currentValue = value;
                 _currentIndex = _options.IndexOf(_options.Single(o => Equals(o.Value, value)));
             }
         }
 
-        public void Update()
+        public virtual void Update()
         {
             _hover = null;
 
@@ -54,15 +58,17 @@ namespace GraphicalUserInterfaceLib.Controls
                     _hover = i;
                     if (!_mouseInput.LeftButtonClick) continue;
 
+                    var previousValue = _currentValue;
                     _currentIndex = i;
+                    _currentValue = _options[_currentIndex].Value; 
 
                     if (Change != null)
-                        Change(_options[_currentIndex].Value);
+                        Change(previousValue, _currentValue);
                 }
             }
         }
 
-        public void Draw()
+        public virtual void Draw()
         {
             for (var i = 0; i < _options.Count; i++)
             {

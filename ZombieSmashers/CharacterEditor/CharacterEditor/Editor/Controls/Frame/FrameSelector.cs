@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Text;
 using CharacterEditor.Character;
 using CharacterEditor.Ioc.Api.Settings;
 using Funq.Fast;
@@ -9,57 +10,104 @@ namespace CharacterEditor.Editor.Controls.Frame
 {
     public class FrameSelector : TextButtonList<int>
     {
+        private const string FrameNameEditorDefaultText = "<name>";
         private readonly IFrameScroll _frameScroll;
         private readonly ISettings _settings;
         private readonly CharacterDefinition _characterDefinition;
         private readonly FrameSelectorItem[] _items;
+        private readonly TextEditor _frameNameEditor;
 
         public FrameSelector(int x, int y, int yIncrement, IFrameScroll frameScroll)
         {
             _frameScroll = frameScroll;
             _settings = DependencyInjection.Resolve<ISettings>();
             _characterDefinition = DependencyInjection.Resolve<CharacterDefinition>();
+            _frameNameEditor = new TextEditor(x + 41, y) { Text = FrameNameEditorDefaultText };
             _items = new FrameSelectorItem[20];
 
             for (var i = 0; i < 20; i++)
             {
-                var option = AddOption(i, FrameSelectorItem.GetOptionText(i), new Vector2(x, y + i * yIncrement));
+                var option = AddOption(i, GetFrameText(i), new Vector2(x, y + i * yIncrement));
                 var frame = _characterDefinition.Frames[i];
-                _items[i] = new FrameSelectorItem(option, frame);
+                _items[i] = new FrameSelectorItem(option, i);
+
+                if (i == _settings.SelectedFrameIndex)
+                {
+                    _frameNameEditor.Text = frame.Name != string.Empty ? frame.Name : FrameNameEditorDefaultText;
+                    _frameNameEditor.Position.Y = option.Position.Y;
+                }
             }
 
+            Value = _settings.SelectedFrameIndex;
+            Change = ValueChange;
+            _frameNameEditor.Change = v => _characterDefinition.Frames[_items[Value].FrameIndex].Name = v;
             _frameScroll.ScrollIndexChanged += UpdateOptions;
+        }
+
+        private void ValueChange(int previousValue, int newValue)
+        {
+            //_settings.SelectedFrameIndex = newValue;
+
+            var previousSelectedItem = _items[previousValue];
+            previousSelectedItem.Option.Text = GetFrameText(previousSelectedItem.FrameIndex);
+
+            var newSelectedItem = _items[newValue];
+            newSelectedItem.Option.Text = GetFrameText(newSelectedItem.FrameIndex);
+            
+            _frameNameEditor.Text = _characterDefinition.Frames[newSelectedItem.FrameIndex].Name;
+            if (_frameNameEditor.Text == string.Empty)
+                _frameNameEditor.Text = FrameNameEditorDefaultText;
+
+            _frameNameEditor.Position.Y = newSelectedItem.Option.Position.Y;
         }
 
         private void UpdateOptions()
         {
             for (var i = 0; i < _items.Length; i++)
             {
-                var frameIndex = _frameScroll.ScrollIndex + i;
-                _items[i].SetFrame(_characterDefinition.Frames[frameIndex], frameIndex);
+                var item = _items[i];
+                
+                item.FrameIndex = _frameScroll.ScrollIndex + i; 
+                item.Option.Text = GetFrameText(item.FrameIndex);
             }
         }
-        
+
+        public override void Update()
+        {
+            base.Update();
+            _frameNameEditor.Update();
+        }
+
+        public override void Draw()
+        {
+            base.Draw();
+            _frameNameEditor.Draw();
+        }
+
+        private string GetFrameText(int frameIndex)
+        {
+            var text = new StringBuilder();
+            text.Append(frameIndex.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0'));
+            text.Append(":");
+
+            if (frameIndex != Value)
+            {
+                var frame = _characterDefinition.Frames[frameIndex];
+                text.AppendFormat(" {0}", frame.Name);
+            }
+
+            return text.ToString();
+        }
+
         private class FrameSelectorItem
         {
-            private readonly TextButtonOption _option;
-            private Character.Frame _frame;
+            public readonly TextButtonOption Option;
+            public int FrameIndex;
 
-            public FrameSelectorItem(TextButtonOption option, Character.Frame frame)
+            public FrameSelectorItem(TextButtonOption option, int frameIndex)
             {
-                _frame = frame;
-                _option = option;
-            }
-
-            public void SetFrame(Character.Frame frame, int frameIndex)
-            {
-                _frame = frame;
-                _option.Text = GetOptionText(frameIndex);
-            }
-
-            public static string GetOptionText(int frameIndex)
-            {
-                return frameIndex.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0') + ":";
+                FrameIndex = frameIndex;
+                Option = option;
             }
         }
     }

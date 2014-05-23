@@ -2,6 +2,7 @@ using CharacterEditor.Editor;
 using CharacterEditor.Ioc;
 using Funq.Fast;
 using Helpers;
+using KeyboardLib.Api;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -17,10 +18,11 @@ namespace CharacterEditor
         // ReSharper disable once NotAccessedField.Local
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        
+
         private IMouseComponent _mouseComponent;
         private IMouseDrawer _mouseDrawer;
         private IMouseInput _mouseInput;
+        private IKeyboardComponent _keyboardComponent;
         private IText _text;
         private ITextContent _textContent;
         private CharacterBoard _characterBoard;
@@ -58,10 +60,12 @@ namespace CharacterEditor
             App.Register(_spriteBatch);
             LibContent.SetContents();
 
-            _guiManager = new GuiManager();
             _text = DependencyInjection.Resolve<IText>();
             _textContent = DependencyInjection.Resolve<ITextContent>();
+            _keyboardComponent = DependencyInjection.Resolve<IKeyboardComponent>();
             _textContent.Size = 0.75f;
+
+            _guiManager = new GuiManager();
         }
 
         protected override void UnloadContent()
@@ -74,6 +78,7 @@ namespace CharacterEditor
                 Exit();
 
             _mouseComponent.Update();
+            _keyboardComponent.Update();
             _guiManager.Update();
             _characterBoard.Update();
 

@@ -17,7 +17,7 @@ namespace MapEditor.Editor.Controls.Map.Ledge
                 AddOption(i, "ledge " + i, new Vector2(x, y + i * yIncrement));
 
             Value = settings.SelectedLedge;
-            Change = v => settings.SelectedLedge = v;
+            Change = (p, v) => settings.SelectedLedge = v;
         }
     }
 }

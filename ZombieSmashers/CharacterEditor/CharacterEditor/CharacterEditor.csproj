@@ -142,6 +142,10 @@
       <Project>{64e0e6a9-80b6-4ae8-91cf-61a3c66dba55}</Project>
       <Name>Helpers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\KeyboardLib\KeyboardLib.csproj">
+      <Project>{4C1F08D3-B61E-4DD3-9BA7-2D8EC071B783}</Project>
+      <Name>KeyboardLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MouseLib\MouseLib.csproj">
       <Project>{c3cc48ce-5faa-4135-a317-3856e64230c5}</Project>
       <Name>MouseLib</Name>

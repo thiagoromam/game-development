@@ -14,10 +14,10 @@ namespace GraphicalUserInterfaceLib.Controls
         private readonly IText _text;
         private readonly IMouseInput _mouseInput;
         private readonly IKeyboardControl _keyboardControl;
-        private readonly Vector2 _position;
         private bool _editing;
         private bool _hover;
         private string _previousText;
+        public Vector2 Position;
         public Action<string> Change;
 
         public TextEditor(int x, int y)
@@ -25,14 +25,14 @@ namespace GraphicalUserInterfaceLib.Controls
             _text = DependencyInjection.Resolve<IText>();
             _mouseInput = DependencyInjection.Resolve<IMouseInput>();
             _keyboardControl = DependencyInjection.Resolve<IKeyboardControl>();
-            _position = new Vector2(x, y);
+            Position = new Vector2(x, y);
         }
 
         public string Text { get; set; }
 
         public void Update()
         {
-            _hover = !_editing && _text.MouseIntersects(Text, _position);
+            _hover = !_editing && _text.MouseIntersects(Text, Position);
             if (_editing) return;
 
             var clicked = _hover && _mouseInput.LeftButtonClick;
@@ -50,7 +50,7 @@ namespace GraphicalUserInterfaceLib.Controls
             if (_editing)
                 text += "*";
 
-            _text.Draw(text, _position, _editing ? Color.GreenYellow : _hover ? Color.Yellow : Color.White);
+            _text.Draw(text, Position, _editing ? Color.GreenYellow : _hover ? Color.Yellow : Color.White);
         }
 
         public void RemoveFocus()

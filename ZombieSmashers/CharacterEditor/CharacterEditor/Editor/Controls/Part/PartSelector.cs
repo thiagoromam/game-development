@@ -24,7 +24,7 @@ namespace CharacterEditor.Editor.Controls.Part
             }
 
             Value = _settings.SelectedPartIndex;
-            Change += v => _settings.SelectedPartIndex = v;
+            Change = (p, v) => _settings.SelectedPartIndex = v;
             _settings.SelectedFrame.PartsChanged += UpdateOptions;
         }
 
