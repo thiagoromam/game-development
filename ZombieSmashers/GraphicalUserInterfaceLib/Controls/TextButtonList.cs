@@ -8,17 +8,16 @@ using TextLib.Api;
 
 namespace GraphicalUserInterfaceLib.Controls
 {
-    public partial class TextButtonList<T> : ITextButtonList
+    public partial class TextButtonList<T> : ITextButtonList where T : struct
     {
-        public delegate void ChangeHandler(T previousValue, T newValue);
-        
+        public delegate void ChangeHandler(T? previousValue, T? newValue);
+
         private readonly List<TextButtonOption> _options;
         private readonly IMouseInput _mouseInput;
         private readonly IText _text;
-        private int _currentIndex;
+        private int? _currentIndex;
         private int? _hover;
-        public ChangeHandler Change; 
-        private T _currentValue;
+        public ChangeHandler Change;
 
         public TextButtonList()
         {
@@ -34,41 +33,67 @@ namespace GraphicalUserInterfaceLib.Controls
             return option;
         }
 
-        public T Value
+        public T? SelectedValue
         {
-            get { return _currentValue; }
-            set
+            get
             {
-                _currentValue = value;
-                _currentIndex = _options.IndexOf(_options.Single(o => Equals(o.Value, value)));
+                if (_currentIndex.HasValue)
+                    return _options[_currentIndex.Value].Value;
+
+                return null;
             }
+            set { _currentIndex = _options.IndexOf(_options.Single(o => Equals(o.Value, value))); }
+        }
+        public TextButtonOption SelectedOption
+        {
+            get { return _currentIndex.HasValue ? _options[_currentIndex.Value] : null; }
         }
 
-        public virtual void Update()
+        public void ClearValue()
+        {
+            if (!_currentIndex.HasValue)
+                return;
+
+            var currentValue = SelectedValue;
+            _currentIndex = null;
+
+            if (Change != null)
+                Change(currentValue, null);
+        }
+        public void Update()
         {
             _hover = null;
 
             for (var i = 0; i < _options.Count; i++)
             {
-                if (i == _currentIndex) continue;
+                if (i == _currentIndex)
+                    continue;
 
                 var option = _options[i];
-                if (_text.MouseIntersects(option.Text, option.Position))
-                {
-                    _hover = i;
-                    if (!_mouseInput.LeftButtonClick) continue;
+                if (!_text.MouseIntersects(option.Text, option.Position))
+                    continue;
 
-                    var previousValue = _currentValue;
-                    _currentIndex = i;
-                    _currentValue = _options[_currentIndex].Value; 
+                _hover = i;
+                if (!_mouseInput.LeftButtonClick)
+                    continue;
 
-                    if (Change != null)
-                        Change(previousValue, _currentValue);
-                }
+                var previousOption = SelectedOption;
+                _currentIndex = i;
+
+                if (Change == null)
+                    continue;
+
+                T? previousValue;
+                if (previousOption != null)
+                    previousValue = previousOption.Value;
+                else
+                    previousValue = null;
+
+                Change(previousValue, SelectedOption.Value);
             }
         }
 
-        public virtual void Draw()
+        public void Draw()
         {
             for (var i = 0; i < _options.Count; i++)
             {

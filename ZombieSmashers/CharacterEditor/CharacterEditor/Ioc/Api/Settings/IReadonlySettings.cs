@@ -11,6 +11,7 @@ namespace CharacterEditor.Ioc.Api.Settings
         Frame SelectedFrame { get; }
         Part SelectedPart { get; }
 
+        event FrameIndexChangedHandler SelectedFrameIndexChanged;
         event Action SelectedFrameChanged;
         event Action SelectedPartChanged;
     }

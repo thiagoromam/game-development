@@ -23,17 +23,24 @@ namespace CharacterEditor.Editor.Controls.Part
                 _items[i] = new PartSelectorItem(option, part);
             }
 
-            Value = _settings.SelectedPartIndex;
-            Change = (p, v) => _settings.SelectedPartIndex = v;
+            SelectedValue = _settings.SelectedPartIndex;
+            Change = ValueChange;
             _settings.SelectedFrame.PartsChanged += UpdateOptions;
+            _settings.SelectedFrameChanged += UpdateOptions;
+        }
+
+        private void ValueChange(int? previousValue, int? newValue)
+        {
+            // ReSharper disable once PossibleInvalidOperationException
+            _settings.SelectedPartIndex = newValue.Value;
         }
 
         private void UpdateOptions()
         {
             for (var i = 0; i < _items.Length; i++)
                 _items[i].Part = _settings.SelectedFrame.Parts[i];
-            
-            Value = _settings.SelectedPartIndex;
+
+            SelectedValue = _settings.SelectedPartIndex;
         }
     }
 }

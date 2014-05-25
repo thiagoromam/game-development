@@ -10,23 +10,27 @@ namespace CharacterEditor.Editor.Controls.Frame
         private const int Y = 280;
         private readonly FrameSelector _frameSelector;
         private readonly FrameScroll _frameScroll;
+        private readonly FrameNameEditor _frameNameEditor;
 
         public FramesPalette()
         {
             _frameScroll = new FrameScroll(X + 170, Y);
             _frameSelector = new FrameSelector(X, Y, YIncrement, _frameScroll);
+            _frameNameEditor = new FrameNameEditor(_frameSelector, X + 41, Y);
         }
 
         public void Update()
         {
             _frameSelector.Update();
             _frameScroll.Update();
+            _frameNameEditor.Update();
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             _frameSelector.Draw();
             _frameScroll.Draw(spriteBatch);
+            _frameNameEditor.Draw();
         }
     }
 }

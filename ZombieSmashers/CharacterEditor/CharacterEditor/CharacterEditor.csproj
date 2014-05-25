@@ -82,6 +82,8 @@
     <Compile Include="Character\Frame.cs" />
     <Compile Include="Character\KeyFrame.cs" />
     <Compile Include="Character\Part.cs" />
+    <Compile Include="Editor\Controls\Frame\FrameNameEditor.cs" />
+    <Compile Include="Editor\Controls\Frame\FrameSelectorItem.cs" />
     <Compile Include="Editor\Controls\Frame\FramesPalette.cs" />
     <Compile Include="Editor\Controls\Frame\FrameScroll.cs" />
     <Compile Include="Editor\Controls\Frame\FrameSelector.cs" />

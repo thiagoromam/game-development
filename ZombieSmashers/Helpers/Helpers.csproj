@@ -57,6 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RectangleHelper.cs" />
     <Compile Include="SpriteFontHelper.cs" />
+    <Compile Include="StringHelper.cs" />
     <Compile Include="Vector2Helper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
