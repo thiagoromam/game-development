@@ -19,6 +19,7 @@ namespace GraphicalUserInterfaceLib.Controls
         private string _previousText;
         public Vector2 Position;
         public Action<string> Change;
+        public bool Visible;
 
         public TextEditor(int x, int y)
         {
@@ -26,6 +27,7 @@ namespace GraphicalUserInterfaceLib.Controls
             _mouseInput = DependencyInjection.Resolve<IMouseInput>();
             _keyboardControl = DependencyInjection.Resolve<IKeyboardControl>();
             Position = new Vector2(x, y);
+            Visible = true;
         }
 
         public string Text { get; set; }
@@ -46,6 +48,9 @@ namespace GraphicalUserInterfaceLib.Controls
 
         public void Draw()
         {
+            if (!Visible)
+                return;
+
             var text = Text;
             if (_editing)
                 text += "*";

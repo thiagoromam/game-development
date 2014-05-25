@@ -42,7 +42,13 @@ namespace GraphicalUserInterfaceLib.Controls
 
                 return null;
             }
-            set { _currentIndex = _options.IndexOf(_options.Single(o => Equals(o.Value, value))); }
+            set
+            {
+                if (Equals(value, SelectedValue))
+                    return;
+
+                _currentIndex = _options.IndexOf(_options.Single(o => Equals(o.Value, value)));
+            }
         }
         public TextButtonOption SelectedOption
         {

@@ -14,9 +14,9 @@ namespace CharacterEditor.Editor.Controls.Frame
 
         public FramesPalette()
         {
-            _frameScroll = new FrameScroll(X + 170, Y);
+            _frameScroll = new FrameScroll(20, X + 170, Y);
             _frameSelector = new FrameSelector(X, Y, YIncrement, _frameScroll);
-            _frameNameEditor = new FrameNameEditor(_frameSelector, X + 41, Y);
+            _frameNameEditor = new FrameNameEditor(_frameSelector, _frameScroll, X + 41, Y);
         }
 
         public void Update()

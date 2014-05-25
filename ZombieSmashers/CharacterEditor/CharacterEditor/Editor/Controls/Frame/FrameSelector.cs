@@ -10,25 +10,27 @@ using Microsoft.Xna.Framework;
 
 namespace CharacterEditor.Editor.Controls.Frame
 {
-    public partial class FrameSelector : TextButtonList<int>
+    public interface IFrameSelector
+    {
+        TextButtonList<int>.TextButtonOption SelectedOption { get; }
+    }
+
+    public partial class FrameSelector : TextButtonList<int>, IFrameSelector
     {
         private readonly IFrameScroll _frameScroll;
         private readonly ISettings _settings;
         private readonly CharacterDefinition _characterDefinition;
-        private readonly FrameSelectorItem[] _items;
+        private readonly TextButtonOption[] _options;
 
         public FrameSelector(int x, int y, int yIncrement, IFrameScroll frameScroll)
         {
             _frameScroll = frameScroll;
             _settings = DependencyInjection.Resolve<ISettings>();
             _characterDefinition = DependencyInjection.Resolve<CharacterDefinition>();
-            _items = new FrameSelectorItem[20];
+            _options = new TextButtonOption[_frameScroll.Limit];
 
-            for (var i = 0; i < 20; i++)
-            {
-                var option = AddOption(i, GetFrameText(i), new Vector2(x, y + i * yIncrement));
-                _items[i] = new FrameSelectorItem(option, i);
-            }
+            for (var i = 0; i < _options.Length; i++)
+                _options[i] = AddOption(i, GetFrameText(i), new Vector2(x, y + i * yIncrement));
 
             SelectedValue = _settings.SelectedFrameIndex;
             Change = ValueChange;
@@ -40,28 +42,26 @@ namespace CharacterEditor.Editor.Controls.Frame
         {
             var previousFrame = _characterDefinition.Frames[previousIndex];
             if (previousFrame.Name.HasValue()) return;
-            
+
             previousFrame.Name = "frame" + previousIndex;
-            _items.Single(i => i.FrameIndex == previousIndex).Option.Text = GetFrameText(previousIndex);
+
+            if (_frameScroll.IsFrameVisible(previousIndex))
+                _options.Single(o => o.Value == previousIndex).Text = GetFrameText(previousIndex);
         }
 
         private void ValueChange(int? previousValue, int? newValue)
         {
-            if (previousValue.HasValue)
-            {
-                var previousSelectedItem = _items[previousValue.Value];
-                previousSelectedItem.Option.Text = GetFrameText(previousSelectedItem.FrameIndex);
-            }
-
             if (newValue.HasValue)
             {
-                var newSelectedItem = _items[newValue.Value];
-                newSelectedItem.Option.Text = GetFrameText(newSelectedItem.FrameIndex);
+                _options.Single(o => o.Value == newValue.Value).Text = GetFrameText(newValue.Value);
 
                 var previousFrameIndex = _settings.SelectedFrameIndex;
                 _settings.SelectedFrameIndex = newValue.Value;
                 CopyFrame(previousFrameIndex, newValue.Value);
             }
+
+            if (previousValue.HasValue)
+                _options.Single(o => o.Value == previousValue.Value).Text = GetFrameText(previousValue.Value);
         }
 
         private void CopyFrame(int sourceIndex, int destinationIndex)
@@ -86,13 +86,19 @@ namespace CharacterEditor.Editor.Controls.Frame
 
         private void UpdateOptions()
         {
-            for (var i = 0; i < _items.Length; i++)
+            var isCurrentFrameVisible = _frameScroll.IsCurrentFrameVisible();
+            if (!isCurrentFrameVisible)
+                ClearValue();
+
+            for (var i = 0; i < _options.Length; i++)
             {
-                var item = _items[i];
-                
-                item.FrameIndex = _frameScroll.ScrollIndex + i; 
-                item.Option.Text = GetFrameText(item.FrameIndex);
+                var option = _options[i];
+                option.Value = _frameScroll.ScrollIndex + i;
+                option.Text = GetFrameText(option.Value);
             }
+
+            if (isCurrentFrameVisible)
+                SelectedValue = _settings.SelectedFrameIndex;
         }
 
         private string GetFrameText(int frameIndex)
@@ -101,7 +107,7 @@ namespace CharacterEditor.Editor.Controls.Frame
             text.Append(frameIndex.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0'));
             text.Append(":");
 
-            if (frameIndex != SelectedValue)
+            if (frameIndex != _settings.SelectedFrameIndex)
             {
                 var frame = _characterDefinition.Frames[frameIndex];
                 text.AppendFormat(" {0}", frame.Name);

@@ -1,5 +1,4 @@
-﻿using CharacterEditor.Character;
-using CharacterEditor.Ioc.Api.Settings;
+﻿using CharacterEditor.Ioc.Api.Settings;
 using Funq.Fast;
 using GraphicalUserInterfaceLib.Controls;
 using Helpers;
@@ -8,24 +7,39 @@ namespace CharacterEditor.Editor.Controls.Frame
 {
     public class FrameNameEditor : TextEditor
     {
-        private readonly FrameSelector _frameSelector;
+        private readonly IFrameSelector _frameSelector;
+        private readonly IFrameScroll _frameScroll;
         private readonly ISettings _settings;
 
-        public FrameNameEditor(FrameSelector frameSelector, int x, int y)
+        public FrameNameEditor(IFrameSelector frameSelector, IFrameScroll frameScroll, int x, int y)
             : base(x, y)
         {
             _frameSelector = frameSelector;
+            _frameScroll = frameScroll;
             _settings = DependencyInjection.Resolve<ISettings>();
 
-            _settings.SelectedFrameChanged += UpdateText;
+            UpdateFocus();
+            _settings.SelectedFrameChanged += UpdateFocus;
+            _frameScroll.ScrollIndexChanged += UpdateVisibility;
+            _frameScroll.ScrollIndexChanged += UpdatePosition;
             Change = v => _settings.SelectedFrame.Name = v;
-            UpdateText();
         }
 
-        private void UpdateText()
+        private void UpdatePosition()
         {
-            Text = _settings.SelectedFrame.Name.HasValue() ? _settings.SelectedFrame.Name : "<name>";
             Position.Y = _frameSelector.SelectedOption.Position.Y;
+        }
+
+        private void UpdateVisibility()
+        {
+            Visible = _frameScroll.IsCurrentFrameVisible();
+        }
+
+        private void UpdateFocus()
+        {
+            Visible = true;
+            Text = _settings.SelectedFrame.Name.HasValue() ? _settings.SelectedFrame.Name : "<name>";
+            UpdatePosition();
         }
     }
 }
