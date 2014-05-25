@@ -70,8 +70,8 @@ namespace CharacterEditor.Editor.Controls.Animations
         {
             if (newValue.HasValue)
             {
-                _options.Single(o => o.Value == newValue.Value).Text = GetAnimationText(newValue.Value);
                 _settings.SelectedAnimationIndex = newValue.Value;
+                _options.Single(o => o.Value == newValue.Value).Text = GetAnimationText(newValue.Value);
             }
 
             if (previousValue.HasValue)

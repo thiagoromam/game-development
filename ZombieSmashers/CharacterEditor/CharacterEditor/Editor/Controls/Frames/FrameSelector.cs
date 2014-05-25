@@ -35,6 +35,7 @@ namespace CharacterEditor.Editor.Controls.Frames
             SelectedValue = _settings.SelectedFrameIndex;
             Change = ValueChange;
             _framesScroll.ScrollIndexChanged += UpdateOptions;
+            _settings.SelectedAnimationChanged += UpdateOptions;
             _settings.SelectedFrameIndexChanged += UpdateFrameWithoutName;
         }
 
@@ -53,10 +54,10 @@ namespace CharacterEditor.Editor.Controls.Frames
         {
             if (newValue.HasValue)
             {
-                _options.Single(o => o.Value == newValue.Value).Text = GetFrameText(newValue.Value);
-
                 var previousFrameIndex = _settings.SelectedFrameIndex;
                 _settings.SelectedFrameIndex = newValue.Value;
+
+                _options.Single(o => o.Value == newValue.Value).Text = GetFrameText(newValue.Value);
                 CopyFrame(previousFrameIndex, newValue.Value);
             }
 

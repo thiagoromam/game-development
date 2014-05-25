@@ -28,8 +28,6 @@ namespace CharacterEditor.Editor
                 if (value == SelectedAnimationIndex)
                     return;
 
-                _selectedAnimationIndex = value;
-
                 var previousIndex = _selectedAnimationIndex;
                 _selectedAnimationIndex = value;
                 SelectedAnimation = _characterDefinition.Animations[_selectedAnimationIndex];
