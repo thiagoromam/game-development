@@ -4,7 +4,7 @@ using GraphicalUserInterfaceLib.Api;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CharacterEditor.Editor.Controls.Part
+namespace CharacterEditor.Editor.Controls.Parts
 {
     public class PartsPalette : IControlComponent, IControl
     {

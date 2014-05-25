@@ -1,7 +1,7 @@
 ﻿using GraphicalUserInterfaceLib.Api;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CharacterEditor.Editor.Controls.Frame
+namespace CharacterEditor.Editor.Controls.Frames
 {
     public class FramesPalette : IControlComponent, IControl
     {

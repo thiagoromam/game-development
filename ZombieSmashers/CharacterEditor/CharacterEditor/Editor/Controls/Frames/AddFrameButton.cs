@@ -2,7 +2,7 @@
 using Funq.Fast;
 using GraphicalUserInterfaceLib.Controls;
 
-namespace CharacterEditor.Editor.Controls.Frame
+namespace CharacterEditor.Editor.Controls.Frames
 {
     public class AddFrameButton : TextButton
     {

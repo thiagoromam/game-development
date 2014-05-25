@@ -8,14 +8,14 @@ using GraphicalUserInterfaceLib.Controls;
 using Helpers;
 using Microsoft.Xna.Framework;
 
-namespace CharacterEditor.Editor.Controls.Frame
+namespace CharacterEditor.Editor.Controls.Frames
 {
     public interface IFrameSelector
     {
         TextButtonList<int>.TextButtonOption SelectedOption { get; }
     }
 
-    public partial class FrameSelector : TextButtonList<int>, IFrameSelector
+    public class FrameSelector : TextButtonList<int>, IFrameSelector
     {
         private readonly IFrameScroll _frameScroll;
         private readonly ISettings _settings;

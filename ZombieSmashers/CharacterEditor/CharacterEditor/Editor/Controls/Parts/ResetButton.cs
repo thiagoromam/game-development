@@ -1,7 +1,7 @@
 ﻿using GraphicalUserInterfaceLib.Controls;
 using Microsoft.Xna.Framework;
 
-namespace CharacterEditor.Editor.Controls.Part
+namespace CharacterEditor.Editor.Controls.Parts
 {
     public class ResetButton : TextButton
     {

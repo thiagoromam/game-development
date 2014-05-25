@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace CharacterEditor.Editor.Controls.Part
+namespace CharacterEditor.Editor.Controls.Parts
 {
     partial class PartSelector
     {

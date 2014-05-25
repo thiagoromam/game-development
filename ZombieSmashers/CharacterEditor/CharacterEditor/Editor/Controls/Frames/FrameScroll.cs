@@ -7,7 +7,7 @@ using Helpers;
 using Microsoft.Xna.Framework.Graphics;
 using SharedLib.Gui;
 
-namespace CharacterEditor.Editor.Controls.Frame
+namespace CharacterEditor.Editor.Controls.Frames
 {
     public interface IFrameScroll
     {

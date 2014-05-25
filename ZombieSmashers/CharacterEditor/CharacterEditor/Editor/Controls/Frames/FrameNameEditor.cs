@@ -3,7 +3,7 @@ using Funq.Fast;
 using GraphicalUserInterfaceLib.Controls;
 using Helpers;
 
-namespace CharacterEditor.Editor.Controls.Frame
+namespace CharacterEditor.Editor.Controls.Frames
 {
     public class FrameNameEditor : TextEditor
     {

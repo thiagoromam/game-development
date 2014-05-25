@@ -1,6 +1,6 @@
 ﻿using GraphicalUserInterfaceLib.Controls;
 
-namespace CharacterEditor.Editor.Controls.Part
+namespace CharacterEditor.Editor.Controls.Parts
 {
     public class MirrorButton : FlipTextButton<int>
     {

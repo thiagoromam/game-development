@@ -1,6 +1,8 @@
 ﻿using CharacterEditor.Editor.Controls.Frame;
+using CharacterEditor.Editor.Controls.Frames;
 using CharacterEditor.Editor.Controls.Icons;
 using CharacterEditor.Editor.Controls.Part;
+using CharacterEditor.Editor.Controls.Parts;
 
 namespace CharacterEditor.Editor
 {
