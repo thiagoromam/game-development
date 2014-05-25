@@ -34,6 +34,9 @@ namespace GraphicalUserInterfaceLib.Controls
 
         public void Update()
         {
+            if (!Visible)
+                return;
+
             _hover = !_editing && _text.MouseIntersects(Text, Position);
             if (_editing) return;
 
