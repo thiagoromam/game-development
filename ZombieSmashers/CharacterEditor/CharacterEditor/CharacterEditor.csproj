@@ -82,10 +82,14 @@
     <Compile Include="Character\Frame.cs" />
     <Compile Include="Character\KeyFrame.cs" />
     <Compile Include="Character\Part.cs" />
+    <Compile Include="Editor\Controls\Animations\AnimationNameEditor.cs" />
+    <Compile Include="Editor\Controls\Animations\AnimationsPalette.cs" />
+    <Compile Include="Editor\Controls\Animations\AnimationsScroll.cs" />
+    <Compile Include="Editor\Controls\Animations\AnimationSelector.cs" />
     <Compile Include="Editor\Controls\Frames\AddFrameButton.cs" />
     <Compile Include="Editor\Controls\Frames\FrameNameEditor.cs" />
     <Compile Include="Editor\Controls\Frames\FramesPalette.cs" />
-    <Compile Include="Editor\Controls\Frames\FrameScroll.cs" />
+    <Compile Include="Editor\Controls\Frames\FramesScroll.cs" />
     <Compile Include="Editor\Controls\Frames\FrameSelector.cs" />
     <Compile Include="Editor\Controls\Icons\IconsPalette.cs" />
     <Compile Include="Editor\Controls\Icons\IconPaletteItem.cs" />

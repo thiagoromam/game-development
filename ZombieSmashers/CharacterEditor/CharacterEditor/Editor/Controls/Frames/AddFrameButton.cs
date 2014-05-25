@@ -7,23 +7,23 @@ namespace CharacterEditor.Editor.Controls.Frames
     public class AddFrameButton : TextButton
     {
         private readonly IFrameSelector _frameSelector;
-        private readonly IFrameScroll _frameScroll;
+        private readonly IFramesScroll _framesScroll;
 
-        public AddFrameButton(IFrameSelector frameSelector, IFrameScroll frameScroll, int x, int y) : base("(a)", x, y)
+        public AddFrameButton(IFrameSelector frameSelector, IFramesScroll framesScroll, int x, int y) : base("(a)", x, y)
         {
             _frameSelector = frameSelector;
-            _frameScroll = frameScroll;
+            _framesScroll = framesScroll;
             var settings = DependencyInjection.Resolve<IReadonlySettings>();
 
             UpdateFocus();
             settings.SelectedFrameChanged += UpdateFocus;
-            _frameScroll.ScrollIndexChanged += UpdateVisibility;
-            _frameScroll.ScrollIndexChanged += UpdatePosition;
+            _framesScroll.ScrollIndexChanged += UpdateVisibility;
+            _framesScroll.ScrollIndexChanged += UpdatePosition;
         }
 
         private void UpdateVisibility()
         {
-            Visible = _frameScroll.IsCurrentFrameVisible();
+            Visible = _framesScroll.IsCurrentFrameVisible();
         }
 
         private void UpdatePosition()

@@ -8,20 +8,20 @@ namespace CharacterEditor.Editor.Controls.Frames
     public class FrameNameEditor : TextEditor
     {
         private readonly IFrameSelector _frameSelector;
-        private readonly IFrameScroll _frameScroll;
+        private readonly IFramesScroll _framesScroll;
         private readonly ISettings _settings;
 
-        public FrameNameEditor(IFrameSelector frameSelector, IFrameScroll frameScroll, int x, int y)
+        public FrameNameEditor(IFrameSelector frameSelector, IFramesScroll framesScroll, int x, int y)
             : base(x, y)
         {
             _frameSelector = frameSelector;
-            _frameScroll = frameScroll;
+            _framesScroll = framesScroll;
             _settings = DependencyInjection.Resolve<ISettings>();
 
             UpdateFocus();
             _settings.SelectedFrameChanged += UpdateFocus;
-            _frameScroll.ScrollIndexChanged += UpdateVisibility;
-            _frameScroll.ScrollIndexChanged += UpdatePosition;
+            _framesScroll.ScrollIndexChanged += UpdateVisibility;
+            _framesScroll.ScrollIndexChanged += UpdatePosition;
             Change = v => _settings.SelectedFrame.Name = v;
         }
 
@@ -32,7 +32,7 @@ namespace CharacterEditor.Editor.Controls.Frames
 
         private void UpdateVisibility()
         {
-            Visible = _frameScroll.IsCurrentFrameVisible();
+            Visible = _framesScroll.IsCurrentFrameVisible();
         }
 
         private void UpdateFocus()

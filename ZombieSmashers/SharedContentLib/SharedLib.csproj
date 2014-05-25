@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="AreaRectangle.cs" />
     <Compile Include="Gui\IconButton.cs" />
+    <Compile Include="Gui\Scroll.cs" />
     <Compile Include="SharedArt.cs" />
     <Compile Include="Mouse\MouseContent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -65,6 +66,10 @@
     <ProjectReference Include="..\GraphicalUserInterfaceLib\GraphicalUserInterfaceLib.csproj">
       <Project>{79e7513d-8e54-483e-9408-af19b90b8c24}</Project>
       <Name>GraphicalUserInterfaceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Helpers\Helpers.csproj">
+      <Project>{64E0E6A9-80B6-4AE8-91CF-61A3C66DBA55}</Project>
+      <Name>Helpers</Name>
     </ProjectReference>
     <ProjectReference Include="..\MouseLib\MouseLib.csproj">
       <Project>{c3cc48ce-5faa-4135-a317-3856e64230c5}</Project>

@@ -17,24 +17,24 @@ namespace CharacterEditor.Editor.Controls.Frames
 
     public class FrameSelector : TextButtonList<int>, IFrameSelector
     {
-        private readonly IFrameScroll _frameScroll;
+        private readonly IFramesScroll _framesScroll;
         private readonly ISettings _settings;
         private readonly CharacterDefinition _characterDefinition;
         private readonly TextButtonOption[] _options;
 
-        public FrameSelector(int x, int y, int yIncrement, IFrameScroll frameScroll)
+        public FrameSelector(int x, int y, int yIncrement, IFramesScroll framesScroll)
         {
-            _frameScroll = frameScroll;
+            _framesScroll = framesScroll;
             _settings = DependencyInjection.Resolve<ISettings>();
             _characterDefinition = DependencyInjection.Resolve<CharacterDefinition>();
-            _options = new TextButtonOption[_frameScroll.Limit];
+            _options = new TextButtonOption[_framesScroll.Limit];
 
             for (var i = 0; i < _options.Length; i++)
                 _options[i] = AddOption(i, GetFrameText(i), new Vector2(x, y + i * yIncrement));
 
             SelectedValue = _settings.SelectedFrameIndex;
             Change = ValueChange;
-            _frameScroll.ScrollIndexChanged += UpdateOptions;
+            _framesScroll.ScrollIndexChanged += UpdateOptions;
             _settings.SelectedFrameIndexChanged += UpdateFrameWithoutName;
         }
 
@@ -45,7 +45,7 @@ namespace CharacterEditor.Editor.Controls.Frames
 
             previousFrame.Name = "frame" + previousIndex;
 
-            if (_frameScroll.IsFrameVisible(previousIndex))
+            if (_framesScroll.IsIndexVisible(previousIndex))
                 _options.Single(o => o.Value == previousIndex).Text = GetFrameText(previousIndex);
         }
 
@@ -86,14 +86,14 @@ namespace CharacterEditor.Editor.Controls.Frames
 
         private void UpdateOptions()
         {
-            var isCurrentFrameVisible = _frameScroll.IsCurrentFrameVisible();
+            var isCurrentFrameVisible = _framesScroll.IsCurrentFrameVisible();
             if (!isCurrentFrameVisible)
                 ClearValue();
 
             for (var i = 0; i < _options.Length; i++)
             {
                 var option = _options[i];
-                option.Value = _frameScroll.ScrollIndex + i;
+                option.Value = _framesScroll.ScrollIndex + i;
                 option.Text = GetFrameText(option.Value);
             }
 

@@ -5,30 +5,51 @@ using Funq.Fast;
 
 namespace CharacterEditor.Editor
 {
-    public class Settings : ISettings, IReadonlySettings
+    public sealed class Settings : ISettings, IReadonlySettings
     {
         private readonly CharacterDefinition _characterDefinition;
-        private int _selectedFrameIndex;
+        private int? _selectedFrameIndex;
         private int? _selectedPartIndex;
+        private int _selectedAnimationIndex;
 
         public Settings()
         {
             _characterDefinition = DependencyInjection.Resolve<CharacterDefinition>();
+            SelectedAnimation = _characterDefinition.Animations[SelectedAnimationIndex];
             SelectedFrame = _characterDefinition.Frames[SelectedFrameIndex];
             SelectedPart = SelectedFrame.Parts[SelectedPartIndex];
         }
 
+        public int SelectedAnimationIndex
+        {
+            get { return _selectedAnimationIndex; }
+            set
+            {
+                if (value == SelectedAnimationIndex)
+                    return;
+
+                _selectedAnimationIndex = value;
+
+                var previousIndex = _selectedAnimationIndex;
+                _selectedAnimationIndex = value;
+                SelectedAnimation = _characterDefinition.Animations[_selectedAnimationIndex];
+                _selectedFrameIndex = null;
+                SelectedFrameIndex = 0;
+                OnSelectedAnimationIndexChanged(previousIndex, value);
+                OnSelectedAnimationChanged();
+            }
+        }
         public int SelectedFrameIndex
         {
-            get { return _selectedFrameIndex; }
+            get { return _selectedFrameIndex ?? 0; }
             set
             {
                 if (value == _selectedFrameIndex)
                     return;
 
-                var previousIndex = _selectedFrameIndex;
+                var previousIndex = SelectedFrameIndex;
                 _selectedFrameIndex = value;
-                SelectedFrame = _characterDefinition.Frames[_selectedFrameIndex];
+                SelectedFrame = _characterDefinition.Frames[_selectedFrameIndex.Value];
                 _selectedPartIndex = null;
                 SelectedPartIndex = 0;
                 OnSelectedFrameIndexChanged(previousIndex, value);
@@ -52,24 +73,37 @@ namespace CharacterEditor.Editor
             }
         }
 
+        public Animation SelectedAnimation { get; private set; }
         public Frame SelectedFrame { get; private set; }
         public Part SelectedPart { get; private set; }
 
+        public event AnimationIndexChangedHandler SelectedAnimationIndexChanged;
         public event FrameIndexChangedHandler SelectedFrameIndexChanged;
+        public event Action SelectedAnimationChanged;
         public event Action SelectedFrameChanged;
         public event Action SelectedPartChanged;
 
-        protected virtual void OnSelectedFrameIndexChanged(int previousindex, int newindex)
+        private void OnSelectedAnimationIndexChanged(int previousIndex, int newIndex)
+        {
+            var handler = SelectedAnimationIndexChanged;
+            if (handler != null) handler(previousIndex, newIndex);
+        }
+        private void OnSelectedFrameIndexChanged(int previousIndex, int newIndex)
         {
             var handler = SelectedFrameIndexChanged;
-            if (handler != null) handler(previousindex, newindex);
+            if (handler != null) handler(previousIndex, newIndex);
         }
-        protected virtual void OnSelectedFrameChanged()
+        private void OnSelectedAnimationChanged()
+        {
+            var handler = SelectedAnimationChanged;
+            if (handler != null) handler();
+        }
+        private void OnSelectedFrameChanged()
         {
             var handler = SelectedFrameChanged;
             if (handler != null) handler();
         }
-        protected virtual void OnSelectedPartChanged()
+        private void OnSelectedPartChanged()
         {
             var handler = SelectedPartChanged;
             if (handler != null) handler();

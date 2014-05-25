@@ -24,7 +24,7 @@ namespace CharacterEditor
             _characterDefinition = DependencyInjection.Resolve<CharacterDefinition>();
             _settings = DependencyInjection.Resolve<IReadonlySettings>();
             _mouseInput = DependencyInjection.Resolve<IMouseInput>();
-            _editingArea = new AreaRectangle(0, 0, 575, 450, Color.White);
+            _editingArea = new AreaRectangle(205, 55, 380, 405, Color.White);
         }
 
         public void Update()

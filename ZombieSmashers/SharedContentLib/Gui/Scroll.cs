@@ -1,39 +1,32 @@
 ﻿using System;
-using CharacterEditor.Character;
-using CharacterEditor.Ioc.Api.Settings;
-using Funq.Fast;
-using GraphicalUserInterfaceLib.Api;
 using Helpers;
 using Microsoft.Xna.Framework.Graphics;
-using SharedLib.Gui;
 
-namespace CharacterEditor.Editor.Controls.Frames
+namespace SharedLib.Gui
 {
-    public interface IFrameScroll
+    public interface IScroll
     {
         int ScrollIndex { get; }
         int Limit { get; }
-        bool IsCurrentFrameVisible();
-        bool IsFrameVisible(int frameIndex);
+        bool IsIndexVisible(int index);
         event Action ScrollIndexChanged;
     }
 
-    public class FrameScroll : IFrameScroll, IControlComponent, IControl
+    public class Scroll : IScroll
     {
+        private readonly int _limit;
+        private readonly int _scrollLimit;
         private readonly IconButton _scrollUpButton;
         private readonly IconButton _scrollDownButton;
-        private readonly int _scrollLimit;
-        private readonly IReadonlySettings _settings;
         private int _scrollIndex;
-        private readonly int _limit;
+        public event Action ScrollIndexChanged;
 
-        public FrameScroll(int limit, int x, int y)
+        public Scroll(int total, int limit, int x, int y, int yFinal)
         {
             _limit = limit;
+            _scrollLimit = total - limit;
             _scrollUpButton = new IconButton(1, x, y) { Click = ScrollUp };
-            _scrollDownButton = new IconButton(2, x, y + 290) { Click = ScrollDown };
-            _settings = DependencyInjection.Resolve<IReadonlySettings>();
-            _scrollLimit = DependencyInjection.Resolve<CharacterDefinition>().Frames.Length - limit;
+            _scrollDownButton = new IconButton(2, x, yFinal) { Click = ScrollDown };
         }
 
         public int ScrollIndex
@@ -53,15 +46,9 @@ namespace CharacterEditor.Editor.Controls.Frames
             get { return _limit; }
         }
 
-        public event Action ScrollIndexChanged;
-
-        public bool IsFrameVisible(int frameIndex)
+        public bool IsIndexVisible(int index)
         {
-            return frameIndex.Between(_scrollIndex, _scrollIndex + _limit);
-        }
-        public bool IsCurrentFrameVisible()
-        {
-            return IsFrameVisible(_settings.SelectedFrameIndex);
+            return index.Between(_scrollIndex, _scrollIndex + _limit);
         }
         private void OnScrollIndexChanged()
         {

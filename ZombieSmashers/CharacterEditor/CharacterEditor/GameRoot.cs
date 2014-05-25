@@ -90,7 +90,10 @@ namespace CharacterEditor
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin();
+            _spriteBatch.Draw(SharedArt.Null, new Rectangle(300, 450, 200, 5), new Color(255, 0, 0, 0.5f));
+            _spriteBatch.Draw(SharedArt.Null, new Rectangle(0, 0, 200, 450), new Color(0, 0, 0, 0.5f));
             _spriteBatch.Draw(SharedArt.Null, new Rectangle(590, 0, 300, 600), new Color(0, 0, 0, 0.5f));
+            _spriteBatch.Draw(SharedArt.Null, new Rectangle(200, 0, 150, 50), new Color(0, 0, 0, 0.5f));
             _spriteBatch.End();
 
             _guiManager.Draw(_spriteBatch);
