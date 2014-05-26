@@ -23,6 +23,7 @@ namespace CharacterEditor
         private IMouseDrawer _mouseDrawer;
         private IMouseInput _mouseInput;
         private IKeyboardComponent _keyboardComponent;
+        private IKeyboardControl _keyboardControl;
         private IText _text;
         private ITextContent _textContent;
         private CharacterBoard _characterBoard;
@@ -45,6 +46,8 @@ namespace CharacterEditor
             _mouseInput = DependencyInjection.Resolve<IMouseInput>();
             _mouseComponent = DependencyInjection.Resolve<IMouseComponent>();
             _mouseDrawer = DependencyInjection.Resolve<IMouseDrawer>();
+            _keyboardComponent = DependencyInjection.Resolve<IKeyboardComponent>();
+            _keyboardControl = DependencyInjection.Resolve<IKeyboardControl>();
             _characterBoard = new CharacterBoard();
 
             base.Initialize();
@@ -62,7 +65,6 @@ namespace CharacterEditor
 
             _text = DependencyInjection.Resolve<IText>();
             _textContent = DependencyInjection.Resolve<ITextContent>();
-            _keyboardComponent = DependencyInjection.Resolve<IKeyboardComponent>();
             _textContent.Size = 0.75f;
 
             _guiManager = new GuiManager();
@@ -74,11 +76,11 @@ namespace CharacterEditor
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (!_keyboardControl.EditingMode && _keyboardControl.IsKeyPressed(Keys.Escape))
                 Exit();
 
-            _mouseComponent.Update();
             _keyboardComponent.Update();
+            _mouseComponent.Update();
             _guiManager.Update();
             _characterBoard.Update();
 

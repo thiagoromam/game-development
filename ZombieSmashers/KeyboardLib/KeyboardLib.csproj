@@ -47,6 +47,7 @@
       <HintPath>..\packages\Funq.Portable.1.0.1\lib\Funq.Portable.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -56,7 +57,7 @@
   <ItemGroup>
     <Compile Include="Api\IKeyboardControl.cs" />
     <Compile Include="Api\ITextEditor.cs" />
-    <Compile Include="Api\KeyboardComponent.cs" />
+    <Compile Include="Api\IKeyboardComponent.cs" />
     <Compile Include="App.cs" />
     <Compile Include="KeyboardControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

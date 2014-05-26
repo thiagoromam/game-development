@@ -10,6 +10,7 @@ namespace CharacterEditor.Ioc
     {
         public static void Register()
         {
+            KeyboardLib.App.Register();
             MouseLib.App.Register();
 
             DependencyInjection.Register(new CharacterDefinition());
