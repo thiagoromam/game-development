@@ -31,8 +31,6 @@ namespace CharacterEditor.Editor
                 var previousIndex = _selectedAnimationIndex;
                 _selectedAnimationIndex = value;
                 SelectedAnimation = _characterDefinition.Animations[_selectedAnimationIndex];
-                _selectedFrameIndex = null;
-                SelectedFrameIndex = 0;
                 OnSelectedAnimationIndexChanged(previousIndex, value);
                 OnSelectedAnimationChanged();
             }

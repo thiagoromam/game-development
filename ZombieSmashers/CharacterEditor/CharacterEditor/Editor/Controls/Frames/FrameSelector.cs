@@ -35,7 +35,6 @@ namespace CharacterEditor.Editor.Controls.Frames
             SelectedValue = _settings.SelectedFrameIndex;
             Change = ValueChange;
             _framesScroll.ScrollIndexChanged += UpdateOptions;
-            _settings.SelectedAnimationChanged += UpdateOptions;
             _settings.SelectedFrameIndexChanged += UpdateFrameWithoutName;
         }
 

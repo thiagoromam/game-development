@@ -27,7 +27,8 @@ namespace CharacterEditor.Editor.Controls.Animations
 
         private void UpdatePosition()
         {
-            Position.Y = _animationSelector.SelectedOption.Position.Y;
+            if (Visible)
+                Position.Y = _animationSelector.SelectedOption.Position.Y;
         }
 
         private void UpdateVisibility()

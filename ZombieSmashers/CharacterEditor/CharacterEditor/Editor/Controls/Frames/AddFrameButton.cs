@@ -9,7 +9,8 @@ namespace CharacterEditor.Editor.Controls.Frames
         private readonly IFrameSelector _frameSelector;
         private readonly IFramesScroll _framesScroll;
 
-        public AddFrameButton(IFrameSelector frameSelector, IFramesScroll framesScroll, int x, int y) : base("(a)", x, y)
+        public AddFrameButton(IFrameSelector frameSelector, IFramesScroll framesScroll, int x, int y)
+            : base("(a)", x, y)
         {
             _frameSelector = frameSelector;
             _framesScroll = framesScroll;
@@ -28,7 +29,8 @@ namespace CharacterEditor.Editor.Controls.Frames
 
         private void UpdatePosition()
         {
-            Position.Y = _frameSelector.SelectedOption.Position.Y;
+            if (Visible)
+                Position.Y = _frameSelector.SelectedOption.Position.Y;
         }
 
         private void UpdateFocus()

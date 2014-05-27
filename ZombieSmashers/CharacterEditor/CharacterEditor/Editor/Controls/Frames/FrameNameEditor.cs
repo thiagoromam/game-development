@@ -27,7 +27,8 @@ namespace CharacterEditor.Editor.Controls.Frames
 
         private void UpdatePosition()
         {
-            Position.Y = _frameSelector.SelectedOption.Position.Y;
+            if (Visible)
+                Position.Y = _frameSelector.SelectedOption.Position.Y;
         }
 
         private void UpdateVisibility()
