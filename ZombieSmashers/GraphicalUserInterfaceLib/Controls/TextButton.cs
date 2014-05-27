@@ -17,13 +17,14 @@ namespace GraphicalUserInterfaceLib.Controls
         private bool _hover;
         public bool Visible;
 
-        protected TextButton(string text, int x, int y)
+        public TextButton(string text, int x, int y)
         {
             _guiText = DependencyInjection.Resolve<IText>();
             _mouseInput = DependencyInjection.Resolve<IMouseInput>();
 
             Text = text;
             Position = new Vector2(x, y);
+            Visible = true;
         }
 
         public void Update()

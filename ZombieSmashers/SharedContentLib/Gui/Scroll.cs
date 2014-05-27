@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Helpers;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,6 +11,7 @@ namespace SharedLib.Gui
         int Limit { get; }
         bool IsIndexVisible(int index);
         event Action ScrollIndexChanged;
+        IEnumerable<int> GetVisibleIndexes();
     }
 
     public class Scroll : IScroll
@@ -50,6 +52,11 @@ namespace SharedLib.Gui
         {
             return index.Between(_scrollIndex, _scrollIndex + _limit);
         }
+        public IEnumerable<int> GetVisibleIndexes()
+        {
+            for (var i = _scrollIndex; i < _scrollIndex + _limit; i++)
+                yield return i;
+        } 
         private void OnScrollIndexChanged()
         {
             var handler = ScrollIndexChanged;

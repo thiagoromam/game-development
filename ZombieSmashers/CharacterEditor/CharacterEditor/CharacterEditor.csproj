@@ -93,6 +93,8 @@
     <Compile Include="Editor\Controls\Frames\FrameSelector.cs" />
     <Compile Include="Editor\Controls\Icons\IconsPalette.cs" />
     <Compile Include="Editor\Controls\Icons\IconPaletteItem.cs" />
+    <Compile Include="Editor\Controls\KeyFrames\DurationControl.cs" />
+    <Compile Include="Editor\Controls\KeyFrames\DurationControls.cs" />
     <Compile Include="Editor\Controls\KeyFrames\KeyFramePalette.cs" />
     <Compile Include="Editor\Controls\KeyFrames\KeyFrameSelectorItem.cs" />
     <Compile Include="Editor\Controls\KeyFrames\KeyFramesScroll.cs" />

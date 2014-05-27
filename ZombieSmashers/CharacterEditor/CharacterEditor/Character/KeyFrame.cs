@@ -8,7 +8,7 @@ namespace CharacterEditor.Character
         public event Action FrameReferenceChanged;
         public int Duration;
         private int _frameReference;
-        
+
         public KeyFrame()
         {
             FrameReference = -1;
