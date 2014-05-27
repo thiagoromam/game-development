@@ -1,4 +1,5 @@
-﻿using CharacterEditor.Ioc.Api.Settings;
+﻿using CharacterEditor.Character;
+using CharacterEditor.Ioc.Api.Settings;
 using Funq.Fast;
 using GraphicalUserInterfaceLib.Controls;
 using Microsoft.Xna.Framework;
@@ -13,7 +14,7 @@ namespace CharacterEditor.Editor.Controls.Parts
         public PartSelector(int x, int y, int yIncrement)
         {
             _settings = DependencyInjection.Resolve<ISettings>();
-            _items = new PartSelectorItem[_settings.SelectedFrame.Parts.Length];
+            _items = new PartSelectorItem[Frame.PartsCount];
 
             for (var i = 0; i < _settings.SelectedFrame.Parts.Length; i++)
             {

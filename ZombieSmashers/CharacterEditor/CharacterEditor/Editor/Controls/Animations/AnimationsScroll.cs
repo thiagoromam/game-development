@@ -12,12 +12,12 @@ namespace CharacterEditor.Editor.Controls.Animations
 
     public class AnimationsScroll : Scroll, IAnimationsScroll
     {
-        private readonly IReadonlySettings _settings;
+        private readonly IReadOnlySettings _settings;
 
         public AnimationsScroll(int limit, int x, int y)
-            : base(DependencyInjection.Resolve<CharacterDefinition>().Animations.Length, limit, x, y, y + 195)
+            : base(CharacterDefinition.AnimationsCount, limit, x, y, y + 195)
         {
-            _settings = DependencyInjection.Resolve<IReadonlySettings>();
+            _settings = DependencyInjection.Resolve<IReadOnlySettings>();
         }
 
         public bool IsCurrentAnimationVisible()

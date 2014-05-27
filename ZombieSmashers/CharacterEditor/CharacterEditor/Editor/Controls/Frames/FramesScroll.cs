@@ -13,12 +13,12 @@ namespace CharacterEditor.Editor.Controls.Frames
 
     public class FramesesScroll : Scroll, IFramesScroll, IControlComponent, IControl
     {
-        private readonly IReadonlySettings _settings;
+        private readonly IReadOnlySettings _settings;
 
         public FramesesScroll(int limit, int x, int y)
-            : base(DependencyInjection.Resolve<CharacterDefinition>().Frames.Length, limit, x, y, y + 290)
+            : base(CharacterDefinition.FramesCount, limit, x, y, y + 290)
         {
-            _settings = DependencyInjection.Resolve<IReadonlySettings>();
+            _settings = DependencyInjection.Resolve<IReadOnlySettings>();
         }
 
         public bool IsCurrentFrameVisible()

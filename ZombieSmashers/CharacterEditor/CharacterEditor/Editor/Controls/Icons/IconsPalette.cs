@@ -17,14 +17,14 @@ namespace CharacterEditor.Editor.Controls.Icons
         private readonly CharacterDefinition _characterDefinition;
         private readonly List<IconPaletteItem> _items;
         private readonly IMouseInput _mouseInput;
-        private readonly IReadonlySettings _settings;
+        private readonly IReadOnlySettings _settings;
         
         public IconsPalette()
         {
             _items = new List<IconPaletteItem>();
             _characterDefinition = DependencyInjection.Resolve<CharacterDefinition>();
             _mouseInput = DependencyInjection.Resolve<IMouseInput>();
-            _settings = DependencyInjection.Resolve<IReadonlySettings>();
+            _settings = DependencyInjection.Resolve<IReadOnlySettings>();
 
             for (var l = 0; l < 4; l++)
             {

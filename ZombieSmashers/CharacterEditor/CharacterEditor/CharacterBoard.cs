@@ -15,14 +15,14 @@ namespace CharacterEditor
         private const int FaceRight = 1;
 
         private readonly CharacterDefinition _characterDefinition;
-        private readonly IReadonlySettings _settings;
+        private readonly IReadOnlySettings _settings;
         private readonly IMouseInput _mouseInput;
         private readonly AreaRectangle _editingArea;
 
         public CharacterBoard()
         {
             _characterDefinition = DependencyInjection.Resolve<CharacterDefinition>();
-            _settings = DependencyInjection.Resolve<IReadonlySettings>();
+            _settings = DependencyInjection.Resolve<IReadOnlySettings>();
             _mouseInput = DependencyInjection.Resolve<IMouseInput>();
             _editingArea = new AreaRectangle(205, 55, 380, 405, Color.White);
         }

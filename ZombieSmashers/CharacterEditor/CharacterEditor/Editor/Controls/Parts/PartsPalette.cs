@@ -12,7 +12,7 @@ namespace CharacterEditor.Editor.Controls.Parts
         private const int SwapButtonsYAddition = 5;
         private const int X = 600;
         private const int Y = 5;
-        private readonly IReadonlySettings _settings;
+        private readonly IReadOnlySettings _settings;
         private readonly PartSelector _partSelector;
         private readonly SwapUpButton _swapUpButton;
         private readonly SwapDownButton _swapDownButton;
@@ -22,7 +22,7 @@ namespace CharacterEditor.Editor.Controls.Parts
 
         public PartsPalette()
         {
-            _settings = DependencyInjection.Resolve<IReadonlySettings>();
+            _settings = DependencyInjection.Resolve<IReadOnlySettings>();
             
             _partSelector = new PartSelector(X, Y, YIncrement);
             _swapUpButton = new SwapUpButton(X + 100, Y + SwapButtonsYAddition);

@@ -4,6 +4,9 @@ namespace CharacterEditor.Character
 {
     public class CharacterDefinition
     {
+        public const int AnimationsCount = 64;
+        public const int FramesCount = 512;
+
         public string Path;
         public int HeadIndex;
         public int TorsoIndex;
@@ -14,8 +17,8 @@ namespace CharacterEditor.Character
         {
             Path = "char";
 
-            Animations = EnumerableHelper.Array<Animation>(64);
-            Frames = EnumerableHelper.Array<Frame>(512);
+            Animations = EnumerableHelper.Array<Animation>(AnimationsCount);
+            Frames = EnumerableHelper.Array<Frame>(FramesCount);
         }
 
         public Animation[] Animations { get; private set; }

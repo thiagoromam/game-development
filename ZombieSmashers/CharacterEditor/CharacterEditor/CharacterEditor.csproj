@@ -93,6 +93,10 @@
     <Compile Include="Editor\Controls\Frames\FrameSelector.cs" />
     <Compile Include="Editor\Controls\Icons\IconsPalette.cs" />
     <Compile Include="Editor\Controls\Icons\IconPaletteItem.cs" />
+    <Compile Include="Editor\Controls\KeyFrames\KeyFramePalette.cs" />
+    <Compile Include="Editor\Controls\KeyFrames\KeyFrameSelectorItem.cs" />
+    <Compile Include="Editor\Controls\KeyFrames\KeyFramesScroll.cs" />
+    <Compile Include="Editor\Controls\KeyFrames\KeyFrameSelector.cs" />
     <Compile Include="Editor\Controls\Parts\DeleteButton.cs" />
     <Compile Include="Editor\Controls\Parts\MirrorButton.cs" />
     <Compile Include="Editor\Controls\Parts\PartSelectorItem.cs" />
@@ -173,6 +177,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

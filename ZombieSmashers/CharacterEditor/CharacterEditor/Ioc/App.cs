@@ -16,7 +16,7 @@ namespace CharacterEditor.Ioc
             DependencyInjection.Register(new CharacterDefinition());
             var settings = new Settings();
             DependencyInjection.Register((ISettings)settings);
-            DependencyInjection.Register((IReadonlySettings)settings);
+            DependencyInjection.Register((IReadOnlySettings)settings);
         }
 
         public static void Register(SpriteBatch spriteBatch)
