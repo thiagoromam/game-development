@@ -97,6 +97,7 @@
     <Compile Include="Editor\Controls\KeyFrames\DurationControls.cs" />
     <Compile Include="Editor\Controls\KeyFrames\KeyFramePalette.cs" />
     <Compile Include="Editor\Controls\KeyFrames\KeyFrameSelectorItem.cs" />
+    <Compile Include="Editor\Controls\KeyFrames\KeyFramesOrderer.cs" />
     <Compile Include="Editor\Controls\KeyFrames\KeyFramesScroll.cs" />
     <Compile Include="Editor\Controls\KeyFrames\KeyFrameSelector.cs" />
     <Compile Include="Editor\Controls\Parts\DeleteButton.cs" />

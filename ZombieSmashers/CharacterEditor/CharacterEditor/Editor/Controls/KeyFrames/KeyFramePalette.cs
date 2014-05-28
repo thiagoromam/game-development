@@ -11,12 +11,14 @@ namespace CharacterEditor.Editor.Controls.KeyFrames
         private readonly KeyFramesScroll _keyFramesScroll;
         private readonly KeyFrameSelector _keyFramesSelector;
         private readonly DurationControls _durationControls;
+        private readonly KeyFramesOrderer _keyFramesOrderer;
 
         public KeyFramePalette()
         {
             _keyFramesScroll = new KeyFramesScroll(13, X + 163, Y);
             _keyFramesSelector = new KeyFrameSelector(X, Y, YIncrement, _keyFramesScroll);
-            _durationControls = new DurationControls(X + 105, Y, YIncrement, _keyFramesScroll);
+            _keyFramesOrderer = new KeyFramesOrderer(_keyFramesScroll);
+            _durationControls = new DurationControls(X + 105, Y, YIncrement, _keyFramesScroll, _keyFramesOrderer);
         }
 
         public void Update()
@@ -24,6 +26,7 @@ namespace CharacterEditor.Editor.Controls.KeyFrames
             _keyFramesScroll.Update();
             _keyFramesSelector.Update();
             _durationControls.Update();
+            _keyFramesOrderer.Update();
         }
 
         public void Draw(SpriteBatch spriteBatch)

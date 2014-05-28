@@ -10,13 +10,15 @@ namespace CharacterEditor.Editor.Controls.KeyFrames
 {
     public class DurationControl : IControlComponent, ITextControl
     {
+        private readonly IKeyFramesOrderer _keyFramesOrderer;
         private readonly TextButton _subtractButton;
         private readonly TextButton _addButton;
         private readonly Vector2 _durationPosition;
         private readonly IText _text;
 
-        public DurationControl(int x, int y)
+        public DurationControl(int x, int y, IKeyFramesOrderer keyFramesOrderer)
         {
+            _keyFramesOrderer = keyFramesOrderer;
             _subtractButton = new TextButton("-", x, y) { Click = Subtract };
             _addButton = new TextButton("+", x + 30, y) { Click = Add };
             _durationPosition = new Vector2(x + 15, y);
@@ -32,6 +34,9 @@ namespace CharacterEditor.Editor.Controls.KeyFrames
         private void Subtract()
         {
             KeyFrame.Duration--;
+            if (KeyFrame.Duration == 0)
+                _keyFramesOrderer.NeedsOrdering();
+
         }
         private void Add()
         {

@@ -26,6 +26,7 @@ namespace CharacterEditor.Editor.Controls.KeyFrames
             SelectedValue = _settings.SelectedKeyFrameIndex;
             Change = ValueChange;
             _settings.SelectedKeyFrameChanged += UpdateItems;
+            _settings.SelectedAnimation.KeyFramesChanged += UpdateItems;
             _framesScroll.ScrollIndexChanged += UpdateItems;
         }
 
@@ -47,6 +48,9 @@ namespace CharacterEditor.Editor.Controls.KeyFrames
                 item.Option.Value = _framesScroll.ScrollIndex + i;
                 item.SetKeyFrame(item.Option.Value);
             }
+
+            if (isCurrentKeyFrameVisible)
+                SelectedValue = _settings.SelectedKeyFrameIndex;
         }
     }
 }
