@@ -18,6 +18,7 @@ namespace CharacterEditor
         private readonly IReadOnlySettings _settings;
         private readonly IMouseInput _mouseInput;
         private readonly AreaRectangle _editingArea;
+        private readonly Vector2 _characterPosition;
 
         public CharacterBoard()
         {
@@ -25,6 +26,8 @@ namespace CharacterEditor
             _settings = DependencyInjection.Resolve<IReadOnlySettings>();
             _mouseInput = DependencyInjection.Resolve<IMouseInput>();
             _editingArea = new AreaRectangle(205, 55, 380, 405, Color.White);
+
+            _characterPosition = new Vector2(400, 450);
         }
 
         public void Update()
@@ -56,7 +59,14 @@ namespace CharacterEditor
         public void Draw(SpriteBatch spriteBatch)
         {
             _editingArea.Draw(spriteBatch);
-            DrawCharacter(spriteBatch, new Vector2(400, 450), 2f, FaceRight, _settings.SelectedFrameIndex, false, 1);
+
+            if (_settings.SelectedFrameIndex > 0)
+                DrawCharacter(spriteBatch, _characterPosition, 2f, FaceRight, _settings.SelectedFrameIndex - 1, false, 0.2f);
+
+            if (_settings.SelectedFrameIndex < CharacterDefinition.FramesCount - 1)
+                DrawCharacter(spriteBatch, _characterPosition, 2f, FaceRight, _settings.SelectedFrameIndex, false, 0.2f);
+
+            DrawCharacter(spriteBatch, _characterPosition, 2f, FaceRight, _settings.SelectedFrameIndex, false, 1);
         }
         private void DrawCharacter(SpriteBatch spriteBatch, Vector2 loc, float scale, int face, int frameIndex, bool preview, float alpha)
         {
@@ -104,9 +114,9 @@ namespace CharacterEditor
                     case 3: texture = Art.Weapons[_characterDefinition.WeaponIndex]; break;
                 }
 
-                var color = new Color(255, 255, 255, alpha * 255);
+                var color = new Color(255, 255, 255, (byte)(alpha * 255));
 
-                if (!preview && _settings.SelectedPartIndex == i)
+                if (!preview && _settings.SelectedPartIndex == i && _settings.SelectedFrameIndex == frameIndex)
                 {
                     color.G = 0;
                     color.B = 0;
@@ -132,7 +142,7 @@ namespace CharacterEditor
 
             spriteBatch.End();
         }
-
+        
         private bool CanEdit()
         {
             return _editingArea.Area.Contains(_mouseInput.Position);
