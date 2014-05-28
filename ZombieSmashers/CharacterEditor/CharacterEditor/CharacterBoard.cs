@@ -1,4 +1,5 @@
-﻿using CharacterEditor.Character;
+﻿using System;
+using CharacterEditor.Character;
 using CharacterEditor.Ioc.Api.Settings;
 using Funq.Fast;
 using Helpers;
@@ -19,26 +20,33 @@ namespace CharacterEditor
         private readonly IMouseInput _mouseInput;
         private readonly AreaRectangle _editingArea;
         private readonly Vector2 _characterPosition;
+        private readonly Vector2 _animationPosition;
+        private bool _playing;
+        private float _currentFrameTime;
+        private int _currentKeyFrameIndex;
 
         public CharacterBoard()
         {
             _characterDefinition = DependencyInjection.Resolve<CharacterDefinition>();
             _settings = DependencyInjection.Resolve<IReadOnlySettings>();
             _mouseInput = DependencyInjection.Resolve<IMouseInput>();
-            _editingArea = new AreaRectangle(205, 55, 380, 405, Color.White);
+            _editingArea = new AreaRectangle(205, 110, 380, 345, new Color(10, 10, 10, 50));
 
             _characterPosition = new Vector2(400, 450);
+            _animationPosition = new Vector2(500, 100);
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
             if (!CanEdit())
-                return;
+            {
+                var mouseDiference = _mouseInput.Position - _mouseInput.PreviousPosition;
+                UpdateDrag(mouseDiference);
+                UpdateRotation(mouseDiference);
+                UpdateScaling(mouseDiference);
+            }
 
-            var mouseDiference = _mouseInput.Position - _mouseInput.PreviousPosition;
-            UpdateDrag(mouseDiference);
-            UpdateRotation(mouseDiference);
-            UpdateScaling(mouseDiference);
+            UpdateAnimation(gameTime);
         }
         private void UpdateDrag(Vector2 mouseDiference)
         {
@@ -48,27 +56,72 @@ namespace CharacterEditor
         private void UpdateRotation(Vector2 mouseDiference)
         {
             if (_mouseInput.RightButtonPressed)
-                _settings.SelectedPart.Rotation += mouseDiference.Y  / 100;
+                _settings.SelectedPart.Rotation += mouseDiference.Y / 100;
         }
         private void UpdateScaling(Vector2 mouseDiference)
         {
             if (_mouseInput.MiddleButtonPressed)
                 _settings.SelectedPart.Scaling += mouseDiference * 0.01f;
         }
+        private void UpdateAnimation(GameTime gameTime)
+        {
+            var keyFrame = _settings.SelectedAnimation.KeyFrames[_currentKeyFrameIndex];
+
+            if (_playing)
+            {
+                _currentFrameTime += (float)gameTime.ElapsedGameTime.TotalSeconds * 30.0f;
+
+                if (_currentFrameTime > keyFrame.Duration)
+                {
+                    _currentFrameTime -= keyFrame.Duration;
+                    _currentKeyFrameIndex++;
+                    if (_currentKeyFrameIndex >= _settings.SelectedAnimation.KeyFrames.Length) _currentKeyFrameIndex = 0;
+
+                    keyFrame = _settings.SelectedAnimation.KeyFrames[_currentKeyFrameIndex];
+                }
+            }
+            else
+                _currentKeyFrameIndex = _settings.SelectedKeyFrameIndex;
+
+            if (keyFrame.FrameReference < 0)
+                _currentKeyFrameIndex = 0;
+        }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             _editingArea.Draw(spriteBatch);
-
+            DrawCharacter(spriteBatch);
+            DrawAnimation(spriteBatch);
+        }
+        private void DrawCharacter(SpriteBatch spriteBatch)
+        {
             if (_settings.SelectedFrameIndex > 0)
-                DrawCharacter(spriteBatch, _characterPosition, 2f, FaceRight, _settings.SelectedFrameIndex - 1, false, 0.2f);
+                DrawCharacterFrame(spriteBatch, _characterPosition, 2f, FaceRight, _settings.SelectedFrameIndex - 1, false, 0.2f);
 
             if (_settings.SelectedFrameIndex < CharacterDefinition.FramesCount - 1)
-                DrawCharacter(spriteBatch, _characterPosition, 2f, FaceRight, _settings.SelectedFrameIndex, false, 0.2f);
+                DrawCharacterFrame(spriteBatch, _characterPosition, 2f, FaceRight, _settings.SelectedFrameIndex, false, 0.2f);
 
-            DrawCharacter(spriteBatch, _characterPosition, 2f, FaceRight, _settings.SelectedFrameIndex, false, 1);
+            DrawCharacterFrame(spriteBatch, _characterPosition, 2f, FaceRight, _settings.SelectedFrameIndex, false, 1);
         }
-        private void DrawCharacter(SpriteBatch spriteBatch, Vector2 loc, float scale, int face, int frameIndex, bool preview, float alpha)
+        private void DrawAnimation(SpriteBatch spriteBatch)
+        {
+            var fRef = Math.Max(_settings.SelectedAnimation.KeyFrames[_currentKeyFrameIndex].FrameReference, 0);
+
+            DrawCharacterFrame(spriteBatch, _animationPosition, 0.5f, FaceLeft, fRef, true, 1);
+
+            if (_playing)
+            {
+                if (LegacySuport.DrawClickText(550, 3, "stop"))
+                    _playing = false;
+            }
+            else
+            {
+                if (LegacySuport.DrawClickText(550, 3, "play"))
+                    _playing = true;
+            }
+        }
+
+        private void DrawCharacterFrame(SpriteBatch spriteBatch, Vector2 loc, float scale, int face, int frameIndex, bool preview, float alpha)
         {
             var source = new Rectangle();
 
@@ -142,7 +195,7 @@ namespace CharacterEditor
 
             spriteBatch.End();
         }
-        
+
         private bool CanEdit()
         {
             return _editingArea.Area.Contains(_mouseInput.Position);

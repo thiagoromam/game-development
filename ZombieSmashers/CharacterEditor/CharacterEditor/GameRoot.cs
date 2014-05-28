@@ -1,7 +1,6 @@
 using CharacterEditor.Editor;
 using CharacterEditor.Ioc;
 using Funq.Fast;
-using Helpers;
 using KeyboardLib.Api;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,10 +20,8 @@ namespace CharacterEditor
 
         private IMouseComponent _mouseComponent;
         private IMouseDrawer _mouseDrawer;
-        private IMouseInput _mouseInput;
         private IKeyboardComponent _keyboardComponent;
         private IKeyboardControl _keyboardControl;
-        private IText _text;
         private ITextContent _textContent;
         private CharacterBoard _characterBoard;
         private GuiManager _guiManager;
@@ -43,7 +40,6 @@ namespace CharacterEditor
         {
             App.Register();
 
-            _mouseInput = DependencyInjection.Resolve<IMouseInput>();
             _mouseComponent = DependencyInjection.Resolve<IMouseComponent>();
             _mouseDrawer = DependencyInjection.Resolve<IMouseDrawer>();
             _keyboardComponent = DependencyInjection.Resolve<IKeyboardComponent>();
@@ -62,8 +58,8 @@ namespace CharacterEditor
 
             App.Register(_spriteBatch);
             LibContent.SetContents();
+            LegacySuport.Load(_spriteBatch);
 
-            _text = DependencyInjection.Resolve<IText>();
             _textContent = DependencyInjection.Resolve<ITextContent>();
             _textContent.Size = 0.75f;
 
@@ -82,7 +78,7 @@ namespace CharacterEditor
             _keyboardComponent.Update();
             _mouseComponent.Update();
             _guiManager.Update();
-            _characterBoard.Update();
+            _characterBoard.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -104,47 +100,5 @@ namespace CharacterEditor
 
             base.Draw(gameTime);
         }
-
-        // Suport
-        // ReSharper disable UnusedMember.Local
-        public bool DrawClickText(int x, int y, string s)
-        {
-            var position = new Vector2(x, y);
-
-            if (_text.MouseIntersects(s, position))
-            {
-                _text.Draw(s, position, Color.Yellow);
-                return _mouseInput.LeftButtonClick;
-            }
-
-            _text.Draw(s, position);
-
-            return false;
-        }
-        private bool DrawButton(int x, int y, int index)
-        {
-            var r = false;
-
-            var sRect = new Rectangle(32 * (index % 8), 32 * (index / 8), 32, 32);
-            var dRect = new Rectangle(x, y, 32, 32);
-
-            if (dRect.Contains(_mouseInput.Position))
-            {
-                dRect.X -= 1;
-                dRect.Y -= 1;
-                dRect.Width += 2;
-                dRect.Height += 2;
-
-                if (_mouseInput.LeftButtonClick)
-                    r = true;
-            }
-
-            _spriteBatch.Begin();
-            _spriteBatch.Draw(SharedArt.Icons, dRect, sRect, Color.White);
-            _spriteBatch.End();
-
-            return r;
-        }
-        // ReSharper restore UnusedMember.Local
     }
 }

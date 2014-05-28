@@ -17,6 +17,7 @@ namespace CharacterEditor.Editor
         {
             _characterDefinition = DependencyInjection.Resolve<CharacterDefinition>();
             SelectedAnimation = _characterDefinition.Animations[SelectedAnimationIndex];
+            SelectedKeyFrame = SelectedAnimation.KeyFrames[SelectedKeyFrameIndex];
             SelectedFrame = _characterDefinition.Frames[SelectedFrameIndex];
             SelectedPart = SelectedFrame.Parts[SelectedPartIndex];
         }
