@@ -34,6 +34,7 @@ namespace GraphicalUserInterfaceLib.Controls
 
         public T Value
         {
+            get { return _options[_current].Value; }
             set { _current = _options.IndexOf(_options.Single(o => Equals(o.Value, value))); }
         }
 

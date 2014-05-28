@@ -1,3 +1,4 @@
+using CharacterEditor.Board;
 using CharacterEditor.Editor;
 using CharacterEditor.Ioc;
 using Funq.Fast;
@@ -23,7 +24,7 @@ namespace CharacterEditor
         private IKeyboardComponent _keyboardComponent;
         private IKeyboardControl _keyboardControl;
         private ITextContent _textContent;
-        private CharacterBoard _characterBoard;
+        private BoardManager _boardManager;
         private GuiManager _guiManager;
 
         public GameRoot()
@@ -39,12 +40,12 @@ namespace CharacterEditor
         protected override void Initialize()
         {
             App.Register();
+            BoardExtensions.Initialize();
 
             _mouseComponent = DependencyInjection.Resolve<IMouseComponent>();
             _mouseDrawer = DependencyInjection.Resolve<IMouseDrawer>();
             _keyboardComponent = DependencyInjection.Resolve<IKeyboardComponent>();
             _keyboardControl = DependencyInjection.Resolve<IKeyboardControl>();
-            _characterBoard = new CharacterBoard();
 
             base.Initialize();
         }
@@ -64,6 +65,7 @@ namespace CharacterEditor
             _textContent.Size = 0.75f;
 
             _guiManager = new GuiManager();
+            _boardManager = new BoardManager();
         }
 
         protected override void UnloadContent()
@@ -78,7 +80,7 @@ namespace CharacterEditor
             _keyboardComponent.Update();
             _mouseComponent.Update();
             _guiManager.Update();
-            _characterBoard.Update(gameTime);
+            _boardManager.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -95,7 +97,7 @@ namespace CharacterEditor
             _spriteBatch.End();
 
             _guiManager.Draw(_spriteBatch);
-            _characterBoard.Draw(_spriteBatch);
+            _boardManager.Draw(_spriteBatch);
             _mouseDrawer.Draw(_spriteBatch);
 
             base.Draw(gameTime);

@@ -67,16 +67,15 @@
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
-    <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Art.cs" />
+    <Compile Include="Board\BoardExtensions.cs" />
+    <Compile Include="Board\BoardManager.cs" />
+    <Compile Include="Board\CharacterAnimation.cs" />
     <Compile Include="Character\Animation.cs" />
     <Compile Include="Character\Definition.cs" />
     <Compile Include="Character\Frame.cs" />
@@ -113,7 +112,7 @@
     <Compile Include="Ioc\Api\Settings\IReadonlySettings.cs" />
     <Compile Include="Ioc\Api\Settings\ISettings.cs" />
     <Compile Include="Ioc\App.cs" />
-    <Compile Include="CharacterBoard.cs" />
+    <Compile Include="Board\CharacterBoard.cs" />
     <Compile Include="LegacySuport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
