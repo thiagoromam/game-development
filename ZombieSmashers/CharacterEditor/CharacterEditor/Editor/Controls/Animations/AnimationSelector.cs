@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using CharacterEditor.Character;
+using CharacterEditor.Ioc.Api.Character;
 using CharacterEditor.Ioc.Api.Settings;
 using Funq.Fast;
 using GraphicalUserInterfaceLib.Controls;
@@ -28,6 +29,7 @@ namespace CharacterEditor.Editor.Controls.Animations
             _settings = DependencyInjection.Resolve<ISettings>();
             _characterDefinition = DependencyInjection.Resolve<CharacterDefinition>();
             _options = new TextButtonOption[_animationsScroll.Limit];
+            var definitionsLoader = DependencyInjection.Resolve<IDefinitionsLoader>();
 
             for (var i = 0; i < _options.Length; i++)
                 _options[i] = AddOption(i, GetAnimationText(i), new Vector2(x, y + i * yIncrement));
@@ -36,6 +38,7 @@ namespace CharacterEditor.Editor.Controls.Animations
             Change = ValueChange;
             _animationsScroll.ScrollIndexChanged += UpdateOptions;
             _settings.SelectedAnimationIndexChanged += UpdateAnimationWithoutName;
+            definitionsLoader.DefinitionsLoaded += UpdateOptions;
         }
 
         private void UpdateAnimationWithoutName(int previousIndex, int newIndex)

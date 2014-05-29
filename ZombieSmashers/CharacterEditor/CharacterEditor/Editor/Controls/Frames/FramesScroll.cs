@@ -1,4 +1,5 @@
 ﻿using CharacterEditor.Character;
+using CharacterEditor.Ioc.Api.Character;
 using CharacterEditor.Ioc.Api.Settings;
 using Funq.Fast;
 using GraphicalUserInterfaceLib.Api;
@@ -19,6 +20,9 @@ namespace CharacterEditor.Editor.Controls.Frames
             : base(CharacterDefinition.FramesCount, limit, x, y, y + 290)
         {
             _settings = DependencyInjection.Resolve<IReadOnlySettings>();
+            
+            var definitionsLoader = DependencyInjection.Resolve<IDefinitionsLoader>();
+            definitionsLoader.DefinitionsLoaded += Reset;
         }
 
         public bool IsCurrentFrameVisible()

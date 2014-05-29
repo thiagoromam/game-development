@@ -1,4 +1,5 @@
-﻿using CharacterEditor.Ioc.Api.Settings;
+﻿using CharacterEditor.Ioc.Api.Character;
+using CharacterEditor.Ioc.Api.Settings;
 using Funq.Fast;
 using GraphicalUserInterfaceLib.Controls;
 using Microsoft.Xna.Framework;
@@ -16,6 +17,7 @@ namespace CharacterEditor.Editor.Controls.KeyFrames
             _framesScroll = framesScroll;
             _settings = DependencyInjection.Resolve<ISettings>();
             _items = new KeyFrameSelectorItem[_framesScroll.Limit];
+            var definitionsLoader = DependencyInjection.Resolve<IDefinitionsLoader>();
 
             for (var i = 0; i < _items.Length; i++)
             {
@@ -28,6 +30,7 @@ namespace CharacterEditor.Editor.Controls.KeyFrames
             _settings.SelectedKeyFrameChanged += UpdateItems;
             _settings.SelectedAnimation.KeyFramesChanged += UpdateItems;
             _framesScroll.ScrollIndexChanged += UpdateItems;
+            definitionsLoader.DefinitionsLoaded += UpdateItems;
         }
 
         private void ValueChange(int? previousValue, int? newValue)

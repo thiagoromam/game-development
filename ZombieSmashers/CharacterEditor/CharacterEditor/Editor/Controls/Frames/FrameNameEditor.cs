@@ -1,4 +1,5 @@
-﻿using CharacterEditor.Ioc.Api.Settings;
+﻿using CharacterEditor.Ioc.Api.Character;
+using CharacterEditor.Ioc.Api.Settings;
 using Funq.Fast;
 using GraphicalUserInterfaceLib.Controls;
 using Helpers;
@@ -17,8 +18,10 @@ namespace CharacterEditor.Editor.Controls.Frames
             _frameSelector = frameSelector;
             _framesScroll = framesScroll;
             _settings = DependencyInjection.Resolve<ISettings>();
+            var definitionsLoader = DependencyInjection.Resolve<IDefinitionsLoader>();
 
             UpdateFocus();
+            definitionsLoader.DefinitionsLoaded += UpdateText;
             _settings.SelectedFrameChanged += UpdateFocus;
             _framesScroll.ScrollIndexChanged += UpdateVisibility;
             _framesScroll.ScrollIndexChanged += UpdatePosition;
@@ -39,8 +42,13 @@ namespace CharacterEditor.Editor.Controls.Frames
         private void UpdateFocus()
         {
             Visible = true;
-            Text = _settings.SelectedFrame.Name.HasValue() ? _settings.SelectedFrame.Name : "<name>";
+            UpdateText();
             UpdatePosition();
+        }
+
+        private void UpdateText()
+        {
+            Text = _settings.SelectedFrame.Name.HasValue() ? _settings.SelectedFrame.Name : "<name>";
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using CharacterEditor.Ioc.Api.Settings;
+﻿using CharacterEditor.Ioc.Api.Character;
+using CharacterEditor.Ioc.Api.Settings;
 using Funq.Fast;
 using GraphicalUserInterfaceLib.Api;
 
@@ -16,6 +17,7 @@ namespace CharacterEditor.Editor.Controls.KeyFrames
             _keyFramesScroll = keyFramesScroll;
             _settings = DependencyInjection.Resolve<IReadOnlySettings>();
             _durationControls = new DurationControl[_keyFramesScroll.Limit];
+            var definitionsLoader = DependencyInjection.Resolve<IDefinitionsLoader>();
 
             for (var i = 0; i < _durationControls.Length; i++)
                 _durationControls[i] = new DurationControl(x, y + (i * yIncrement), keyFramesOrderer);
@@ -23,6 +25,7 @@ namespace CharacterEditor.Editor.Controls.KeyFrames
             _settings.SelectedAnimationChanged += UpdateControls;
             _settings.SelectedAnimation.KeyFramesChanged += UpdateControls;
             _keyFramesScroll.ScrollIndexChanged += UpdateControls;
+            definitionsLoader.DefinitionsLoaded += UpdateControls;
             UpdateControls();
         }
 

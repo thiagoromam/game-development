@@ -15,12 +15,15 @@ namespace CharacterEditor.Editor
 
         public Settings()
         {
+            FileName = "char";
             _characterDefinition = DependencyInjection.Resolve<CharacterDefinition>();
             SelectedAnimation = _characterDefinition.Animations[SelectedAnimationIndex];
             SelectedKeyFrame = SelectedAnimation.KeyFrames[SelectedKeyFrameIndex];
             SelectedFrame = _characterDefinition.Frames[SelectedFrameIndex];
             SelectedPart = SelectedFrame.Parts[SelectedPartIndex];
         }
+
+        public string FileName { get; set; }
 
         public int SelectedAnimationIndex
         {

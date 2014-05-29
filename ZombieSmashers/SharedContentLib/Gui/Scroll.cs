@@ -31,6 +31,10 @@ namespace SharedLib.Gui
             _scrollDownButton = new IconButton(2, x, yFinal) { Click = ScrollDown };
         }
 
+        public void Reset()
+        {
+            ScrollIndex = 0;
+        }
         public int ScrollIndex
         {
             get { return _scrollIndex; }

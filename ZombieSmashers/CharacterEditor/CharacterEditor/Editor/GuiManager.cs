@@ -1,4 +1,5 @@
 ﻿using CharacterEditor.Editor.Controls.Animations;
+using CharacterEditor.Editor.Controls.File;
 using CharacterEditor.Editor.Controls.Frames;
 using CharacterEditor.Editor.Controls.Icons;
 using CharacterEditor.Editor.Controls.KeyFrames;
@@ -15,6 +16,7 @@ namespace CharacterEditor.Editor
             AddFramesPalette();
             AddAnimationsPalette();
             AddKeyFramesPalette();
+            AddFileControls();
         }
 
         private void AddIconsPalette()
@@ -50,6 +52,21 @@ namespace CharacterEditor.Editor
             var keyFramesPalette = new KeyFramePalette();
             AddComponent(keyFramesPalette);
             AddControl(keyFramesPalette);
+        }
+
+        private void AddFileControls()
+        {
+            var loadButton = new LoadButton();
+            AddComponent(loadButton);
+            AddControl(loadButton);
+
+            var saveButton = new SaveButton();
+            AddComponent(saveButton);
+            AddControl(saveButton);
+
+            var fileNameEditor = new FileNameEditor();
+            AddComponent(fileNameEditor);
+            AddTextControl(fileNameEditor);
         }
     }
 }

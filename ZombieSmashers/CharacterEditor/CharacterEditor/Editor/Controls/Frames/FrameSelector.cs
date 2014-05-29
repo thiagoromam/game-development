@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using CharacterEditor.Character;
+using CharacterEditor.Ioc.Api.Character;
 using CharacterEditor.Ioc.Api.Settings;
 using Funq.Fast;
 using GraphicalUserInterfaceLib.Controls;
@@ -28,6 +29,7 @@ namespace CharacterEditor.Editor.Controls.Frames
             _settings = DependencyInjection.Resolve<ISettings>();
             _characterDefinition = DependencyInjection.Resolve<CharacterDefinition>();
             _options = new TextButtonOption[_framesScroll.Limit];
+            var definitionsLoader = DependencyInjection.Resolve<IDefinitionsLoader>();
 
             for (var i = 0; i < _options.Length; i++)
                 _options[i] = AddOption(i, GetFrameText(i), new Vector2(x, y + i * yIncrement));
@@ -36,6 +38,7 @@ namespace CharacterEditor.Editor.Controls.Frames
             Change = ValueChange;
             _framesScroll.ScrollIndexChanged += UpdateOptions;
             _settings.SelectedFrameIndexChanged += UpdateFrameWithoutName;
+            definitionsLoader.DefinitionsLoaded += UpdateOptions;
         }
 
         private void UpdateFrameWithoutName(int previousIndex, int newIndex)

@@ -56,6 +56,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AreaRectangle.cs" />
+    <Compile Include="Gui\Controls\File\LoadButton.cs" />
+    <Compile Include="Gui\Controls\File\SaveButton.cs" />
     <Compile Include="Gui\IconButton.cs" />
     <Compile Include="Gui\Scroll.cs" />
     <Compile Include="SharedArt.cs" />

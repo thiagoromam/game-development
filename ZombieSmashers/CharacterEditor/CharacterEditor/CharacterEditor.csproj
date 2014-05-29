@@ -85,6 +85,9 @@
     <Compile Include="Editor\Controls\Animations\AnimationsPalette.cs" />
     <Compile Include="Editor\Controls\Animations\AnimationsScroll.cs" />
     <Compile Include="Editor\Controls\Animations\AnimationSelector.cs" />
+    <Compile Include="Editor\Controls\File\FileNameEditor.cs" />
+    <Compile Include="Editor\Controls\File\LoadButton.cs" />
+    <Compile Include="Editor\Controls\File\SaveButton.cs" />
     <Compile Include="Editor\Controls\Frames\AddFrameButton.cs" />
     <Compile Include="Editor\Controls\Frames\FrameNameEditor.cs" />
     <Compile Include="Editor\Controls\Frames\FramesPalette.cs" />
@@ -109,6 +112,7 @@
     <Compile Include="Editor\Controls\Parts\SwapUpButton.cs" />
     <Compile Include="Editor\GuiManager.cs" />
     <Compile Include="Editor\Settings.cs" />
+    <Compile Include="Ioc\Api\Character\IDefinitionsLoader.cs" />
     <Compile Include="Ioc\Api\Settings\IReadonlySettings.cs" />
     <Compile Include="Ioc\Api\Settings\ISettings.cs" />
     <Compile Include="Ioc\App.cs" />
@@ -117,6 +121,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="GameRoot.cs" />
+    <Compile Include="Routines\File\DefinitionsLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

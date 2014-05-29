@@ -1,6 +1,8 @@
 ﻿using CharacterEditor.Character;
 using CharacterEditor.Editor;
+using CharacterEditor.Ioc.Api.Character;
 using CharacterEditor.Ioc.Api.Settings;
+using CharacterEditor.Routines.File;
 using Funq.Fast;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -17,6 +19,7 @@ namespace CharacterEditor.Ioc
             var settings = new Settings();
             DependencyInjection.Register((ISettings)settings);
             DependencyInjection.Register((IReadOnlySettings)settings);
+            DependencyInjection.Register((IDefinitionsLoader)new DefinitionsLoader());
         }
 
         public static void Register(SpriteBatch spriteBatch)

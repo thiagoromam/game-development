@@ -1,4 +1,5 @@
-﻿using Helpers;
+﻿using System;
+using Helpers;
 
 namespace CharacterEditor.Character
 {
@@ -7,7 +8,9 @@ namespace CharacterEditor.Character
         public const int AnimationsCount = 64;
         public const int FramesCount = 512;
 
-        public string Path;
+        public event Action AnimationsChanged;
+        public event Action FramesChanged;
+
         public int HeadIndex;
         public int TorsoIndex;
         public int LegsIndex;
@@ -15,13 +18,22 @@ namespace CharacterEditor.Character
 
         public CharacterDefinition()
         {
-            Path = "char";
-
             Animations = EnumerableHelper.Array<Animation>(AnimationsCount);
             Frames = EnumerableHelper.Array<Frame>(FramesCount);
         }
 
         public Animation[] Animations { get; private set; }
         public Frame[] Frames { get; private set; }
+
+        public void OnAnimationsChanged()
+        {
+            var handler = AnimationsChanged;
+            if (handler != null) handler();
+        }
+        public void OnFramesChanged()
+        {
+            var handler = FramesChanged;
+            if (handler != null) handler();
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using CharacterEditor.Ioc.Api.Settings;
+﻿using CharacterEditor.Ioc.Api.Character;
+using CharacterEditor.Ioc.Api.Settings;
 using Funq.Fast;
 using GraphicalUserInterfaceLib.Controls;
 using Helpers;
@@ -17,11 +18,13 @@ namespace CharacterEditor.Editor.Controls.Animations
             _animationSelector = animationSelector;
             _animationsScroll = animationsScroll;
             _settings = DependencyInjection.Resolve<ISettings>();
+            var definitionsLoader = DependencyInjection.Resolve<IDefinitionsLoader>();
 
             UpdateFocus();
             _settings.SelectedAnimationChanged += UpdateFocus;
             _animationsScroll.ScrollIndexChanged += UpdateVisibility;
             _animationsScroll.ScrollIndexChanged += UpdatePosition;
+            definitionsLoader.DefinitionsLoaded += UpdateText;
             Change = v => _settings.SelectedAnimation.Name = v;
         }
 
@@ -39,8 +42,13 @@ namespace CharacterEditor.Editor.Controls.Animations
         private void UpdateFocus()
         {
             Visible = true;
-            Text = _settings.SelectedAnimation.Name.HasValue() ? _settings.SelectedAnimation.Name : "<name>";
+            UpdateText();
             UpdatePosition();
+        }
+
+        private void UpdateText()
+        {
+            Text = _settings.SelectedAnimation.Name.HasValue() ? _settings.SelectedAnimation.Name : "<name>";
         }
     }
 }

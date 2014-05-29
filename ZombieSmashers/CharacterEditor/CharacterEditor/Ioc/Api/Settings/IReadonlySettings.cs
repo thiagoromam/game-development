@@ -5,6 +5,8 @@ namespace CharacterEditor.Ioc.Api.Settings
 {
     public interface IReadOnlySettings
     {
+        string FileName { get; }
+
         int SelectedAnimationIndex { get; }
         int SelectedKeyFrameIndex { get; }
         int SelectedFrameIndex { get; }

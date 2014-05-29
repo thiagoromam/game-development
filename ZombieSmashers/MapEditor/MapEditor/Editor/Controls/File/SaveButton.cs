@@ -2,25 +2,22 @@
 using Funq.Fast;
 using MapEditor.Ioc.Api.Map;
 using MapEditor.Ioc.Api.Settings;
-using SharedLib.Gui;
 
 // ReSharper disable ForCanBeConvertedToForeach
 namespace MapEditor.Editor.Controls.File
 {
-    public class SaveButton : IconButton
+    public class SaveButton : SharedLib.Gui.Controls.File.SaveButton
     {
         private readonly IReadOnlySettings _settings;
         private readonly IReadonlyMapData _mapData;
 
-        public SaveButton(int x, int y) : base(3, x, y)
+        public SaveButton(int x, int y) : base(x, y)
         {
             _settings = DependencyInjection.Resolve<IReadOnlySettings>();
             _mapData = DependencyInjection.Resolve<IReadonlyMapData>();
-
-            Click = Save;
         }
 
-        private void Save()
+        protected override void Save()
         {
             var mapPath = string.Format("Content/{0}", _settings.MapPath);
             var file = new BinaryWriter(System.IO.File.Open(mapPath, FileMode.Create));

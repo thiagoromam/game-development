@@ -8,6 +8,8 @@ namespace CharacterEditor.Ioc.Api.Settings
  
     public interface ISettings
     {
+        string FileName { get; set; }
+
         int SelectedAnimationIndex { get; set; }
         int SelectedKeyFrameIndex { get; set; }
         int SelectedFrameIndex { get; set; }

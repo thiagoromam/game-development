@@ -1,4 +1,5 @@
 ﻿using CharacterEditor.Character;
+using CharacterEditor.Ioc.Api.Character;
 using CharacterEditor.Ioc.Api.Settings;
 using Funq.Fast;
 using SharedLib.Gui;
@@ -18,6 +19,9 @@ namespace CharacterEditor.Editor.Controls.Animations
             : base(CharacterDefinition.AnimationsCount, limit, x, y, y + 195)
         {
             _settings = DependencyInjection.Resolve<IReadOnlySettings>();
+            var definitionsLoader = DependencyInjection.Resolve<IDefinitionsLoader>();
+
+            definitionsLoader.DefinitionsLoaded += Reset;
         }
 
         public bool IsCurrentAnimationVisible()
