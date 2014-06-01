@@ -1,0 +1,69 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZombieSmashers", "ZombieSmashers\ZombieSmashers\ZombieSmashers.csproj", "{BE1B9AC7-3CA0-4A26-ACED-6B8D2DC88321}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "ZombieSmashersContent", "ZombieSmashers\ZombieSmashersContent\ZombieSmashersContent.contentproj", "{B29FCB00-36BB-4DF5-9975-574452DAA45B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharacterEditor", "CharacterEditor\CharacterEditor\CharacterEditor.csproj", "{7F4494B5-90DF-4092-AD06-DED0F94BF154}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "CharacterEditorContent", "CharacterEditor\CharacterEditorContent\CharacterEditorContent.contentproj", "{0C1FB96E-858E-4DE8-A213-20E817BD58ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditor", "MapEditor\MapEditor\MapEditor.csproj", "{DAE39007-4E0B-4D07-927B-8CD39F8C4FA3}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "MapEditorContent", "MapEditor\MapEditorContent\MapEditorContent.contentproj", "{232DE420-7806-468B-8648-E4E413C7E55A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Character Editor", "Character Editor", "{3D4D94E5-AB35-4375-A039-97932F2D1632}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Map Editor", "Map Editor", "{150DAB9C-D736-4400-A40D-9677C2F43A00}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Zombie Smashers", "Zombie Smashers", "{7486D143-7737-49F4-8BB5-2977CA5F2369}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{B4F8BA04-45F2-4AE6-9C7F-8F05D9BD3CB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextLib", "TextLib\TextLib.csproj", "{246407F1-501C-46B3-B58B-7175435B5EC9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BE1B9AC7-3CA0-4A26-ACED-6B8D2DC88321}.Debug|x86.ActiveCfg = Debug|x86
+		{BE1B9AC7-3CA0-4A26-ACED-6B8D2DC88321}.Debug|x86.Build.0 = Debug|x86
+		{BE1B9AC7-3CA0-4A26-ACED-6B8D2DC88321}.Release|x86.ActiveCfg = Release|x86
+		{BE1B9AC7-3CA0-4A26-ACED-6B8D2DC88321}.Release|x86.Build.0 = Release|x86
+		{B29FCB00-36BB-4DF5-9975-574452DAA45B}.Debug|x86.ActiveCfg = Debug|x86
+		{B29FCB00-36BB-4DF5-9975-574452DAA45B}.Release|x86.ActiveCfg = Release|x86
+		{7F4494B5-90DF-4092-AD06-DED0F94BF154}.Debug|x86.ActiveCfg = Debug|x86
+		{7F4494B5-90DF-4092-AD06-DED0F94BF154}.Debug|x86.Build.0 = Debug|x86
+		{7F4494B5-90DF-4092-AD06-DED0F94BF154}.Release|x86.ActiveCfg = Release|x86
+		{7F4494B5-90DF-4092-AD06-DED0F94BF154}.Release|x86.Build.0 = Release|x86
+		{0C1FB96E-858E-4DE8-A213-20E817BD58ED}.Debug|x86.ActiveCfg = Debug|x86
+		{0C1FB96E-858E-4DE8-A213-20E817BD58ED}.Release|x86.ActiveCfg = Release|x86
+		{DAE39007-4E0B-4D07-927B-8CD39F8C4FA3}.Debug|x86.ActiveCfg = Debug|x86
+		{DAE39007-4E0B-4D07-927B-8CD39F8C4FA3}.Debug|x86.Build.0 = Debug|x86
+		{DAE39007-4E0B-4D07-927B-8CD39F8C4FA3}.Release|x86.ActiveCfg = Release|x86
+		{DAE39007-4E0B-4D07-927B-8CD39F8C4FA3}.Release|x86.Build.0 = Release|x86
+		{232DE420-7806-468B-8648-E4E413C7E55A}.Debug|x86.ActiveCfg = Debug|x86
+		{232DE420-7806-468B-8648-E4E413C7E55A}.Release|x86.ActiveCfg = Release|x86
+		{246407F1-501C-46B3-B58B-7175435B5EC9}.Debug|x86.ActiveCfg = Debug|x86
+		{246407F1-501C-46B3-B58B-7175435B5EC9}.Debug|x86.Build.0 = Debug|x86
+		{246407F1-501C-46B3-B58B-7175435B5EC9}.Release|x86.ActiveCfg = Release|x86
+		{246407F1-501C-46B3-B58B-7175435B5EC9}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BE1B9AC7-3CA0-4A26-ACED-6B8D2DC88321} = {7486D143-7737-49F4-8BB5-2977CA5F2369}
+		{B29FCB00-36BB-4DF5-9975-574452DAA45B} = {7486D143-7737-49F4-8BB5-2977CA5F2369}
+		{7F4494B5-90DF-4092-AD06-DED0F94BF154} = {3D4D94E5-AB35-4375-A039-97932F2D1632}
+		{0C1FB96E-858E-4DE8-A213-20E817BD58ED} = {3D4D94E5-AB35-4375-A039-97932F2D1632}
+		{DAE39007-4E0B-4D07-927B-8CD39F8C4FA3} = {150DAB9C-D736-4400-A40D-9677C2F43A00}
+		{232DE420-7806-468B-8648-E4E413C7E55A} = {150DAB9C-D736-4400-A40D-9677C2F43A00}
+		{246407F1-501C-46B3-B58B-7175435B5EC9} = {B4F8BA04-45F2-4AE6-9C7F-8F05D9BD3CB4}
+	EndGlobalSection
+EndGlobal
