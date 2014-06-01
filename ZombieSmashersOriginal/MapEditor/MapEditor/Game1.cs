@@ -41,7 +41,7 @@ namespace MapEditor
 
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this) { PreferredBackBufferWidth = 800, PreferredBackBufferHeight = 600 };
             Content.RootDirectory = "Content";
         }
 
