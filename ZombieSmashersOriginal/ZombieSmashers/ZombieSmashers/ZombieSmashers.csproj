@@ -70,17 +70,26 @@
   <ItemGroup>
     <Compile Include="CharClasses\Animation.cs" />
     <Compile Include="CharClasses\Character.cs" />
+    <Compile Include="CharClasses\CharacterType.cs" />
     <Compile Include="CharClasses\CharDef.cs" />
+    <Compile Include="CharClasses\CharDir.cs" />
+    <Compile Include="CharClasses\CharState.cs" />
     <Compile Include="CharClasses\Frame.cs" />
     <Compile Include="CharClasses\KeyFrame.cs" />
     <Compile Include="CharClasses\Part.cs" />
+    <Compile Include="Input\ControlInput.cs" />
+    <Compile Include="Input\GamePadControlInput.cs" />
+    <Compile Include="Input\IControlInput.cs" />
+    <Compile Include="Input\KeyboardControlInput.cs" />
     <Compile Include="MapClasses\Ledge.cs" />
+    <Compile Include="MapClasses\LedgeFlags.cs" />
     <Compile Include="MapClasses\Map.cs" />
     <Compile Include="MapClasses\MapSegment.cs" />
     <Compile Include="MapClasses\SegmentDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Rand.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

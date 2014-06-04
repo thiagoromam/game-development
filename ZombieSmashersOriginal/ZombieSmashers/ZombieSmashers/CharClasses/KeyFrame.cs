@@ -1,6 +1,6 @@
 namespace ZombieSmashers.CharClasses
 {
-    internal class KeyFrame
+    public class KeyFrame
     {
         public int FrameRef;
         public int Duration;

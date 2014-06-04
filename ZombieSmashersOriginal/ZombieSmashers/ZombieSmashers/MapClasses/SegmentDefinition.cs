@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 
 namespace ZombieSmashers.MapClasses
 {
-    class SegmentDefinition
+    public class SegmentDefinition
     {
         private Rectangle _srcRect;
 

@@ -3,9 +3,11 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+// ReSharper disable ForCanBeConvertedToForeach
+
 namespace MapEditor.MapClasses
 {
-    class Map
+    internal class Map
     {
         public Map()
         {
@@ -16,7 +18,7 @@ namespace MapEditor.MapClasses
 
             Ledges = new Ledge[16];
 
-            for (int i = 0; i < 16; i++)
+            for (var i = 0; i < 16; i++)
                 Ledges[i] = new Ledge();
 
             ReadSegmentDefinitions();
@@ -77,12 +79,12 @@ namespace MapEditor.MapClasses
 
         public void Write()
         {
-            BinaryWriter file = new BinaryWriter(File.Open(@"data/" + Path + ".zmx", FileMode.Create));
+            var file = new BinaryWriter(File.Open(@"data/" + Path + ".zmx", FileMode.Create));
 
-            for (int i = 0; i < Ledges.Length; i++)
+            for (var i = 0; i < Ledges.Length; i++)
             {
                 file.Write(Ledges[i].TotalNodes);
-                for (int n = 0; n < Ledges[i].TotalNodes; n++)
+                for (var n = 0; n < Ledges[i].TotalNodes; n++)
                 {
                     file.Write(Ledges[i].Nodes[n].X);
                     file.Write(Ledges[i].Nodes[n].Y);
@@ -90,9 +92,9 @@ namespace MapEditor.MapClasses
                 file.Write(Ledges[i].Flags);
             }
 
-            for (int l = 0; l < 3; l++)
+            for (var l = 0; l < 3; l++)
             {
-                for (int i = 0; i < 64; i++)
+                for (var i = 0; i < 64; i++)
                 {
                     if (Segments[l, i] == null)
                         file.Write(-1);
@@ -105,9 +107,9 @@ namespace MapEditor.MapClasses
                 }
             }
 
-            for (int x = 0; x < 20; x++)
+            for (var x = 0; x < 20; x++)
             {
-                for (int y = 0; y < 20; y++)
+                for (var y = 0; y < 20; y++)
                 {
                     file.Write(Grid[x, y]);
                 }
@@ -115,41 +117,43 @@ namespace MapEditor.MapClasses
 
             file.Close();
         }
+
         public void Read()
         {
-            BinaryReader file = new BinaryReader(File.Open(@"data/" + Path + ".zmx", FileMode.Open));
+            var file = new BinaryReader(File.Open(@"data/" + Path + ".zmx", FileMode.Open));
 
-            for (int i = 0; i < Ledges.Length; i++)
+            for (var i = 0; i < Ledges.Length; i++)
             {
-                Ledges[i] = new Ledge();
-                Ledges[i].TotalNodes = file.ReadInt32();
-                for (int n = 0; n < Ledges[i].TotalNodes; n++)
+                Ledges[i] = new Ledge { TotalNodes = file.ReadInt32() };
+                for (var n = 0; n < Ledges[i].TotalNodes; n++)
                 {
                     Ledges[i].Nodes[n] = new Vector2(file.ReadSingle(), file.ReadSingle());
                 }
                 Ledges[i].Flags = file.ReadInt32();
             }
 
-            for (int l = 0; l < 3; l++)
+            for (var l = 0; l < 3; l++)
             {
-                for (int i = 0; i < 64; i++)
+                for (var i = 0; i < 64; i++)
                 {
-                    int t = file.ReadInt32();
+                    var t = file.ReadInt32();
 
                     if (t == -1)
                         Segments[l, i] = null;
                     else
                     {
-                        Segments[l, i] = new MapSegment();
-                        Segments[l, i].Index = t;
-                        Segments[l, i].Location = new Vector2(file.ReadSingle(), file.ReadSingle());
+                        Segments[l, i] = new MapSegment
+                        {
+                            Index = t,
+                            Location = new Vector2(file.ReadSingle(), file.ReadSingle())
+                        };
                     }
                 }
             }
 
-            for (int x = 0; x < 20; x++)
+            for (var x = 0; x < 20; x++)
             {
-                for (int y = 0; y < 20; y++)
+                for (var y = 0; y < 20; y++)
                 {
                     Grid[x, y] = file.ReadInt32();
                 }
@@ -157,6 +161,7 @@ namespace MapEditor.MapClasses
 
             file.Close();
         }
+
         private void ReadSegmentDefinitions()
         {
             var s = new StreamReader(@"Content/maps.zdx");
@@ -170,6 +175,7 @@ namespace MapEditor.MapClasses
 
             while (!s.EndOfStream)
             {
+                // ReSharper disable PossibleNullReferenceException
                 var t = s.ReadLine();
 
                 string[] split;
@@ -204,18 +210,20 @@ namespace MapEditor.MapClasses
                     else
                         Console.WriteLine("read fail: " + name);
 
-                    int tex = currentTex;
+                    var tex = currentTex;
 
                     t = s.ReadLine();
-                    int flags = Convert.ToInt32(t);
+                    var flags = Convert.ToInt32(t);
 
                     SegmentDefinitions[curDef] = new SegmentDefinition(name, tex, tRect, flags);
                 }
+                // ReSharper restore PossibleNullReferenceException
             }
         }
+
         public int GetHoveredSegment(int x, int y, int l, Vector2 scroll)
         {
-            float scale = 1.0f;
+            var scale = 1.0f;
             if (l == 0)
                 scale = 0.75f;
             else if (l == 2)
@@ -223,12 +231,12 @@ namespace MapEditor.MapClasses
 
             scale *= 0.5f;
 
-            for (int i = 63; i >= 0; i--)
+            for (var i = 63; i >= 0; i--)
             {
                 if (Segments[l, i] != null)
                 {
-                    Rectangle sRect = SegmentDefinitions[Segments[l, i].Index].SourceRect;
-                    Rectangle dRect = new Rectangle(
+                    var sRect = SegmentDefinitions[Segments[l, i].Index].SourceRect;
+                    var dRect = new Rectangle(
                         (int)(Segments[l, i].Location.X - scroll.X * scale),
                         (int)(Segments[l, i].Location.Y - scroll.Y * scale),
                         (int)(sRect.Width * scale),
@@ -242,14 +250,14 @@ namespace MapEditor.MapClasses
 
             return -1;
         }
+
         public int AddSeg(int layer, int index)
         {
-            for (int i = 0; i < 64; i++)
+            for (var i = 0; i < 64; i++)
             {
                 if (Segments[layer, i] == null)
                 {
-                    Segments[layer, i] = new MapSegment();
-                    Segments[layer, i].Index = index;
+                    Segments[layer, i] = new MapSegment { Index = index };
 
                     return i;
                 }

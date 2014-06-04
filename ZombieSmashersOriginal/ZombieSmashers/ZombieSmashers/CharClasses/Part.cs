@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 
 namespace ZombieSmashers.CharClasses
 {
-    internal class Part
+    public class Part
     {
         public Vector2 Location;
         public float Rotation;

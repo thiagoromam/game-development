@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 
 namespace ZombieSmashers.MapClasses
 {
-    class MapSegment
+    public class MapSegment
     {
         public Vector2 Location;
 

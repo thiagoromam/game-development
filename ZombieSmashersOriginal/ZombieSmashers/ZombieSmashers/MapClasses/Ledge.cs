@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 
 namespace ZombieSmashers.MapClasses
 {
-    class Ledge
+    public class Ledge
     {
         private readonly Vector2[] _nodes = new Vector2[16];
 

@@ -5,7 +5,7 @@ using System.IO;
 
 namespace ZombieSmashers.CharClasses
 {
-    internal class CharDef
+    public class CharDef
     {
         private readonly Animation[] _animations;
         private readonly Frame[] _frames;
@@ -15,8 +15,9 @@ namespace ZombieSmashers.CharClasses
         public string Path;
         public int TorsoIndex;
         public int WeaponIndex;
+        public CharacterType CharType = CharacterType.Guy;
 
-        public CharDef()
+        public CharDef(string path)
         {
             _animations = new Animation[64];
             for (var i = 0; i < _animations.Length; i++)
@@ -26,7 +27,9 @@ namespace ZombieSmashers.CharClasses
             for (var i = 0; i < _frames.Length; i++)
                 _frames[i] = new Frame();
 
-            Path = "guy";
+            Path = path;
+
+            Read();
         }
 
         public Animation[] Animations

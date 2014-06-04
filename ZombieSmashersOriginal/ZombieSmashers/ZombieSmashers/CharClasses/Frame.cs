@@ -2,7 +2,7 @@ using System;
 
 namespace ZombieSmashers.CharClasses
 {
-    internal class Frame
+    public class Frame
     {
         private readonly Part[] _parts;
         public string Name;

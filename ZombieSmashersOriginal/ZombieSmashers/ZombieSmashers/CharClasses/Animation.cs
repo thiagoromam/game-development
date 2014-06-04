@@ -2,7 +2,7 @@ using System;
 
 namespace ZombieSmashers.CharClasses
 {
-    class Animation
+    public class Animation
     {
         public string Name;
         private readonly KeyFrame[] _keyFrames;
