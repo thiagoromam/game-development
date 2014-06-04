@@ -377,6 +377,8 @@ namespace ZombieSmashers.CharClasses
 
                     var color = new Color(new Vector4(1f, 1f, 1f, 1f));
 
+                    var flip = (Face == CharDir.Right && part.Flip == 0) || (Face == CharDir.Left && part.Flip == 1);
+
                     if (texture != null)
                     {
                         spriteBatch.Draw(
@@ -387,7 +389,7 @@ namespace ZombieSmashers.CharClasses
                             rotation,
                             new Vector2(sRect.Width / 2f, 32f),
                             scaling,
-                            SpriteEffects.None,
+                            (flip ? SpriteEffects.None : SpriteEffects.FlipHorizontally),
                             1.0f
                             );
                     }

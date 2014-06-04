@@ -34,9 +34,9 @@ namespace ZombieSmashers.Input
             else if (_curState.IsKeyDown(Keys.S))
                 KeyUp = true;
 
-            KeyJump = IsKeyClick(Keys.K);
+            KeyJump = IsKeyClick(Keys.Space);
             KeyAttack = IsKeyClick(Keys.J);
-            KeySecondary = IsKeyClick(Keys.H);
+            KeySecondary = IsKeyClick(Keys.K);
 
             _prevState = _curState;
         }
