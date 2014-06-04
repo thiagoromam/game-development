@@ -9,6 +9,8 @@ namespace ZombieSmashers.MapClasses
 {
     public class Map
     {
+        private const int LayerBack = 0;
+
         public Map(string path)
         {
             SegmentDefinitions = new SegmentDefinition[512];
@@ -32,11 +34,19 @@ namespace ZombieSmashers.MapClasses
         public SegmentDefinition[] SegmentDefinitions { get; private set; }
         public string Path { get; set; }
 
-        public void Draw(SpriteBatch sprite, Texture2D[] mapsTex, int startLayer, int endLayer)
+        public void Draw(SpriteBatch sprite, Texture2D[] mapsTex, Texture2D[] mapsBackTex, int startLayer, int endLayer)
         {
             var dRect = new Rectangle();
 
             sprite.Begin();
+
+            if (startLayer == LayerBack)
+            {
+                var lim = new Vector2(GetXLim(), GetYLim());
+                var targ = Game1.ScreenSize / 2 - (Game1.Scroll / lim - new Vector2(0.5f)) * 100;
+
+                sprite.Draw(mapsBackTex[0], targ, new Rectangle(0, 0, 1280, 720), Color.White, 0, new Vector2(640, 360), 1, SpriteEffects.None, 1);
+            }
 
             for (var l = startLayer; l < endLayer; l++)
             {
@@ -300,6 +310,15 @@ namespace ZombieSmashers.MapClasses
             }
 
             return true;
+        }
+
+        public float GetXLim()
+        {
+            return 1280 - Game1.ScreenSize.X;
+        }
+        public float GetYLim()
+        {
+            return 1280 - Game1.ScreenSize.Y;
         }
     }
 }

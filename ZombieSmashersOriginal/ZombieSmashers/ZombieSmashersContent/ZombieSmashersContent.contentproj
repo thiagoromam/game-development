@@ -91,6 +91,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="gfx\back1.png">
+      <Name>back1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Content Include="maps.zdx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>maps</Name>

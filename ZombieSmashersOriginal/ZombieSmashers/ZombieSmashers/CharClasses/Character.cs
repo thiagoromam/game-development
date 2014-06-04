@@ -58,7 +58,7 @@ namespace ZombieSmashers.CharClasses
             Location = newLoc;
             Trajectory = Vector2.Zero;
 
-            Face = CharDir.Left;
+            Face = CharDir.Right;
             Scale = 0.5f;
             _charDef = newCharDef;
 
