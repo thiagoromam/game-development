@@ -5,6 +5,7 @@ namespace CharacterEditor
         None,
         FrameName,
         AnimationName,
-        PathName
+        PathName,
+        Script
     }
 }

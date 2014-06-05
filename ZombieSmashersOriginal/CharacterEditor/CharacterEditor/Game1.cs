@@ -33,6 +33,7 @@ namespace CharacterEditor
         private int _selFrame;
         private int _selAnim;
         private int _selKeyFrame;
+        private int _selScriptLine;
 
         private int _curKey;
         private bool _playing;
@@ -53,7 +54,11 @@ namespace CharacterEditor
 
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this) { PreferredBackBufferWidth = 800, PreferredBackBufferHeight = 600 };
+            _graphics = new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferWidth = 800,
+                PreferredBackBufferHeight = 600
+            };
             Content.RootDirectory = "Content";
         }
 
@@ -241,6 +246,9 @@ namespace CharacterEditor
                 case EditingMode.PathName:
                     t = _charDef.Path;
                     break;
+                case EditingMode.Script:
+                    t = _charDef.Animations[_selAnim].KeyFrames[_selKeyFrame].Scripts[_selScriptLine];
+                    break;
             }
 
             if (key == Keys.Back)
@@ -267,6 +275,9 @@ namespace CharacterEditor
                 case EditingMode.PathName:
                     _charDef.Path = t;
                     break;
+                case EditingMode.Script:
+                    _charDef.Animations[_selAnim].KeyFrames[_selKeyFrame].Scripts[_selScriptLine] = t;
+                    break;
             }
         }
 
@@ -275,14 +286,10 @@ namespace CharacterEditor
             _graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin();
-            _spriteBatch.Draw(_nullTex, new Rectangle(300, 450, 200, 5), new Color(new
-                Vector4(1.0f, 0.0f, 0.0f, 0.5f)));
-            _spriteBatch.Draw(_nullTex, new Rectangle(0, 0, 200, 450), new Color(new
-                Vector4(0.0f, 0.0f, 0.0f, 0.5f)));
-            _spriteBatch.Draw(_nullTex, new Rectangle(590, 0, 300, 600), new Color(new
-                Vector4(0.0f, 0.0f, 0.0f, 0.5f)));
-            _spriteBatch.Draw(_nullTex, new Rectangle(200, 0, 150, 50), new Color(new
-                Vector4(0.0f, 0.0f, 0.0f, 0.5f)));
+            _spriteBatch.Draw(_nullTex, new Rectangle(300, 450, 200, 5), new Color(new Vector4(1.0f, 0.0f, 0.0f, 0.5f)));
+            _spriteBatch.Draw(_nullTex, new Rectangle(0, 0, 200, 450), new Color(new Vector4(0.0f, 0.0f, 0.0f, 0.5f)));
+            _spriteBatch.Draw(_nullTex, new Rectangle(590, 0, 300, 600), new Color(new Vector4(0.0f, 0.0f, 0.0f, 0.5f)));
+            _spriteBatch.Draw(_nullTex, new Rectangle(200, 0, 150, 110), new Color(new Vector4(0.0f, 0.0f, 0.0f, 0.5f)));
             _spriteBatch.End();
 
             if (_selFrame > 0)
@@ -329,6 +336,28 @@ namespace CharacterEditor
                 if (_text.DrawClickText(270, 15, _charDef.Path, _mouseState.X, _mouseState.Y, _mouseClick))
                     _editMode = EditingMode.PathName;
             }
+
+            #region Script
+
+            for (var i = 0; i < 4; i++)
+            {
+                var scriptLineDescription = i + ": " + _charDef.Animations[_selAnim].KeyFrames[_selKeyFrame].Scripts[i];
+                const int scriptLineX = 210;
+                var scriptLineY = 42 + i * 16;
+
+                if (_editMode == EditingMode.Script && _selScriptLine == i)
+                {
+                    _text.Color = Color.Lime;
+                    _text.DrawText(scriptLineX, scriptLineY, scriptLineDescription + "*");
+                }
+                else if (_text.DrawClickText(scriptLineX, scriptLineY, scriptLineDescription, _mouseState.X, _mouseState.Y, _mouseClick))
+                {
+                    _selScriptLine = i;
+                    _editMode = EditingMode.Script;
+                }
+            }
+
+            #endregion
 
             DrawCursor();
 
