@@ -84,47 +84,6 @@ namespace ZombieSmashers.MapClasses
             sprite.End();
         }
 
-        public void Write()
-        {
-            var file = new BinaryWriter(File.Open(@"data/" + Path + ".zmx", FileMode.Create));
-
-            for (var i = 0; i < Ledges.Length; i++)
-            {
-                file.Write(Ledges[i].TotalNodes);
-                for (var n = 0; n < Ledges[i].TotalNodes; n++)
-                {
-                    file.Write(Ledges[i].Nodes[n].X);
-                    file.Write(Ledges[i].Nodes[n].Y);
-                }
-                file.Write(Ledges[i].Flags);
-            }
-
-            for (var l = 0; l < 3; l++)
-            {
-                for (var i = 0; i < 64; i++)
-                {
-                    if (Segments[l, i] == null)
-                        file.Write(-1);
-                    else
-                    {
-                        file.Write(Segments[l, i].Index);
-                        file.Write(Segments[l, i].Location.X);
-                        file.Write(Segments[l, i].Location.Y);
-                    }
-                }
-            }
-
-            for (var x = 0; x < 20; x++)
-            {
-                for (var y = 0; y < 20; y++)
-                {
-                    file.Write(Grid[x, y]);
-                }
-            }
-
-            file.Close();
-        }
-
         public void Read()
         {
             var file = new BinaryReader(File.Open(@"data/" + Path + ".zmx", FileMode.Open));

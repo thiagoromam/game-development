@@ -42,51 +42,6 @@ namespace ZombieSmashers.CharClasses
             get { return _frames; }
         }
 
-        public void Write()
-        {
-            var b = new BinaryWriter(File.Open(@"data/" + Path + ".zmx", FileMode.Create));
-
-            b.Write(Path);
-            b.Write(HeadIndex);
-            b.Write(TorsoIndex);
-            b.Write(LegsIndex);
-            b.Write(WeaponIndex);
-
-            for (var i = 0; i < _frames.Length; i++)
-            {
-                b.Write(_frames[i].Name);
-
-                for (var j = 0; j < _frames[i].Parts.Length; j++)
-                {
-                    var p = _frames[i].Parts[j];
-                    b.Write(p.Index);
-                    b.Write(p.Location.X);
-                    b.Write(p.Location.Y);
-                    b.Write(p.Rotation);
-                    b.Write(p.Scaling.X);
-                    b.Write(p.Scaling.Y);
-                    b.Write(p.Flip);
-                }
-            }
-
-            for (var i = 0; i < _animations.Length; i++)
-            {
-                b.Write(_animations[i].Name);
-
-                for (var j = 0; j < _animations[i].KeyFrames.Length; j++)
-                {
-                    var keyframe = _animations[i].KeyFrames[j];
-                    b.Write(keyframe.FrameRef);
-                    b.Write(keyframe.Duration);
-                    var scripts = keyframe.Scripts;
-                    for (var s = 0; s < scripts.Length; s++)
-                        b.Write(scripts[s]);
-                }
-            }
-
-            b.Close();
-        }
-
         public void Read()
         {
             var b = new
@@ -111,7 +66,7 @@ namespace ZombieSmashers.CharClasses
 
                     var scripts = keyframe.Scripts;
                     for (var s = 0; s < scripts.Length; s++)
-                        scripts[s] = b.ReadString();
+                        scripts[s] = new ScriptLine(b.ReadString());
                 }
             }
 

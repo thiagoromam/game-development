@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using ZombieSmashers.Input;
 using ZombieSmashers.MapClasses;
 
@@ -40,16 +39,21 @@ namespace ZombieSmashers.CharClasses
         public string AnimName;
         private float _frame;
 
-        // Control fields
-        private bool _keyLeft;
-        private bool _keyRight;
-        private bool _keyUp;
-        private bool _keyDown;
-        private bool _keyJump;
-        private bool _keyAttack;
-        private bool _keySecondary;
+        // Control and script fields
+        public bool KeyLeft;
+        public bool KeyRight;
+        public bool KeyUp;
+        public bool KeyDown;
+        public bool KeyJump;
+        public bool KeyAttack;
+        public bool KeySecondary;
         private readonly CharDef _charDef;
         private int _ledgeAttach = -1;
+        public bool Floating;
+        public float Speed = 200;
+        public int[] GotoGoal = { -1, -1, -1, -1, -1, -1, -1, -1 };
+        public PressedKeys PressedKey;
+        private readonly Script _script;
 
         public Map Map;
 
@@ -65,9 +69,16 @@ namespace ZombieSmashers.CharClasses
             SetAnim("fly");
 
             State = CharState.Air;
+
+            _script = new Script(this);
         }
 
-        private void SetAnim(string newAnim)
+        public CharDef Definition
+        {
+            get { return _charDef; }
+        }
+
+        public void SetAnim(string newAnim)
         {
             if (newAnim == AnimName)
                 return;
@@ -97,8 +108,13 @@ namespace ZombieSmashers.CharClasses
 
             if (_frame > keyFrame.Duration)
             {
+                var pFrame = AnimFrame;
+                _script.DoScript(Anim, AnimFrame);
+
                 _frame -= keyFrame.Duration;
-                AnimFrame++;
+
+                if (AnimFrame == pFrame)
+                    AnimFrame++;
 
                 if (AnimFrame >= animation.KeyFrames.Length)
                     AnimFrame = 0;
@@ -235,13 +251,13 @@ namespace ZombieSmashers.CharClasses
 
             if (AnimName == "idle" || AnimName == "run")
             {
-                if (_keyLeft)
+                if (KeyLeft)
                 {
                     SetAnim("run");
                     Trajectory.X = -200;
                     Face = CharDir.Left;
                 }
-                else if (_keyRight)
+                else if (KeyRight)
                 {
                     SetAnim("run");
                     Trajectory.X = 200;
@@ -251,30 +267,59 @@ namespace ZombieSmashers.CharClasses
                 {
                     SetAnim("idle");
                 }
-                if (_keyJump)
+                if (KeyJump)
                 {
                     SetAnim("fly");
                     Trajectory.Y = -600;
                     State = CharState.Air;
                     _ledgeAttach = -1;
-                    if (_keyRight) Trajectory.X = 200;
-                    else if (_keyLeft) Trajectory.X = -200;
+                    if (KeyRight) Trajectory.X = 200;
+                    else if (KeyLeft) Trajectory.X = -200;
                 }
             }
 
             if (AnimName == "fly")
             {
-                if (_keyLeft)
+                if (KeyLeft)
                 {
                     Face = CharDir.Left;
                     if (Trajectory.X > -200)
                         Trajectory.X -= 500 * Game1.FrameTime;
                 }
-                else if (_keyRight)
+                else if (KeyRight)
                 {
                     Face = CharDir.Right;
                     if (Trajectory.X < 200)
                         Trajectory.X += 500 * Game1.FrameTime;
+                }
+            }
+
+            PressedKey = PressedKeys.None;
+
+            if (KeyAttack)
+                PressedKey = KeyUp ? PressedKeys.Lower : KeyDown ? PressedKeys.Upper : PressedKeys.Attack;
+
+            if (KeySecondary)
+                PressedKey = KeyUp ? PressedKeys.SecUp : KeyDown ? PressedKeys.SecDown : PressedKeys.Secondary;
+
+            if (PressedKey != PressedKeys.None)
+            {
+                if (GotoGoal[(int)PressedKey] > -1)
+                {
+                    AnimFrame = GotoGoal[(int)PressedKey];
+
+                    if (KeyLeft)
+                        Face = CharDir.Left;
+                    else if (KeyRight)
+                        Face = CharDir.Right;
+
+                    PressedKey = PressedKeys.None;
+
+                    for (var i = 0; i < GotoGoal.Length; i++)
+                        GotoGoal[i] = -1;
+
+                    _frame = 0;
+                    _script.DoScript(Anim, AnimFrame);
                 }
             }
 
@@ -301,22 +346,31 @@ namespace ZombieSmashers.CharClasses
             SetAnim("fly");
             Trajectory.Y = 0;
         }
-
         private void Land()
         {
             State = CharState.Grounded;
             SetAnim("idle");
         }
+        public void Slide(float distance)
+        {
+            Trajectory.X = (float)Face * 2f * distance - distance;
+        }
+        public void SetJump(float jump)
+        {
+            Trajectory.Y = -jump;
+            State = CharState.Air;
+            _ledgeAttach = -1;
+        }
 
         public void DoInput()
         {
-            _keyLeft = ControlInput.KeyLeft;
-            _keyRight = ControlInput.KeyRight;
-            _keyUp = ControlInput.KeyUp;
-            _keyDown = ControlInput.KeyDown;
-            _keyAttack = ControlInput.KeyAttack;
-            _keyJump = ControlInput.KeyJump;
-            _keySecondary = ControlInput.KeySecondary;
+            KeyLeft = ControlInput.KeyLeft;
+            KeyRight = ControlInput.KeyRight;
+            KeyUp = ControlInput.KeyUp;
+            KeyDown = ControlInput.KeyDown;
+            KeyAttack = ControlInput.KeyAttack;
+            KeyJump = ControlInput.KeyJump;
+            KeySecondary = ControlInput.KeySecondary;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -328,6 +382,7 @@ namespace ZombieSmashers.CharClasses
 
             spriteBatch.Begin();
 
+            // ReSharper disable once ForCanBeConvertedToForeach
             for (var i = 0; i < frame.Parts.Length; i++)
             {
                 var part = frame.Parts[i];

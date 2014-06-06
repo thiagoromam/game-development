@@ -5,19 +5,17 @@ namespace ZombieSmashers.CharClasses
         public int FrameRef;
         public int Duration;
 
-        private readonly string[] _scripts;
+        private readonly ScriptLine[] _scripts;
 
         public KeyFrame()
         {
             FrameRef = -1;
             Duration = 0;
 
-            _scripts = new string[4];
-            for (var i = 0; i < _scripts.Length; i++)
-                _scripts[i] = string.Empty;
+            _scripts = new ScriptLine[4];
         }
 
-        public string[] Scripts
+        public ScriptLine[] Scripts
         {
             get { return _scripts; }
         }
