@@ -10,10 +10,11 @@ namespace CharacterEditor.Character
         private readonly Animation[] _animations;
         private readonly Frame[] _frames;
 
-        public int HeadIndex;
-        public int LegsIndex;
         public string Path;
+
+        public int HeadIndex;
         public int TorsoIndex;
+        public int LegsIndex;
         public int WeaponIndex;
 
         public CharDef()
@@ -29,16 +30,6 @@ namespace CharacterEditor.Character
             Path = "guy";
         }
 
-        public Animation[] Animations
-        {
-            get { return _animations; }
-        }
-
-        public Frame[] Frames
-        {
-            get { return _frames; }
-        }
-
         public void Write()
         {
             var b = new BinaryWriter(File.Open(@"data/" + Path + ".zmx", FileMode.Create));
@@ -48,6 +39,24 @@ namespace CharacterEditor.Character
             b.Write(TorsoIndex);
             b.Write(LegsIndex);
             b.Write(WeaponIndex);
+
+            for (var i = 0; i < _animations.Length; i++)
+            {
+                b.Write(_animations[i].Name);
+
+                for (var j = 0;
+                    j <
+                    _animations[i].KeyFrames.Length;
+                    j++)
+                {
+                    var keyframe = _animations[i].KeyFrames[j];
+                    b.Write(keyframe.FrameRef);
+                    b.Write(keyframe.Duration);
+                    var scripts = keyframe.Scripts;
+                    for (var s = 0; s < scripts.Length; s++)
+                        b.Write(scripts[s]);
+                }
+            }
 
             for (var i = 0; i < _frames.Length; i++)
             {
@@ -66,21 +75,6 @@ namespace CharacterEditor.Character
                 }
             }
 
-            for (var i = 0; i < _animations.Length; i++)
-            {
-                b.Write(_animations[i].Name);
-
-                for (var j = 0; j < _animations[i].KeyFrames.Length; j++)
-                {
-                    var keyframe = _animations[i].KeyFrames[j];
-                    b.Write(keyframe.FrameRef);
-                    b.Write(keyframe.Duration);
-                    var scripts = keyframe.Scripts;
-                    for (var s = 0; s < scripts.Length; s++)
-                        b.Write(scripts[s]);
-                }
-            }
-
             b.Close();
         }
 
@@ -96,11 +90,15 @@ namespace CharacterEditor.Character
             LegsIndex = b.ReadInt32();
             WeaponIndex = b.ReadInt32();
 
+
             for (var i = 0; i < _animations.Length; i++)
             {
                 _animations[i].Name = b.ReadString();
 
-                for (var j = 0; j < _animations[i].KeyFrames.Length; j++)
+                for (var j = 0;
+                    j <
+                    _animations[i].KeyFrames.Length;
+                    j++)
                 {
                     var keyframe = _animations[i].KeyFrames[j];
                     keyframe.FrameRef = b.ReadInt32();
@@ -132,6 +130,16 @@ namespace CharacterEditor.Character
             b.Close();
 
             Console.WriteLine("Loaded.");
+        }
+
+        public Animation[] Animations
+        {
+            get { return _animations; }
+        }
+
+        public Frame[] Frames
+        {
+            get { return _frames; }
         }
     }
 }

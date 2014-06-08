@@ -1,45 +1,43 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace TextLib
 {
     public class Text
     {
-        SpriteBatch sprite;
-        SpriteFont font;
-        float size = 1f;
-        Color color = Color.White;
+        private readonly SpriteBatch _sprite;
+        private readonly SpriteFont _font;
+        private float _size = 1f;
+        private Color _color = Color.White;
 
-        public Text(SpriteBatch _sprite, SpriteFont _font)
+        public Text(SpriteBatch sprite, SpriteFont font)
         {
-            sprite = _sprite;
-            font = _font;
+            _sprite = sprite;
+            _font = font;
         }
 
         public void DrawText(int x, int y, String s)
         {
-            sprite.Begin();
-            sprite.DrawString(font, s, new Vector2(
-                (float)x, (float)y), color, 0f, new Vector2(),
-                size, SpriteEffects.None, 1f);
-            sprite.End();
+            _sprite.Begin();
+            _sprite.DrawString(_font, s, new Vector2(
+                x, y), _color, 0f, new Vector2(),
+                _size, SpriteEffects.None, 1f);
+            _sprite.End();
         }
 
         public bool DrawClickText(int x, int y, String s,
             int mosX, int mosY, bool mouseClick)
         {
-            color = Color.White;
+            _color = Color.White;
 
-            bool r = false;
+            var r = false;
 
             if (mosX > x && mosY > y &&
-                mosX < x + font.MeasureString(s).X * size &&
-                mosY < y + font.MeasureString(s).Y * size)
+                mosX < x + _font.MeasureString(s).X*_size &&
+                mosY < y + _font.MeasureString(s).Y*_size)
             {
-                color = Color.Yellow;
+                _color = Color.Yellow;
                 if (mouseClick)
                     r = true;
             }
@@ -51,14 +49,14 @@ namespace TextLib
 
         public Color Color
         {
-            get { return color; }
-            set { color = value; }
+            get { return _color; }
+            set { _color = value; }
         }
 
         public float Size
         {
-            get { return size; }
-            set { size = value; }
+            get { return _size; }
+            set { _size = value; }
         }
     }
 }

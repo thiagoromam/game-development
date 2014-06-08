@@ -267,6 +267,17 @@ namespace ZombieSmashers.CharClasses
                 {
                     SetAnim("idle");
                 }
+
+                if (KeyAttack)
+                {
+                    SetAnim("attack");
+                }
+
+                if (KeySecondary)
+                {
+                    SetAnim("second");
+                }
+
                 if (KeyJump)
                 {
                     SetAnim("fly");
@@ -349,7 +360,7 @@ namespace ZombieSmashers.CharClasses
         private void Land()
         {
             State = CharState.Grounded;
-            SetAnim("idle");
+            SetAnim("land");
         }
         public void Slide(float distance)
         {
