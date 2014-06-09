@@ -96,6 +96,11 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="gfx\sprites.dds">
+      <Name>sprites</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Content Include="maps.zdx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>maps</Name>

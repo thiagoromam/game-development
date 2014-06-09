@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ZombieSmashers.Input;
 using ZombieSmashers.MapClasses;
+using ZombieSmashers.Particles;
 
 namespace ZombieSmashers.CharClasses
 {
@@ -56,6 +57,7 @@ namespace ZombieSmashers.CharClasses
         private readonly Script _script;
 
         public Map Map;
+        public ParticlesManager ParticlesManager;
 
         public Character(Vector2 newLoc, CharDef newCharDef)
         {
@@ -332,6 +334,18 @@ namespace ZombieSmashers.CharClasses
                     _frame = 0;
                     _script.DoScript(Anim, AnimFrame);
                 }
+            }
+
+            #endregion
+
+            #region Particle Test
+
+            for (var i = 0; i < 4; i++)
+            {
+                var tLoc = (Location - pLoc) * i / 4 + pLoc;
+                tLoc.Y -= 100;
+
+                ParticlesManager.AddParticle(new Smoke(tLoc, Rand.GetRandomVector2(-50, 50, -300, -200), 1, 0.8f, 0.6f, 1, Rand.GetRandomFloat(0.25f, 0.5f), Rand.GetRandomInt(0, 4)));
             }
 
             #endregion
