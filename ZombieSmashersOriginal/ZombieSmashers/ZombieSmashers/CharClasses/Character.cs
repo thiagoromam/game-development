@@ -346,6 +346,16 @@ namespace ZombieSmashers.CharClasses
                 tLoc.Y -= 100;
 
                 ParticlesManager.AddParticle(new Smoke(tLoc, Rand.GetRandomVector2(-50, 50, -300, -200), 1, 0.8f, 0.6f, 1, Rand.GetRandomFloat(0.25f, 0.5f), Rand.GetRandomInt(0, 4)));
+
+                if (i%2 == 0)
+                {
+                    ParticlesManager.AddParticle(new Fire(
+                        tLoc + Rand.GetRandomVector2(10, -10, -10, 10),
+                        Rand.GetRandomVector2(-30, 30, -250, -200),
+                        Rand.GetRandomFloat(0.25f, 0.75f),
+                        Rand.GetRandomInt(0, 4)
+                    ));
+                }
             }
 
             #endregion

@@ -7,7 +7,7 @@ namespace ZombieSmashers.Particles
     public class ParticlesManager
     {
         private readonly Particle[] _particles;
-        private SpriteBatch _spriteBatch;
+        private readonly SpriteBatch _spriteBatch;
 
         public ParticlesManager(SpriteBatch spriteBatch)
         {
@@ -51,7 +51,16 @@ namespace ZombieSmashers.Particles
             _spriteBatch.Begin();
             foreach (var particle in _particles)
             {
-                if (particle == null) continue;
+                if (particle == null || particle.Additive) continue;
+                if (particle.Background == background)
+                    particle.Draw(_spriteBatch, spritesTex);
+            }
+            _spriteBatch.End();
+
+            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
+            foreach (var particle in _particles)
+            {
+                if (particle == null || !particle.Additive) continue;
                 if (particle.Background == background)
                     particle.Draw(_spriteBatch, spritesTex);
             }

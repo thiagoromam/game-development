@@ -19,6 +19,7 @@ namespace ZombieSmashers.Particles
 
         public bool Exists;
         public bool Background;
+        public bool Additive;
 
         public Vector2 GameLocation
         {
