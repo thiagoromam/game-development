@@ -63,7 +63,6 @@ namespace ZombieSmashers
             base.Initialize();
 
             _particlesManager = new ParticlesManager(_spriteBatch);
-            _characters[0].ParticlesManager = _particlesManager;
         }
 
         protected override void LoadContent()
@@ -113,6 +112,8 @@ namespace ZombieSmashers
                     character.Update(gameTime);
             }
 
+            _map.Update(_particlesManager);
+
             base.Update(gameTime);
         }
 
@@ -125,20 +126,6 @@ namespace ZombieSmashers
             _characters[0].Draw(_spriteBatch);
             _particlesManager.DrawParticles(_spritesTex, false);
             _map.Draw(_spriteBatch, _mapsTex, _mapBackTex, 2, 3);
-
-            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
-            _spriteBatch.Draw(
-                _spritesTex,
-                _characters[0].Location - new Vector2(0, 100) - Scroll,
-                new Rectangle(0, 128, 64, 64),
-                Color.White,
-                0,
-                new Vector2(32),
-                Rand.GetRandomFloat(0.5f, 1),
-                SpriteEffects.None,
-                1
-            );
-            _spriteBatch.End();
 
             base.Draw(gameTime);
         }

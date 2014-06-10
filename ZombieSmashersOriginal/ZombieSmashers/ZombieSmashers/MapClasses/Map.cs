@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ZombieSmashers.Particles;
 
 // ReSharper disable ForCanBeConvertedToForeach
 
@@ -10,6 +11,7 @@ namespace ZombieSmashers.MapClasses
     public class Map
     {
         private const int LayerBack = 0;
+        private const int LayerMap = 1;
 
         public Map(string path)
         {
@@ -45,7 +47,8 @@ namespace ZombieSmashers.MapClasses
                 var lim = new Vector2(GetXLim(), GetYLim());
                 var targ = Game1.ScreenSize / 2 - (Game1.Scroll / lim - new Vector2(0.5f)) * 100;
 
-                sprite.Draw(mapsBackTex[0], targ, new Rectangle(0, 0, 1280, 720), Color.White, 0, new Vector2(640, 360), 1, SpriteEffects.None, 1);
+                sprite.Draw(mapsBackTex[0], targ, new Rectangle(0, 0, 1280, 720), Color.White, 0, new Vector2(640, 360),
+                    1, SpriteEffects.None, 1);
             }
 
             for (var l = startLayer; l < endLayer; l++)
@@ -271,10 +274,42 @@ namespace ZombieSmashers.MapClasses
             return true;
         }
 
+        public void Update(ParticlesManager pMan)
+        {
+            for (var i = 0; i < 64; i++)
+            {
+                if (Segments[LayerMap, i] != null)
+                {
+                    if (SegmentDefinitions[Segments[LayerMap, i].Index].Flags == (int)SegmentFlags.Torch)
+                    {
+                        pMan.AddParticle(
+                            new Smoke(
+                                Segments[LayerMap, i].Location * 2f + new Vector2(20f, 13f),
+                                Rand.GetRandomVector2(-50.0f, 50.0f, -300.0f, -200.0f),
+                                1.0f, 0.8f, 0.6f, 1.0f,
+                                Rand.GetRandomFloat(0.25f, 0.5f), Rand.GetRandomInt(0, 4)
+                            ),
+                            true
+                        );
+                        pMan.AddParticle(
+                            new Fire(
+                                Segments[LayerMap, i].Location * 2f + new Vector2(20f, 37f),
+                                Rand.GetRandomVector2(-30.0f, 30.0f, -250.0f, -200.0f),
+                                Rand.GetRandomFloat(0.25f, 0.75f),
+                                Rand.GetRandomInt(0, 4)
+                            ),
+                            true
+                        );
+                    }
+                }
+            }
+        }
+
         public float GetXLim()
         {
             return 1280 - Game1.ScreenSize.X;
         }
+
         public float GetYLim()
         {
             return 1280 - Game1.ScreenSize.Y;

@@ -20,7 +20,7 @@ namespace ZombieSmashers.Particles
             AddParticle(newParticle, false);
         }
 
-        private void AddParticle(Particle newParticle, bool background)
+        public void AddParticle(Particle newParticle, bool background)
         {
             for (var i = 0; i < _particles.Length; i++)
             {
