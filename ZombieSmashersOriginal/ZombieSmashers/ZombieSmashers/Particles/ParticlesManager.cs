@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using ZombieSmashers.CharClasses;
 using ZombieSmashers.MapClasses;
 
@@ -39,7 +40,7 @@ namespace ZombieSmashers.Particles
             {
                 var particle = _particles[i];
                 if (particle == null) continue;
-                
+
                 particle.Update(frameTime, map, this, c);
                 if (!particle.Exists)
                     _particles[i] = null;
@@ -65,6 +66,36 @@ namespace ZombieSmashers.Particles
                     particle.Draw(_spriteBatch, spritesTex);
             }
             _spriteBatch.End();
+        }
+
+        public void MakeBullet(Vector2 loc, Vector2 traj, CharDir face, int owner)
+        {
+            switch (face)
+            {
+                case CharDir.Left:
+                    AddParticle(new Bullet(loc,
+                        new Vector2(-traj.X, traj.Y) + Rand.GetRandomVector2(-90f, 90f, -90f, 90f), owner));
+                    MakeMuzzleFlash(loc, new Vector2(-traj.X, traj.Y));
+                    break;
+                case CharDir.Right:
+                    AddParticle(new Bullet(loc, traj + Rand.GetRandomVector2(-90f, 90f, -90f, 90f), owner));
+                    MakeMuzzleFlash(loc, traj);
+                    break;
+            }
+        }
+
+        private void MakeMuzzleFlash(Vector2 loc, Vector2 traj)
+        {
+            for (var i = 0; i < 16; i++)
+            {
+                AddParticle(new MuzzleFlash(loc + (traj*i)*0.001f + Rand.GetRandomVector2(-5f, 5f, -5f, 5f),
+                    traj/5f, (20f - i)*0.06f));
+            }
+            for (var i = 0; i < 4; i++)
+            {
+                AddParticle(new Smoke(loc, Rand.GetRandomVector2(-30f, 30f, -100f, 0f), 0f, 0f, 0f, 0.25f,
+                    Rand.GetRandomFloat(0.25f, 1.0f), Rand.GetRandomInt(0, 4)));
+            }
         }
     }
 }

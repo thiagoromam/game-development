@@ -5,6 +5,8 @@ using ZombieSmashers.Input;
 using ZombieSmashers.MapClasses;
 using ZombieSmashers.Particles;
 
+// ReSharper disable ForCanBeConvertedToForeach
+
 namespace ZombieSmashers.CharClasses
 {
     public class Character
@@ -28,6 +30,10 @@ namespace ZombieSmashers.CharClasses
             for (var i = 0; i < WeaponTex.Length; i++)
                 WeaponTex[i] = content.Load<Texture2D>("gfx/weapon" + (i + 1));
         }
+
+        private const int TrigPistolAcross = 0;
+        private const int TrigPistolUp = 1;
+        private const int TrigPistolDown = 2;
 
         // Animation fields
         public Vector2 Location;
@@ -57,6 +63,7 @@ namespace ZombieSmashers.CharClasses
         private readonly Script _script;
 
         public Map Map;
+        public int Id;
 
         public Character(Vector2 newLoc, CharDef newCharDef)
         {
@@ -98,7 +105,7 @@ namespace ZombieSmashers.CharClasses
             }
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, ParticlesManager pMan, Character[] c)
         {
             #region Update animation
 
@@ -111,6 +118,7 @@ namespace ZombieSmashers.CharClasses
             {
                 var pFrame = AnimFrame;
                 _script.DoScript(Anim, AnimFrame);
+                CheckTrig(pMan);
 
                 _frame -= keyFrame.Duration;
 
@@ -338,6 +346,43 @@ namespace ZombieSmashers.CharClasses
             #endregion
         }
 
+        private void CheckTrig(ParticlesManager pMan)
+        {
+            var frameIndex = _charDef.Animations[Anim].KeyFrames[AnimFrame].FrameRef;
+
+            var frame = _charDef.Frames[frameIndex];
+
+            for (var i = 0; i < frame.Parts.Length; i++)
+            {
+                var part = frame.Parts[i];
+                if (part.Index >= 1000)
+                {
+                    var location = part.Location*Scale + Location;
+
+                    if (Face == CharDir.Left)
+                        location.X -= part.Location.X * Scale * 2;
+
+                    FireTrig(part.Index - 1000, location, pMan);
+                }
+            }
+        }
+
+        private void FireTrig(int trig, Vector2 loc, ParticlesManager pMan)
+        {
+            switch (trig)
+            {
+                case TrigPistolAcross:
+                    pMan.MakeBullet(loc, new Vector2(2000, 0), Face, Id);
+                    break;
+                case TrigPistolDown:
+                    pMan.MakeBullet(loc, new Vector2(1400, 1400), Face, Id);
+                    break;
+                case TrigPistolUp:
+                    pMan.MakeBullet(loc, new Vector2(1400, -1400), Face, Id);
+                    break;
+            }
+        }
+
         private void CheckXCol(Vector2 pLoc)
         {
             if (Trajectory.X > 0)
@@ -398,7 +443,7 @@ namespace ZombieSmashers.CharClasses
             for (var i = 0; i < frame.Parts.Length; i++)
             {
                 var part = frame.Parts[i];
-                if (part.Index > -1)
+                if (part.Index > -1 && part.Index < 1000)
                 {
                     sRect.X = ((part.Index % 64) % 5) * 64;
                     sRect.Y = ((part.Index % 64) / 5) * 64;

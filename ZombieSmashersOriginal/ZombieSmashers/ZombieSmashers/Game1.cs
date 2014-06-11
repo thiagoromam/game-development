@@ -109,7 +109,7 @@ namespace ZombieSmashers
             {
                 var character = _characters[i];
                 if (character != null)
-                    character.Update(gameTime);
+                    character.Update(gameTime, _particlesManager, _characters);
             }
 
             _map.Update(_particlesManager);
