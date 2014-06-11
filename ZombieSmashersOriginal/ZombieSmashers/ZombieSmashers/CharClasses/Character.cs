@@ -105,7 +105,7 @@ namespace ZombieSmashers.CharClasses
             }
         }
 
-        public void Update(GameTime gameTime, ParticlesManager pMan, Character[] c)
+        public void Update(GameTime gameTime, ParticleManager pMan, Character[] c)
         {
             #region Update animation
 
@@ -130,7 +130,7 @@ namespace ZombieSmashers.CharClasses
 
                 keyFrame = animation.KeyFrames[AnimFrame];
 
-                if (keyFrame.FrameRef <= 0)
+                if (keyFrame.FrameRef < 0)
                     AnimFrame = 0;
             }
 
@@ -346,7 +346,7 @@ namespace ZombieSmashers.CharClasses
             #endregion
         }
 
-        private void CheckTrig(ParticlesManager pMan)
+        private void CheckTrig(ParticleManager pMan)
         {
             var frameIndex = _charDef.Animations[Anim].KeyFrames[AnimFrame].FrameRef;
 
@@ -367,7 +367,7 @@ namespace ZombieSmashers.CharClasses
             }
         }
 
-        private void FireTrig(int trig, Vector2 loc, ParticlesManager pMan)
+        private void FireTrig(int trig, Vector2 loc, ParticleManager pMan)
         {
             switch (trig)
             {

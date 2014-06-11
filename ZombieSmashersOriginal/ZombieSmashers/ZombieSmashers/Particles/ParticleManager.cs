@@ -5,12 +5,12 @@ using ZombieSmashers.MapClasses;
 
 namespace ZombieSmashers.Particles
 {
-    public class ParticlesManager
+    public class ParticleManager
     {
         private readonly Particle[] _particles;
         private readonly SpriteBatch _spriteBatch;
 
-        public ParticlesManager(SpriteBatch spriteBatch)
+        public ParticleManager(SpriteBatch spriteBatch)
         {
             _particles = new Particle[1024];
             _spriteBatch = spriteBatch;
@@ -88,13 +88,25 @@ namespace ZombieSmashers.Particles
         {
             for (var i = 0; i < 16; i++)
             {
-                AddParticle(new MuzzleFlash(loc + (traj*i)*0.001f + Rand.GetRandomVector2(-5f, 5f, -5f, 5f),
-                    traj/5f, (20f - i)*0.06f));
+                AddParticle(new MuzzleFlash(loc + (traj * i) * 0.001f + Rand.GetRandomVector2(-5f, 5f, -5f, 5f),
+                    traj / 5f, (20f - i) * 0.06f));
             }
             for (var i = 0; i < 4; i++)
             {
                 AddParticle(new Smoke(loc, Rand.GetRandomVector2(-30f, 30f, -100f, 0f), 0f, 0f, 0f, 0.25f,
                     Rand.GetRandomFloat(0.25f, 1.0f), Rand.GetRandomInt(0, 4)));
+            }
+        }
+
+        public void MakeBulletDust(Vector2 loc, Vector2 traj)
+        {
+            for (var i = 0; i < 16; i++)
+            {
+                AddParticle(new Smoke(loc,
+                    Rand.GetRandomVector2(-50f, 50f, -50f, 10f) - traj * Rand.GetRandomFloat(0.001f, 0.1f), 1f, 1f, 1f,
+                    0.25f, Rand.GetRandomFloat(0.05f, 0.25f), Rand.GetRandomInt(0, 4)));
+                AddParticle(new Smoke(loc, Rand.GetRandomVector2(-50f, 50f, -50f, 10f), 0.5f, 0.5f, 0.5f, 0.25f,
+                    Rand.GetRandomFloat(0.1f, 0.5f), Rand.GetRandomInt(0, 4)));
             }
         }
     }

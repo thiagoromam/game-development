@@ -27,7 +27,7 @@ namespace ZombieSmashers
         private Map _map;
         private static Vector2 _scroll;
         private static Vector2 _screenSize;
-        private ParticlesManager _particlesManager;
+        private ParticleManager _particleManager;
         private Texture2D _spritesTex;
 
         public Game1()
@@ -62,7 +62,7 @@ namespace ZombieSmashers
 
             base.Initialize();
 
-            _particlesManager = new ParticlesManager(_spriteBatch);
+            _particleManager = new ParticleManager(_spriteBatch);
         }
 
         protected override void LoadContent()
@@ -87,7 +87,7 @@ namespace ZombieSmashers
 
             FrameTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            _particlesManager.UpdateParticles(FrameTime, _map, _characters);
+            _particleManager.UpdateParticles(FrameTime, _map, _characters);
 
             if (_characters[0] != null)
             {
@@ -109,10 +109,10 @@ namespace ZombieSmashers
             {
                 var character = _characters[i];
                 if (character != null)
-                    character.Update(gameTime, _particlesManager, _characters);
+                    character.Update(gameTime, _particleManager, _characters);
             }
 
-            _map.Update(_particlesManager);
+            _map.Update(_particleManager);
 
             base.Update(gameTime);
         }
@@ -122,9 +122,9 @@ namespace ZombieSmashers
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _map.Draw(_spriteBatch, _mapsTex, _mapBackTex, 0, 2);
-            _particlesManager.DrawParticles(_spritesTex, true);
+            _particleManager.DrawParticles(_spritesTex, true);
             _characters[0].Draw(_spriteBatch);
-            _particlesManager.DrawParticles(_spritesTex, false);
+            _particleManager.DrawParticles(_spritesTex, false);
             _map.Draw(_spriteBatch, _mapsTex, _mapBackTex, 2, 3);
 
             base.Draw(gameTime);

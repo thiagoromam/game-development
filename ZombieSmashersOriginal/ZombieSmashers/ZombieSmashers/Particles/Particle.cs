@@ -26,7 +26,7 @@ namespace ZombieSmashers.Particles
             get { return Location - Game1.Scroll; }
         }
 
-        public virtual void Update(float gameTime, Map map, ParticlesManager pMan, Character[] c)
+        public virtual void Update(float gameTime, Map map, ParticleManager pMan, Character[] c)
         {
             Location += Trajectory*gameTime;
             Frame -= gameTime;

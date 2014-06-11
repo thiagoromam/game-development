@@ -96,7 +96,7 @@
     <Compile Include="Particles\Fire.cs" />
     <Compile Include="Particles\MuzzleFlash.cs" />
     <Compile Include="Particles\Particle.cs" />
-    <Compile Include="Particles\ParticlesManager.cs" />
+    <Compile Include="Particles\ParticleManager.cs" />
     <Compile Include="Particles\Smoke.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

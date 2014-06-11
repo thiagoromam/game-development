@@ -22,7 +22,7 @@ namespace ZombieSmashers.Particles
             Frame = 1;
         }
 
-        public override void Update(float gameTime, Map map, ParticlesManager pMan, Character[] c)
+        public override void Update(float gameTime, Map map, ParticleManager pMan, Character[] c)
         {
             if (Frame < 0.5f)
             {

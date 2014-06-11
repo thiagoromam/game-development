@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ZombieSmashers.CharClasses;
+using ZombieSmashers.MapClasses;
 
 namespace ZombieSmashers.Particles
 {
@@ -16,6 +18,16 @@ namespace ZombieSmashers.Particles
             Additive = true;
         }
 
+        public override void Update(float gameTime, Map map, ParticleManager pMan, Character[] c)
+        {
+            if (map.CheckParticleCol(Location))
+            {
+                Frame = 0f;
+                pMan.MakeBulletDust(Location, Trajectory);
+            }
+            base.Update(gameTime, map, pMan, c);
+        }
+        
         public override void Draw(SpriteBatch sprite, Texture2D spritesTex)
         {
             sprite.Draw(spritesTex, GameLocation, new Rectangle(0, 128, 64, 64),

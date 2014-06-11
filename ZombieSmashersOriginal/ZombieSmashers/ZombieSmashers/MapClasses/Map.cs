@@ -273,8 +273,28 @@ namespace ZombieSmashers.MapClasses
 
             return true;
         }
+        public bool CheckParticleCol(Vector2 loc)
+        {
+            if (CheckCol(loc))
+                return true;
 
-        public void Update(ParticlesManager pMan)
+            for (int i = 0; i < 16; i++)
+            {
+                if (Ledges[i].TotalNodes > 1)
+                {
+                    if (Ledges[i].Flags == (int)LedgeFlags.Solid)
+                    {
+                        int s = GetLedgeSec(i, loc.X);
+                        if (s > -1) if (GetLedgeYLoc(i, s, loc.X) < loc.Y)
+                            return true;
+                    }
+                }
+            }
+            
+            return false; 
+        }
+
+        public void Update(ParticleManager pMan)
         {
             for (var i = 0; i < 64; i++)
             {
