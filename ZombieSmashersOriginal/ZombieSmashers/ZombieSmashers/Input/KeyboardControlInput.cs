@@ -30,9 +30,9 @@ namespace ZombieSmashers.Input
                 KeyRight = true;
 
             if (_curState.IsKeyDown(Keys.W))
-                KeyDown = true;
-            else if (_curState.IsKeyDown(Keys.S))
                 KeyUp = true;
+            else if (_curState.IsKeyDown(Keys.S))
+                KeyDown = true;
 
             KeyJump = IsKeyClick(Keys.Space);
             KeyAttack = IsKeyClick(Keys.J);

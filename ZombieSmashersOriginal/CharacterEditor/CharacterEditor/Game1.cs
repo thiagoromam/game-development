@@ -21,15 +21,16 @@ namespace CharacterEditor
 
         private Texture2D _nullTex;
         private Texture2D _iconsTex;
-        private readonly Texture2D[] _legsTex = new Texture2D[1];
-        private readonly Texture2D[] _torsoTex = new Texture2D[1];
-        private readonly Texture2D[] _headTex = new Texture2D[1];
+        private readonly Texture2D[] _legsTex = new Texture2D[2];
+        private readonly Texture2D[] _torsoTex = new Texture2D[2];
+        private readonly Texture2D[] _headTex = new Texture2D[2];
         private readonly Texture2D[] _weaponTex = new Texture2D[1];
 
         private const int FaceLeft = 0;
         private const int FaceRight = 1;
         private const int AuxScript = 0;
         private const int AuxTrigs = 1;
+        private const int AuxTextures = 2;
         private const int TrigPistolAcross = 0;
         private const int TrigPistolUp = 1;
         private const int TrigPistolDown = 2;
@@ -152,7 +153,7 @@ namespace CharacterEditor
                 if (_preState.LeftButton == ButtonState.Pressed)
                 {
                     _charDef.Frames[_selFrame].Parts[_selPart].Location +=
-                        new Vector2(xM/2.0f, yM/2.0f);
+                        new Vector2(xM / 2.0f, yM / 2.0f);
                 }
             }
             else
@@ -167,7 +168,7 @@ namespace CharacterEditor
             {
                 if (_preState.RightButton == ButtonState.Pressed)
                 {
-                    _charDef.Frames[_selFrame].Parts[_selPart].Rotation += yM/100.0f;
+                    _charDef.Frames[_selFrame].Parts[_selPart].Rotation += yM / 100.0f;
                 }
             }
 
@@ -176,7 +177,7 @@ namespace CharacterEditor
                 if (_preState.MiddleButton == ButtonState.Pressed)
                 {
                     _charDef.Frames[_selFrame].Parts[_selPart].Scaling +=
-                        new Vector2(xM*0.01f, yM*0.01f);
+                        new Vector2(xM * 0.01f, yM * 0.01f);
                 }
             }
 
@@ -189,7 +190,7 @@ namespace CharacterEditor
 
             if (_playing)
             {
-                _curFrame += (float) gameTime.ElapsedGameTime.TotalSeconds*30.0f;
+                _curFrame += (float)gameTime.ElapsedGameTime.TotalSeconds * 30.0f;
 
                 if (_curFrame > keyframe.Duration)
                 {
@@ -269,7 +270,7 @@ namespace CharacterEditor
             }
             else
             {
-                t = (t + (char) key).ToLower();
+                t = (t + (char)key).ToLower();
             }
 
             switch (_editMode)
@@ -345,7 +346,7 @@ namespace CharacterEditor
                     _editMode = EditingMode.PathName;
             }
 
-            #region Script/Trigs Selector
+            #region Script/Trigs/Textures Selector
 
             if (_auxMode == AuxScript)
             {
@@ -357,6 +358,7 @@ namespace CharacterEditor
                 if (_text.DrawClickText(210, 110, "script", _mouseState.X, _mouseState.Y, _mouseClick))
                     _auxMode = AuxScript;
             }
+
             if (_auxMode == AuxTrigs)
             {
                 _text.Color = Color.Lime;
@@ -366,6 +368,17 @@ namespace CharacterEditor
             {
                 if (_text.DrawClickText(260, 110, "trigs", _mouseState.X, _mouseState.Y, _mouseClick))
                     _auxMode = AuxTrigs;
+            }
+
+            if (_auxMode == AuxTextures)
+            {
+                _text.Color = Color.Lime;
+                _text.DrawText(300, 110, "tex");
+            }
+            else
+            {
+                if (_text.DrawClickText(300, 110, "tex", _mouseState.X, _mouseState.Y, _mouseClick))
+                    _auxMode = AuxTextures;
             }
 
             #endregion
@@ -379,7 +392,7 @@ namespace CharacterEditor
                     var scriptLineDescription = i + ": " +
                                                 _charDef.Animations[_selAnim].KeyFrames[_selKeyFrame].Scripts[i];
                     const int scriptLineX = 210;
-                    var scriptLineY = 42 + i*16;
+                    var scriptLineY = 42 + i * 16;
 
                     if (_editMode == EditingMode.Script && _selScriptLine == i)
                     {
@@ -408,9 +421,71 @@ namespace CharacterEditor
                 for (var i = 0; i < 4; i++)
                 {
                     var t = i + _trigScroll;
-                    if (_text.DrawClickText(210, 42 + i*16, GetTrigName(t), _mouseState.X, _mouseState.Y, _mouseClick))
+                    if (_text.DrawClickText(210, 42 + i * 16, GetTrigName(t), _mouseState.X, _mouseState.Y, _mouseClick))
                     {
                         _charDef.Frames[_selFrame].Parts[_selPart].Index = t + 1000;
+                    }
+                }
+            }
+
+            #endregion
+
+            #region Texture Switching
+
+            if (_auxMode == AuxTextures)
+            {
+                for (var i = 0; i < 4; i++)
+                {
+                    if (DrawButton(210 + i * 21, 40, 1, _mouseState.X, _mouseState.Y, _mouseClick, 0.45f))
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                if (_charDef.HeadIndex > 0) _charDef.HeadIndex--;
+                                break;
+                            case 1:
+                                if (_charDef.TorsoIndex > 0) _charDef.TorsoIndex--;
+                                break;
+                            case 2:
+                                if (_charDef.LegsIndex > 0) _charDef.LegsIndex--;
+                                break;
+                            case 3:
+                                if (_charDef.WeaponIndex > 0) _charDef.WeaponIndex--;
+                                break;
+                        }
+                    }
+                    var t = _charDef.HeadIndex.ToString(CultureInfo.InvariantCulture);
+                    switch (i)
+                    {
+                        case 1:
+                            t = _charDef.TorsoIndex.ToString(CultureInfo.InvariantCulture);
+                            break;
+                        case 2:
+                            t = _charDef.LegsIndex.ToString(CultureInfo.InvariantCulture);
+                            break;
+                        case 3:
+                            t = _charDef.WeaponIndex.ToString(CultureInfo.InvariantCulture);
+                            break;
+                    }
+                    _text.Color = Color.White;
+                    _text.DrawText(212 + i * 21, 60, t);
+                    if (DrawButton(210 + i * 21, 85, 2, _mouseState.X, _mouseState.Y, _mouseClick, 0.45f))
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                if (_charDef.HeadIndex < _headTex.Length - 1) _charDef.HeadIndex++;
+                                break;
+                            case 1:
+                                if (_charDef.TorsoIndex < _torsoTex.Length - 1) _charDef.TorsoIndex++;
+                                break;
+                            case 2:
+                                if (_charDef.LegsIndex < _legsTex.Length - 1) _charDef.LegsIndex++;
+                                break;
+                            case 3:
+                                if (_charDef.WeaponIndex < _weaponTex.Length - 1) _charDef.WeaponIndex++;
+                                break;
+                        }
                     }
                 }
             }
@@ -448,7 +523,7 @@ namespace CharacterEditor
 
                 if (i < animation.KeyFrames.Length)
                 {
-                    var y = (i - _keyFrameScroll)*15 + 250;
+                    var y = (i - _keyFrameScroll) * 15 + 250;
                     var frameRef = animation.KeyFrames[i].FrameRef;
 
                     var name = "";
@@ -511,7 +586,7 @@ namespace CharacterEditor
             {
                 if (i < _charDef.Animations.Length)
                 {
-                    var y = (i - _animScroll)*15 + 5;
+                    var y = (i - _animScroll) * 15 + 5;
                     if (i == _selAnim)
                     {
                         _text.Color = Color.Lime;
@@ -548,7 +623,7 @@ namespace CharacterEditor
             {
                 if (i < _charDef.Frames.Length)
                 {
-                    var y = (i - _frameScroll)*15 + 280;
+                    var y = (i - _frameScroll) * 15 + 280;
 
                     if (i == _selFrame)
                     {
@@ -605,7 +680,7 @@ namespace CharacterEditor
         {
             for (var i = 0; i < _charDef.Frames[_selFrame].Parts.Length; i++)
             {
-                var y = 5 + i*15;
+                var y = 5 + i * 15;
 
                 _text.Size = 0.75f;
 
@@ -664,12 +739,12 @@ namespace CharacterEditor
             }
         }
 
-        private bool DrawButton(int x, int y, int index, int mosX, int mosY, bool mouseClick)
+        private bool DrawButton(int x, int y, int index, int mosX, int mosY, bool mouseClick, float scale = 1)
         {
             var r = false;
 
-            var sRect = new Rectangle(32*(index%8), 32*(index/8), 32, 32);
-            var dRect = new Rectangle(x, y, 32, 32);
+            var sRect = new Rectangle(32 * (index % 8), 32 * (index / 8), 32, 32);
+            var dRect = new Rectangle(x, y, (int) (32 * scale), (int) (32 * scale));
 
             if (dRect.Contains(mosX, mosY))
             {
@@ -716,22 +791,22 @@ namespace CharacterEditor
                 {
                     for (var i = 0; i < 25; i++)
                     {
-                        var sRect = new Rectangle((i%5)*64,
-                            (i/5)*64, 64, 64);
+                        var sRect = new Rectangle((i % 5) * 64,
+                            (i / 5) * 64, 64, 64);
 
-                        var dRect = new Rectangle(i*23, 467 + l*32, 23, 32);
+                        var dRect = new Rectangle(i * 23, 467 + l * 32, 23, 32);
 
                         _spriteBatch.Draw(_nullTex, dRect, new Color(0, 0, 0, 25));
 
                         if (l == 3)
                         {
-                            sRect.X = (i%4)*80;
-                            sRect.Y = (i/4)*64;
+                            sRect.X = (i % 4) * 80;
+                            sRect.Y = (i / 4) * 64;
                             sRect.Width = 80;
 
                             if (i < 15)
                             {
-                                dRect.X = i*30;
+                                dRect.X = i * 30;
                                 dRect.Width = 30;
                             }
                         }
@@ -742,7 +817,7 @@ namespace CharacterEditor
                         {
                             if (_mouseClick)
                             {
-                                _charDef.Frames[_selFrame].Parts[_selPart].Index = i + 64*l;
+                                _charDef.Frames[_selFrame].Parts[_selPart].Index = i + 64 * l;
                             }
                         }
                     }
@@ -765,27 +840,27 @@ namespace CharacterEditor
                 var part = frame.Parts[i];
                 if (part.Index > -1)
                 {
-                    sRect.X = ((part.Index%64)%5)*64;
-                    sRect.Y = ((part.Index%64)/5)*64;
+                    sRect.X = ((part.Index % 64) % 5) * 64;
+                    sRect.Y = ((part.Index % 64) / 5) * 64;
                     sRect.Width = 64;
                     sRect.Height = 64;
 
                     if (part.Index >= 192)
                     {
-                        sRect.X = ((part.Index%64)%3)*80;
+                        sRect.X = ((part.Index % 64) % 3) * 80;
                         sRect.Width = 80;
                     }
 
                     var rotation = part.Rotation;
 
-                    var location = part.Location*scale + loc;
-                    var scaling = part.Scaling*scale;
+                    var location = part.Location * scale + loc;
+                    var scaling = part.Scaling * scale;
                     if (part.Index >= 128) scaling *= 1.35f;
 
                     if (face == FaceLeft)
                     {
                         rotation = -rotation;
-                        location.X -= part.Location.X*scale*2.0f;
+                        location.X -= part.Location.X * scale * 2.0f;
                     }
 
                     if (part.Index >= 1000 && alpha >= 1f)
@@ -801,7 +876,7 @@ namespace CharacterEditor
                         else
                         {
                             _text.Size = 1f;
-                            _text.DrawText((int) location.X, (int) location.Y, "*" + GetTrigName(part.Index - 1000));
+                            _text.DrawText((int)location.X, (int)location.Y, "*" + GetTrigName(part.Index - 1000));
                             _text.Size = 0.75f;
                         }
                         _spriteBatch.Begin();
@@ -836,7 +911,9 @@ namespace CharacterEditor
 
                         if (texture != null)
                         {
-                            _spriteBatch.Draw(texture, location, sRect, color, rotation, new Vector2(sRect.Width / 2f, 32f), scaling, (flip ? SpriteEffects.None : SpriteEffects.FlipHorizontally), 1.0f);
+                            _spriteBatch.Draw(texture, location, sRect, color, rotation,
+                                new Vector2(sRect.Width / 2f, 32f), scaling,
+                                (flip ? SpriteEffects.None : SpriteEffects.FlipHorizontally), 1.0f);
                         }
                     }
                 }
