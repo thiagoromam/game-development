@@ -20,6 +20,9 @@ namespace ZombieSmashers.Particles
 
         public override void Update(float gameTime, Map map, ParticleManager pMan, Character[] c)
         {
+            if (HitManager.CheckHit(this, c, pMan))
+                Frame = 0f;
+
             if (map.CheckParticleCol(Location))
             {
                 Frame = 0f;

@@ -36,7 +36,7 @@ namespace ZombieSmashers.CharClasses
         private const int TrigPistolDown = 2;
         public const int TeamGoodGuys = 0;
         public const int TeamBadGuys = 1;
-        
+
         // Animation fields
         public Vector2 Location;
         public Vector2 Trajectory;
@@ -362,7 +362,7 @@ namespace ZombieSmashers.CharClasses
                 var part = frame.Parts[i];
                 if (part.Index >= 1000)
                 {
-                    var location = part.Location*Scale + Location;
+                    var location = part.Location * Scale + Location;
 
                     if (Face == CharDir.Left)
                         location.X -= part.Location.X * Scale * 2;
@@ -408,20 +408,31 @@ namespace ZombieSmashers.CharClasses
             SetAnim("fly");
             Trajectory.Y = 0;
         }
+
         private void Land()
         {
             State = CharState.Grounded;
             SetAnim("land");
         }
+
         public void Slide(float distance)
         {
             Trajectory.X = (float)Face * 2f * distance - distance;
         }
+
         public void SetJump(float jump)
         {
             Trajectory.Y = -jump;
             State = CharState.Air;
             _ledgeAttach = -1;
+        }
+
+        public bool InHitBounds(Vector2 hitLoc)
+        {
+            return hitLoc.X > Location.X - 50f * Scale &&
+                   hitLoc.X < Location.X + 50f * Scale &&
+                   hitLoc.Y > Location.Y - 190f * Scale &&
+                   hitLoc.Y < Location.Y + 10f * Scale;
         }
 
         public void DoInput()

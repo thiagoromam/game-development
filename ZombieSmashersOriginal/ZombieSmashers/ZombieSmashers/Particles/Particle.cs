@@ -7,15 +7,15 @@ namespace ZombieSmashers.Particles
 {
     public class Particle
     {
-        protected Vector2 Location;
-        protected Vector2 Trajectory;
+        public Vector2 Location;
+        public Vector2 Trajectory;
         protected float Frame;
         protected float R, G, B, A;
         protected float Size;
         protected float Rotation;
 
         protected int Flag;
-        protected int Owner;
+        public int Owner;
 
         public bool Exists;
         public bool Background;
