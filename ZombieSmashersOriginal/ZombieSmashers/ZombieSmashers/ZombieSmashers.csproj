@@ -96,6 +96,7 @@
     <Compile Include="Particles\Blood.cs" />
     <Compile Include="Particles\Bullet.cs" />
     <Compile Include="Particles\Fire.cs" />
+    <Compile Include="Particles\Hit.cs" />
     <Compile Include="Particles\MuzzleFlash.cs" />
     <Compile Include="Particles\Particle.cs" />
     <Compile Include="Particles\ParticleManager.cs" />

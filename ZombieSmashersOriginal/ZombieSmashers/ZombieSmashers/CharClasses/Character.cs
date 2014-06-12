@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ZombieSmashers.Input;
@@ -31,9 +32,16 @@ namespace ZombieSmashers.CharClasses
                 WeaponTex[i] = content.Load<Texture2D>("gfx/weapon" + (i + 1));
         }
 
-        private const int TrigPistolAcross = 0;
-        private const int TrigPistolUp = 1;
-        private const int TrigPistolDown = 2;
+        public const int TrigPistolAcross = 0;
+        public const int TrigPistolUp = 1;
+        public const int TrigPistolDown = 2;
+        public const int TrigWrenchUp = 3;
+        public const int TrigWrenchDown = 4;
+        public const int TrigWrenchDiagUp = 5;
+        public const int TrigWrenchDiagDown = 6;
+        public const int TrigWrenchUppercut = 7;
+        public const int TrigWrenchSmackdown = 8;
+        public const int TrigKick = 9;
         public const int TeamGoodGuys = 0;
         public const int TeamBadGuys = 1;
 
@@ -63,6 +71,7 @@ namespace ZombieSmashers.CharClasses
         public int[] GotoGoal = { -1, -1, -1, -1, -1, -1, -1, -1 };
         public PressedKeys PressedKey;
         private readonly Script _script;
+        public float ColMove;
 
         public Map Map;
         public int Id;
@@ -141,6 +150,50 @@ namespace ZombieSmashers.CharClasses
 
             #endregion
 
+            #region Collison w/ other characters
+
+            for (var i = 0; i < c.Length; i++)
+            {
+                if (i != Id)
+                {
+                    if (c[i] != null)
+                    {
+                        if (Location.X > c[i].Location.X - 90f * c[i].Scale &&
+                            Location.X < c[i].Location.X + 90f * c[i].Scale &&
+                            Location.Y > c[i].Location.Y - 120f * c[i].Scale &&
+                            Location.Y < c[i].Location.Y + 10f * c[i].Scale)
+                        {
+                            var dif = Math.Abs(Location.X - c[i].Location.X);
+                            dif = 180f * c[i].Scale - dif;
+                            dif *= 2f;
+                            if (Location.X < c[i].Location.X)
+                            {
+                                ColMove = -dif;
+                                c[i].ColMove = dif;
+                            }
+                            else
+                            {
+                                ColMove = dif;
+                                c[i].ColMove = -dif;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (ColMove > 0f)
+            {
+                ColMove -= 400f * Game1.FrameTime;
+                if (ColMove < 0f) ColMove = 0f;
+            }
+            else if (ColMove < 0f)
+            {
+                ColMove += 400f * Game1.FrameTime;
+                if (ColMove > 0f) ColMove = 0f;
+            }
+
+            #endregion
+
             #region Update location by trajectory
 
             var pLoc = Location;
@@ -163,6 +216,7 @@ namespace ZombieSmashers.CharClasses
             }
 
             Location.X += Trajectory.X * Game1.FrameTime;
+            Location.X += ColMove * Game1.FrameTime;
 
             if (State == CharState.Air)
             {
@@ -385,17 +439,20 @@ namespace ZombieSmashers.CharClasses
                 case TrigPistolUp:
                     pMan.MakeBullet(loc, new Vector2(1400, -1400), Face, Id);
                     break;
+                default:
+                    pMan.AddParticle(new Hit(loc, new Vector2(200f * (float)Face - 100f, 0f), Id, trig));
+                    break;
             }
         }
 
         private void CheckXCol(Vector2 pLoc)
         {
-            if (Trajectory.X > 0)
+            if (Trajectory.X + ColMove > 0)
             {
                 if (Map.CheckCol(new Vector2(Location.X + 25, Location.Y - 15)))
                     Location.X = pLoc.X;
             }
-            else if (Trajectory.X < 0)
+            else if (Trajectory.X + ColMove < 0)
             {
                 if (Map.CheckCol(new Vector2(Location.X - 25, Location.Y - 15)))
                     Location.X = pLoc.X;
@@ -412,7 +469,17 @@ namespace ZombieSmashers.CharClasses
         private void Land()
         {
             State = CharState.Grounded;
-            SetAnim("land");
+            switch (AnimName)
+            {
+                case "jhit":
+                case "jmid":
+                case "jfall":
+                    SetAnim("hitland");
+                    break;
+                default:
+                    SetAnim("land");
+                    break;
+            }
         }
 
         public void Slide(float distance)

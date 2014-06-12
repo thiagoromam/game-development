@@ -34,6 +34,13 @@ namespace CharacterEditor
         private const int TrigPistolAcross = 0;
         private const int TrigPistolUp = 1;
         private const int TrigPistolDown = 2;
+        private const int TrigWrenchUp = 3;
+        private const int TrigWrenchDown = 4;
+        private const int TrigWrenchDiagUp = 5;
+        private const int TrigWrenchDiagDown = 6;
+        private const int TrigWrenchUppercut = 7;
+        private const int TrigWrenchSmackdown = 8;
+        private const int TrigKick = 9;
 
         private int _selPart;
         private int _selFrame;
@@ -744,7 +751,7 @@ namespace CharacterEditor
             var r = false;
 
             var sRect = new Rectangle(32 * (index % 8), 32 * (index / 8), 32, 32);
-            var dRect = new Rectangle(x, y, (int) (32 * scale), (int) (32 * scale));
+            var dRect = new Rectangle(x, y, (int)(32 * scale), (int)(32 * scale));
 
             if (dRect.Contains(mosX, mosY))
             {
@@ -922,7 +929,7 @@ namespace CharacterEditor
             _spriteBatch.End();
         }
 
-        private string GetTrigName(int idx)
+        private static string GetTrigName(int idx)
         {
             switch (idx)
             {
@@ -932,6 +939,20 @@ namespace CharacterEditor
                     return "pistol down";
                 case TrigPistolUp:
                     return "pistol up";
+                case TrigWrenchDown:
+                    return "wrench down";
+                case TrigWrenchSmackdown:
+                    return "wrench smackdown";
+                case TrigWrenchDiagUp:
+                    return "wrench diag up";
+                case TrigWrenchDiagDown:
+                    return "wrench diag down";
+                case TrigWrenchUp:
+                    return "wrench up";
+                case TrigWrenchUppercut:
+                    return "wrench uppercut";
+                case TrigKick:
+                    return "kick";
             }
             return "";
         }

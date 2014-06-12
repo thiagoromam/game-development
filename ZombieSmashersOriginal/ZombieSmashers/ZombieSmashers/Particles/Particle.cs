@@ -14,7 +14,7 @@ namespace ZombieSmashers.Particles
         protected float Size;
         protected float Rotation;
 
-        protected int Flag;
+        public int Flag;
         public int Owner;
 
         public bool Exists;
@@ -34,7 +34,7 @@ namespace ZombieSmashers.Particles
                 KillMe();
         }
 
-        private void KillMe()
+        protected void KillMe()
         {
             Exists = false;
         }

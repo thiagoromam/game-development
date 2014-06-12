@@ -45,6 +45,8 @@ namespace ZombieSmashers
             get { return _scroll; }
         }
 
+        public static float SlowTime { get; set; }
+
         public static float FrameTime { get; private set; }
 
         public static Vector2 ScreenSize
@@ -56,16 +58,16 @@ namespace ZombieSmashers
         {
             _map = new Map("maps/map");
 
-            _charDefs[(int)CharacterType.Guy] = new CharDef("chars/guy");
-            _charDefs[(int)CharacterType.Zombie] = new CharDef("chars/zombie");
+            _charDefs[(int) CharacterType.Guy] = new CharDef("chars/guy");
+            _charDefs[(int) CharacterType.Zombie] = new CharDef("chars/zombie");
 
-            _characters[0] = new Character(new Vector2(100, 100), _charDefs[(int)CharacterType.Guy], 0,
-                Character.TeamGoodGuys) { Map = _map };
+            _characters[0] = new Character(new Vector2(100, 100), _charDefs[(int) CharacterType.Guy], 0,
+                Character.TeamGoodGuys) {Map = _map};
 
             for (var i = 1; i < 9; i++)
             {
-                _characters[i] = new Character(new Vector2(i * 100, 100), _charDefs[(int)CharacterType.Zombie], i,
-                    Character.TeamBadGuys) { Map = _map };
+                _characters[i] = new Character(new Vector2(i*100, 100), _charDefs[(int) CharacterType.Zombie], i,
+                    Character.TeamBadGuys) {Map = _map};
             }
 
             _screenSize.X = GraphicsDevice.Viewport.Width;
@@ -96,13 +98,18 @@ namespace ZombieSmashers
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 Exit();
 
-            FrameTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            FrameTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
+            if (SlowTime > 0f)
+            {
+                SlowTime -= FrameTime;
+                FrameTime /= 10f;
+            }
 
             _particleManager.UpdateParticles(FrameTime, _map, _characters);
 
             if (_characters[0] != null)
             {
-                _scroll += (_characters[0].Location - _scrollOffset - _scroll) * FrameTime * 20;
+                _scroll += (_characters[0].Location - _scrollOffset - _scroll)*FrameTime*20;
 
                 var xLim = _map.GetXLim();
                 var yLim = _map.GetYLim();

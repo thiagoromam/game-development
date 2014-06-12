@@ -20,6 +20,8 @@ namespace ZombieSmashers
                         {
                             if (p is Bullet)
                             {
+                                #region Bullet
+
                                 c[i].Face = tFace == CharDir.Left ? CharDir.Right : CharDir.Left;
                                 c[i].SetAnim("idle");
                                 c[i].SetAnim("hit");
@@ -28,6 +30,80 @@ namespace ZombieSmashers
                                 pMan.MakeBulletBlood(p.Location, -p.Trajectory);
                                 pMan.MakeBulletDust(p.Location, p.Trajectory);
                                 r = true;
+
+                                #endregion
+                            }
+                            else if (p is Hit)
+                            {
+                                #region Hit
+
+                                c[i].Face = (tFace == CharDir.Left) ? CharDir.Right : CharDir.Left;
+                                var tX = 1f;
+                                if (tFace == CharDir.Left)
+                                    tX = -1f;
+                                c[i].SetAnim("idle");
+                                c[i].SetAnim("hit");
+
+                                if (c[i].State == CharState.Grounded)
+                                    c[i].Slide(-200f);
+                                else
+                                    c[i].Slide(-50f);
+
+                                switch (p.Flag)
+                                {
+                                    case Character.TrigWrenchDiagDown:
+                                        pMan.MakeBloodSplash(p.Location, new Vector2(50f*tX, 100f));
+                                        Game1.SlowTime = 0.1f;
+                                        break;
+                                    case Character.TrigWrenchDiagUp:
+                                        pMan.MakeBloodSplash(p.Location, new Vector2(-50f*tX, -100f));
+                                        Game1.SlowTime = 0.1f;
+                                        break;
+                                    case Character.TrigWrenchUp:
+                                        pMan.MakeBloodSplash(p.Location, new Vector2(30f*tX, -100f));
+                                        Game1.SlowTime = 0.1f;
+                                        break;
+                                    case Character.TrigWrenchDown:
+                                        pMan.MakeBloodSplash(p.Location, new Vector2(-50f*tX, 100f));
+                                        Game1.SlowTime = 0.1f;
+                                        break;
+                                    case Character.TrigWrenchUppercut:
+                                        pMan.MakeBloodSplash(p.Location, new Vector2(-50f*tX, -150f));
+                                        c[i].Trajectory.X = 100f*tX;
+                                        c[i].SetAnim("jhit");
+                                        c[i].SetJump(700f);
+                                        Game1.SlowTime = 0.125f;
+                                        break;
+                                    case Character.TrigWrenchSmackdown:
+                                        pMan.MakeBloodSplash(p.Location, new Vector2(-50f*tX, 150f));
+                                        c[i].SetAnim("jfall");
+                                        c[i].SetJump(-900f);
+                                        Game1.SlowTime = 0.125f;
+                                        break;
+                                    case Character.TrigKick:
+                                        pMan.MakeBloodSplash(p.Location, new Vector2(300f*tX, 0f));
+                                        c[i].Trajectory.X = 1000f*tX;
+                                        c[i].SetAnim("jhit");
+                                        c[i].SetJump(300f);
+                                        Game1.SlowTime = 0.25f;
+                                        break;
+                                }
+
+                                #endregion
+                            }
+
+                            if (c[i].State == CharState.Air)
+                            {
+                                if (c[i].AnimName == "hit")
+                                {
+                                    c[i].SetAnim("jmid");
+                                    c[i].SetJump(300f);
+                                    if (p is Hit)
+                                    {
+                                        if (c[p.Owner].Team == Character.TeamGoodGuys)
+                                            c[i].Location.Y = c[p.Owner].Location.Y;
+                                    }
+                                }
                             }
                         }
                     }

@@ -119,5 +119,21 @@ namespace ZombieSmashers.Particles
                     1f, Rand.GetRandomFloat(0.1f, 0.3f), Rand.GetRandomInt(0, 4)));
             }
         }
+
+        public void MakeBloodSplash(Vector2 loc, Vector2 traj)
+        {
+            traj += Rand.GetRandomVector2(-100f, 100f, -100f, 100f);
+            for (var i = 0; i < 64; i++)
+            {
+                AddParticle(new Blood(loc,
+                    traj * Rand.GetRandomFloat(0.1f, 3.5f) + Rand.GetRandomVector2(-70f, 70f, -70f, 70f), 1f, 0f, 0f, 1f,
+                    Rand.GetRandomFloat(0.01f, 0.25f), Rand.GetRandomInt(0, 4)));
+                AddParticle(new Blood(loc,
+                    traj * Rand.GetRandomFloat(-0.2f, 0f) + Rand.GetRandomVector2(-120f, 120f, -120f, 120f), 1f, 0f, 0f,
+                    1f, Rand.GetRandomFloat(0.01f, 0.25f), Rand.GetRandomInt(0, 4)));
+            }
+            MakeBulletDust(loc, traj * -20f);
+            MakeBulletDust(loc, traj * 10f);
+        }
     }
 }
