@@ -11,9 +11,9 @@ namespace ZombieSmashers.CharClasses
 {
     public class Character
     {
-        public static Texture2D[] HeadTex = new Texture2D[1];
-        public static Texture2D[] TorsoTex = new Texture2D[1];
-        public static Texture2D[] LegsTex = new Texture2D[1];
+        public static Texture2D[] HeadTex = new Texture2D[2];
+        public static Texture2D[] TorsoTex = new Texture2D[2];
+        public static Texture2D[] LegsTex = new Texture2D[2];
         public static Texture2D[] WeaponTex = new Texture2D[1];
 
         public static void LoadContent(ContentManager content)
@@ -34,7 +34,9 @@ namespace ZombieSmashers.CharClasses
         private const int TrigPistolAcross = 0;
         private const int TrigPistolUp = 1;
         private const int TrigPistolDown = 2;
-
+        public const int TeamGoodGuys = 0;
+        public const int TeamBadGuys = 1;
+        
         // Animation fields
         public Vector2 Location;
         public Vector2 Trajectory;
@@ -64,8 +66,9 @@ namespace ZombieSmashers.CharClasses
 
         public Map Map;
         public int Id;
+        public int Team;
 
-        public Character(Vector2 newLoc, CharDef newCharDef)
+        public Character(Vector2 newLoc, CharDef newCharDef, int newId, int newTeam)
         {
             Location = newLoc;
             Trajectory = Vector2.Zero;
@@ -73,6 +76,8 @@ namespace ZombieSmashers.CharClasses
             Face = CharDir.Right;
             Scale = 0.5f;
             _charDef = newCharDef;
+            Id = newId;
+            Team = newTeam;
 
             SetAnim("fly");
 

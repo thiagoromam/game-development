@@ -44,7 +44,9 @@ namespace ZombieSmashers
         {
             get { return _scroll; }
         }
+
         public static float FrameTime { get; private set; }
+
         public static Vector2 ScreenSize
         {
             get { return _screenSize; }
@@ -55,7 +57,16 @@ namespace ZombieSmashers
             _map = new Map("maps/map");
 
             _charDefs[(int)CharacterType.Guy] = new CharDef("chars/guy");
-            _characters[0] = new Character(new Vector2(100, 100), _charDefs[(int)CharacterType.Guy]) { Map = _map };
+            _charDefs[(int)CharacterType.Zombie] = new CharDef("chars/zombie");
+
+            _characters[0] = new Character(new Vector2(100, 100), _charDefs[(int)CharacterType.Guy], 0,
+                Character.TeamGoodGuys) { Map = _map };
+
+            for (var i = 1; i < 9; i++)
+            {
+                _characters[i] = new Character(new Vector2(i * 100, 100), _charDefs[(int)CharacterType.Zombie], i,
+                    Character.TeamBadGuys) { Map = _map };
+            }
 
             _screenSize.X = GraphicsDevice.Viewport.Width;
             _screenSize.Y = GraphicsDevice.Viewport.Height;
@@ -123,7 +134,12 @@ namespace ZombieSmashers
 
             _map.Draw(_spriteBatch, _mapsTex, _mapBackTex, 0, 2);
             _particleManager.DrawParticles(_spritesTex, true);
-            _characters[0].Draw(_spriteBatch);
+            for (var i = 0; i < _characters.Length; i++)
+            {
+                if (_characters[i] != null)
+                    _characters[i].Draw(_spriteBatch);
+            }
+
             _particleManager.DrawParticles(_spritesTex, false);
             _map.Draw(_spriteBatch, _mapsTex, _mapBackTex, 2, 3);
 
