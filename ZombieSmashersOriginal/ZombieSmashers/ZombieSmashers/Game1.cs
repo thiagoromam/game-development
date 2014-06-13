@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using ZombieSmashers.Audio;
 using ZombieSmashers.CharClasses;
 using ZombieSmashers.Input;
 using ZombieSmashers.MapClasses;
@@ -131,6 +132,8 @@ namespace ZombieSmashers
             }
 
             _map.Update(_particleManager);
+
+            Sound.Update();
 
             base.Update(gameTime);
         }

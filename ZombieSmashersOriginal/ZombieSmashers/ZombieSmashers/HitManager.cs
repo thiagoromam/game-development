@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using ZombieSmashers.Audio;
 using ZombieSmashers.CharClasses;
 using ZombieSmashers.Particles;
 
@@ -26,6 +27,7 @@ namespace ZombieSmashers
                                 c[i].SetAnim("idle");
                                 c[i].SetAnim("hit");
                                 c[i].Slide(-100f);
+                                Sound.PlayCue("bullethit");
                                 pMan.MakeBulletBlood(p.Location, p.Trajectory/2f);
                                 pMan.MakeBulletBlood(p.Location, -p.Trajectory);
                                 pMan.MakeBulletDust(p.Location, p.Trajectory);
@@ -43,6 +45,7 @@ namespace ZombieSmashers
                                     tX = -1f;
                                 c[i].SetAnim("idle");
                                 c[i].SetAnim("hit");
+                                Sound.PlayCue("zomhit");
 
                                 if (c[i].State == CharState.Grounded)
                                     c[i].Slide(-200f);

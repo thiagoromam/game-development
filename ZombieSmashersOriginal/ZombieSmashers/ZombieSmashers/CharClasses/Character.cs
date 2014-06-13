@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using ZombieSmashers.Audio;
 using ZombieSmashers.Input;
 using ZombieSmashers.MapClasses;
 using ZombieSmashers.Particles;
@@ -432,12 +433,15 @@ namespace ZombieSmashers.CharClasses
             {
                 case TrigPistolAcross:
                     pMan.MakeBullet(loc, new Vector2(2000, 0), Face, Id);
+                    Sound.PlayCue("revol");
                     break;
                 case TrigPistolDown:
                     pMan.MakeBullet(loc, new Vector2(1400, 1400), Face, Id);
+                    Sound.PlayCue("revol");
                     break;
                 case TrigPistolUp:
                     pMan.MakeBullet(loc, new Vector2(1400, -1400), Face, Id);
+                    Sound.PlayCue("revol");
                     break;
                 default:
                     pMan.AddParticle(new Hit(loc, new Vector2(200f * (float)Face - 100f, 0f), Id, trig));
