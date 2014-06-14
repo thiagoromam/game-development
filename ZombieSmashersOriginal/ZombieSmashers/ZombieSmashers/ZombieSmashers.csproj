@@ -69,6 +69,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audio\Music.cs" />
     <Compile Include="Audio\Sound.cs" />
     <Compile Include="CharClasses\Animation.cs" />
     <Compile Include="CharClasses\Character.cs" />

@@ -4,7 +4,7 @@ namespace ZombieSmashers.Audio
 {
     public class Sound
     {
-        private static readonly AudioEngine Engine;
+        public static readonly AudioEngine Engine;
         private static readonly SoundBank SoundBank;
         private static readonly WaveBank WaveBank;
 

@@ -134,6 +134,7 @@ namespace ZombieSmashers
             _map.Update(_particleManager);
 
             Sound.Update();
+            Music.Play("music1");
 
             base.Update(gameTime);
         }
