@@ -1,4 +1,6 @@
-﻿namespace ZombieSmashers.CharClasses
+﻿using ZombieSmashers.Audio;
+
+namespace ZombieSmashers.CharClasses
 {
     public class Script
     {
@@ -98,6 +100,9 @@
                         break;
                     case Commands.SetSecDownGoto:
                         _character.GotoGoal[(int)PressedKeys.SecDown] = line.IParam;
+                        break;
+                    case Commands.PlaySound:
+                        Sound.PlayCue(line.SParam);
                         break;
                 }
             }

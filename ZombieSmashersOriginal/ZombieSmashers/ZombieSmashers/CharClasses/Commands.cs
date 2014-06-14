@@ -19,6 +19,7 @@
         SetAnyGoto,
         SetSecondaryGoto,
         SetSecUpGoto,
-        SetSecDownGoto
+        SetSecDownGoto,
+        PlaySound
     }
 }

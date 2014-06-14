@@ -84,6 +84,10 @@ namespace ZombieSmashers.CharClasses
                         _command = Commands.SetSecDownGoto;
                         _iParam = Convert.ToInt32(split[1]);
                         break;
+                    case "play": 
+                        _command = Commands.PlaySound; 
+                        _sParam = split[1];
+                        break;
                 }
             }
             catch (Exception e)
