@@ -6,6 +6,7 @@ using ZombieSmashers.Audio;
 using ZombieSmashers.Input;
 using ZombieSmashers.MapClasses;
 using ZombieSmashers.Particles;
+using ZombieSmashers.Shakes;
 
 // ReSharper disable ForCanBeConvertedToForeach
 
@@ -445,6 +446,19 @@ namespace ZombieSmashers.CharClasses
                     break;
                 default:
                     pMan.AddParticle(new Hit(loc, new Vector2(200f * (float)Face - 100f, 0f), Id, trig));
+                    break;
+            }
+
+            switch (trig)
+            {
+                case TrigPistolAcross:
+                case TrigPistolUp:
+                case TrigPistolDown:
+                    if (Team == TeamGoodGuys && Id < 4)
+                    {
+                        QuakeManager.SetRumble(Id, 1, .5f);
+                        QuakeManager.SetRumble(Id, 0, .3f);
+                    }
                     break;
             }
         }

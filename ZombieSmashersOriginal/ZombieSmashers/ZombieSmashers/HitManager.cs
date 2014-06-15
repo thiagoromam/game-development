@@ -2,6 +2,7 @@
 using ZombieSmashers.Audio;
 using ZombieSmashers.CharClasses;
 using ZombieSmashers.Particles;
+using ZombieSmashers.Shakes;
 
 namespace ZombieSmashers
 {
@@ -28,7 +29,7 @@ namespace ZombieSmashers
                                 c[i].SetAnim("hit");
                                 c[i].Slide(-100f);
                                 Sound.PlayCue("bullethit");
-                                pMan.MakeBulletBlood(p.Location, p.Trajectory/2f);
+                                pMan.MakeBulletBlood(p.Location, p.Trajectory / 2f);
                                 pMan.MakeBulletBlood(p.Location, -p.Trajectory);
                                 pMan.MakeBulletDust(p.Location, p.Trajectory);
                                 r = true;
@@ -55,37 +56,39 @@ namespace ZombieSmashers
                                 switch (p.Flag)
                                 {
                                     case Character.TrigWrenchDiagDown:
-                                        pMan.MakeBloodSplash(p.Location, new Vector2(50f*tX, 100f));
+                                        pMan.MakeBloodSplash(p.Location, new Vector2(50f * tX, 100f));
                                         Game1.SlowTime = 0.1f;
                                         break;
                                     case Character.TrigWrenchDiagUp:
-                                        pMan.MakeBloodSplash(p.Location, new Vector2(-50f*tX, -100f));
+                                        pMan.MakeBloodSplash(p.Location, new Vector2(-50f * tX, -100f));
                                         Game1.SlowTime = 0.1f;
                                         break;
                                     case Character.TrigWrenchUp:
-                                        pMan.MakeBloodSplash(p.Location, new Vector2(30f*tX, -100f));
+                                        pMan.MakeBloodSplash(p.Location, new Vector2(30f * tX, -100f));
                                         Game1.SlowTime = 0.1f;
                                         break;
                                     case Character.TrigWrenchDown:
-                                        pMan.MakeBloodSplash(p.Location, new Vector2(-50f*tX, 100f));
+                                        pMan.MakeBloodSplash(p.Location, new Vector2(-50f * tX, 100f));
                                         Game1.SlowTime = 0.1f;
                                         break;
                                     case Character.TrigWrenchUppercut:
-                                        pMan.MakeBloodSplash(p.Location, new Vector2(-50f*tX, -150f));
-                                        c[i].Trajectory.X = 100f*tX;
+                                        pMan.MakeBloodSplash(p.Location, new Vector2(-50f * tX, -150f));
+                                        c[i].Trajectory.X = 100f * tX;
                                         c[i].SetAnim("jhit");
                                         c[i].SetJump(700f);
                                         Game1.SlowTime = 0.125f;
+                                        QuakeManager.SetQuake(.5f);
+                                        QuakeManager.SetBlast(.5f, p.Location);
                                         break;
                                     case Character.TrigWrenchSmackdown:
-                                        pMan.MakeBloodSplash(p.Location, new Vector2(-50f*tX, 150f));
+                                        pMan.MakeBloodSplash(p.Location, new Vector2(-50f * tX, 150f));
                                         c[i].SetAnim("jfall");
                                         c[i].SetJump(-900f);
                                         Game1.SlowTime = 0.125f;
                                         break;
                                     case Character.TrigKick:
-                                        pMan.MakeBloodSplash(p.Location, new Vector2(300f*tX, 0f));
-                                        c[i].Trajectory.X = 1000f*tX;
+                                        pMan.MakeBloodSplash(p.Location, new Vector2(300f * tX, 0f));
+                                        c[i].Trajectory.X = 1000f * tX;
                                         c[i].SetAnim("jhit");
                                         c[i].SetJump(300f);
                                         Game1.SlowTime = 0.25f;

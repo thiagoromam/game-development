@@ -108,6 +108,10 @@
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Rand.cs" />
+    <Compile Include="Shakes\Blast.cs" />
+    <Compile Include="Shakes\Quake.cs" />
+    <Compile Include="Shakes\QuakeManager.cs" />
+    <Compile Include="Shakes\Rumble.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

@@ -6,6 +6,7 @@ using ZombieSmashers.CharClasses;
 using ZombieSmashers.Input;
 using ZombieSmashers.MapClasses;
 using ZombieSmashers.Particles;
+using ZombieSmashers.Shakes;
 
 // ReSharper disable ForCanBeConvertedToForeach
 
@@ -13,9 +14,9 @@ namespace ZombieSmashers
 {
     public class Game1 : Game
     {
-        // ReSharper disable once NotAccessedField.Local
-        private GraphicsDeviceManager _graphics;
+        private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private RenderTarget2D _mainTarget;
 
         public const float Friction = 1000;
         public const float Gravity = 900;
@@ -59,16 +60,16 @@ namespace ZombieSmashers
         {
             _map = new Map("maps/map");
 
-            _charDefs[(int) CharacterType.Guy] = new CharDef("chars/guy");
-            _charDefs[(int) CharacterType.Zombie] = new CharDef("chars/zombie");
+            _charDefs[(int)CharacterType.Guy] = new CharDef("chars/guy");
+            _charDefs[(int)CharacterType.Zombie] = new CharDef("chars/zombie");
 
-            _characters[0] = new Character(new Vector2(100, 100), _charDefs[(int) CharacterType.Guy], 0,
-                Character.TeamGoodGuys) {Map = _map};
+            _characters[0] = new Character(new Vector2(100, 100), _charDefs[(int)CharacterType.Guy], 0,
+                Character.TeamGoodGuys) { Map = _map };
 
             for (var i = 1; i < 9; i++)
             {
-                _characters[i] = new Character(new Vector2(i*100, 100), _charDefs[(int) CharacterType.Zombie], i,
-                    Character.TeamBadGuys) {Map = _map};
+                _characters[i] = new Character(new Vector2(i * 100, 100), _charDefs[(int)CharacterType.Zombie], i,
+                    Character.TeamBadGuys) { Map = _map };
             }
 
             _screenSize.X = GraphicsDevice.Viewport.Width;
@@ -92,6 +93,15 @@ namespace ZombieSmashers
             _spritesTex = Content.Load<Texture2D>("gfx/sprites");
 
             Character.LoadContent(Content);
+
+            _mainTarget = new RenderTarget2D(
+                GraphicsDevice,
+                _graphics.PreferredBackBufferWidth,
+                _graphics.PreferredBackBufferHeight,
+                false,
+                SurfaceFormat.Color,
+                DepthFormat.Depth24
+            );
         }
 
         protected override void Update(GameTime gameTime)
@@ -99,7 +109,9 @@ namespace ZombieSmashers
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 Exit();
 
-            FrameTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
+            QuakeManager.Update();
+
+            FrameTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (SlowTime > 0f)
             {
                 SlowTime -= FrameTime;
@@ -110,7 +122,8 @@ namespace ZombieSmashers
 
             if (_characters[0] != null)
             {
-                _scroll += (_characters[0].Location - _scrollOffset - _scroll)*FrameTime*20;
+                _scroll += (_characters[0].Location - _scrollOffset - _scroll) * FrameTime * 20;
+                _scroll += QuakeManager.Quake.Vector;
 
                 var xLim = _map.GetXLim();
                 var yLim = _map.GetYLim();
@@ -141,7 +154,10 @@ namespace ZombieSmashers
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
+
+            GraphicsDevice.SetRenderTarget(_mainTarget);
+            GraphicsDevice.Clear(Color.Black);
 
             _map.Draw(_spriteBatch, _mapsTex, _mapBackTex, 0, 2);
             _particleManager.DrawParticles(_spritesTex, true);
@@ -153,6 +169,36 @@ namespace ZombieSmashers
 
             _particleManager.DrawParticles(_spritesTex, false);
             _map.Draw(_spriteBatch, _mapsTex, _mapBackTex, 2, 3);
+
+            GraphicsDevice.SetRenderTarget(null);
+
+            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque);
+
+            _spriteBatch.Draw(_mainTarget, Vector2.Zero, Color.White);
+
+            _spriteBatch.End();
+
+            if (QuakeManager.Blast.Value > 0)
+            {
+                _spriteBatch.Begin();
+
+                for (var i = 0; i < 5; i++)
+                {
+                    _spriteBatch.Draw(
+                        _mainTarget,
+                        QuakeManager.Blast.Center - Scroll,
+                        new Rectangle(0, 0, (int)ScreenSize.X, (int)ScreenSize.Y),
+                        new Color(new Vector4(1f, 1f, 1f, 0.35f * (QuakeManager.Blast.Value / QuakeManager.Blast.Magnitude))),
+                        0f,
+                        QuakeManager.Blast.Center - Scroll,
+                        (1 + (QuakeManager.Blast.Magnitude - QuakeManager.Blast.Value) * 0.1f + ((i + 1) / 40f)),
+                        SpriteEffects.None,
+                        1f
+                    );
+                }
+
+                _spriteBatch.End();
+            }
 
             base.Draw(gameTime);
         }
