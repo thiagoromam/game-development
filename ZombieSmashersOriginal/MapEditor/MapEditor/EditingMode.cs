@@ -3,6 +3,7 @@ namespace MapEditor
     enum EditingMode
     {
         None,
-        Path
+        Path,
+        Script
     }
 }

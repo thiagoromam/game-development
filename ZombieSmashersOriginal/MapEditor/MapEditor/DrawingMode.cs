@@ -4,6 +4,7 @@ namespace MapEditor
     {
         SegmentSelection,
         CollisionMap,
-        Ledges
+        Ledges,
+        Script
     }
 }

@@ -14,6 +14,7 @@ namespace MapEditor.MapClasses
             SegmentDefinitions = new SegmentDefinition[512];
             Segments = new MapSegment[3, 64];
             Grid = new int[20, 20];
+            Scripts = new String[128];
             Path = "map";
 
             Ledges = new Ledge[16];
@@ -22,6 +23,9 @@ namespace MapEditor.MapClasses
                 Ledges[i] = new Ledge();
 
             ReadSegmentDefinitions();
+
+            for (var i = 0; i < Scripts.Length; i++)
+                Scripts[i] = "";
         }
 
         public Ledge[] Ledges { get; private set; }
@@ -29,6 +33,7 @@ namespace MapEditor.MapClasses
         public MapSegment[,] Segments { get; private set; }
         public SegmentDefinition[] SegmentDefinitions { get; private set; }
         public string Path { get; set; }
+        public string[] Scripts { get; set; }
 
         public void Draw(SpriteBatch sprite, Texture2D[] mapsTex, Vector2 scroll)
         {
@@ -115,6 +120,9 @@ namespace MapEditor.MapClasses
                 }
             }
 
+            for (var i = 0; i < Scripts.Length; i++)
+                file.Write(Scripts[i]);
+
             file.Close();
         }
 
@@ -159,6 +167,9 @@ namespace MapEditor.MapClasses
                 }
             }
 
+            for (var i = 0; i < Scripts.Length; i++)
+                Scripts[i] = file.ReadString();
+            
             file.Close();
         }
 

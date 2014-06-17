@@ -1,47 +1,55 @@
-using System;
+using MapEditor.MapClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MapEditor.MapClasses;
-
 using TextLib;
 
 namespace MapEditor
 {
     public class Game1 : Game
     {
-        readonly GraphicsDeviceManager _graphics;
-        SpriteBatch _spriteBatch;
+        private readonly GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
 
-        Map _map;
-        Text _text;
-        SpriteFont _font;
+        private Map _map;
+        private Text _text;
+        private SpriteFont _font;
 
-        Texture2D[] _mapsTex;
-        Texture2D _nullTex;
-        Texture2D _iconsTex;
+        private Texture2D[] _mapsTex;
+        private Texture2D _nullTex;
+        private Texture2D _iconsTex;
 
-        int _mosX, _mosY;
-        bool _rightMouseDown;
-        bool _midMouseDown;
-        bool _mouseClick;
+        private int _mosX, _mosY;
+        private bool _rightMouseDown;
+        private bool _midMouseDown;
+        private bool _mouseClick;
 
-        Vector2 _scroll;
+        private Vector2 _scroll;
 
-        int _mouseDragSeg = -1;
-        int _curLayer = 1;
-        int _pMosX, _pMosY;
+        private int _mouseDragSeg = -1;
+        private int _curLayer = 1;
+        private int _pMosX, _pMosY;
 
-        int _curLedge;
+        private int _curLedge;
 
-        KeyboardState _oldKeyState;
+        private int _scriptScroll;
+        private int _selScript = -1;
+        private const int ColorNone = 0;
+        private const int ColorYellow = 1;
+        private const int ColorGreen = 2;
 
-        DrawingMode _drawType = DrawingMode.SegmentSelection;
-        EditingMode _editMode = EditingMode.None;
+        private KeyboardState _oldKeyState;
+
+        private DrawingMode _drawType = DrawingMode.SegmentSelection;
+        private EditingMode _editMode = EditingMode.None;
 
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this) { PreferredBackBufferWidth = 800, PreferredBackBufferHeight = 600 };
+            _graphics = new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferWidth = 800,
+                PreferredBackBufferHeight = 600
+            };
             Content.RootDirectory = "Content";
         }
 
@@ -63,7 +71,7 @@ namespace MapEditor
             _nullTex = Content.Load<Texture2D>(@"gfx/1x1");
             _mapsTex = new Texture2D[1];
 
-            for (int i = 0; i < _mapsTex.Length; i++)
+            for (var i = 0; i < _mapsTex.Length; i++)
                 _mapsTex[i] = Content.Load<Texture2D>(@"gfx/maps" + (i + 1));
 
             _iconsTex = Content.Load<Texture2D>(@"gfx/icons");
@@ -95,15 +103,15 @@ namespace MapEditor
                 {
                     if (_drawType == DrawingMode.SegmentSelection)
                     {
-                        int f = _map.GetHoveredSegment(_mosX, _mosY, _curLayer, _scroll);
+                        var f = _map.GetHoveredSegment(_mosX, _mosY, _curLayer, _scroll);
 
                         if (f != -1)
                             _mouseDragSeg = f;
                     }
                     else if (_drawType == DrawingMode.CollisionMap)
                     {
-                        int x = (_mosX + (int)(_scroll.X / 2)) / 32;
-                        int y = (_mosY + (int)(_scroll.Y / 2)) / 32;
+                        var x = (_mosX + (int)(_scroll.X / 2)) / 32;
+                        var y = (_mosY + (int)(_scroll.Y / 2)) / 32;
                         if (x >= 0 && y >= 0 && x < 20 && y < 20)
                         {
                             if (mState.LeftButton == ButtonState.Pressed)
@@ -125,6 +133,15 @@ namespace MapEditor
                             _map.Ledges[_curLedge].TotalNodes++;
                         }
                     }
+                    else if (_drawType == DrawingMode.Script)
+                    {
+                        if (_selScript > -1)
+                        {
+                            if (_mosX < 400)
+                                _map.Scripts[_selScript] += " " + ((int)(_mosX + _scroll.X / 2f)) + " " +
+                                                            ((int)(_mosY + _scroll.Y / 2f));
+                        }
+                    }
                 }
                 _rightMouseDown = true;
             }
@@ -141,7 +158,7 @@ namespace MapEditor
                     _mouseDragSeg = -1;
                 else
                 {
-                    Vector2 loc = _map.Segments[_curLayer, _mouseDragSeg].Location;
+                    var loc = _map.Segments[_curLayer, _mouseDragSeg].Location;
 
                     loc.X += (_mosX - _pMosX);
                     loc.Y += (_mosY - _pMosY);
@@ -196,34 +213,58 @@ namespace MapEditor
 
         private void PressKey(Keys key)
         {
-            string t = String.Empty;
-
+            string t;
             switch (_editMode)
             {
                 case EditingMode.Path:
                     t = _map.Path;
                     break;
+                case EditingMode.Script:
+                    if (_selScript < 0)
+                        return;
+                    t = _map.Scripts[_selScript];
+                    break;
+                default:
+                    return;
             }
+
+            var delLine = false;
 
             if (key == Keys.Back)
             {
-                if (t.Length > 0) t = t.Substring(0, t.Length - 1);
+                if (t.Length > 0)
+                    t = t.Substring(0, t.Length - 1);
+                else if (_editMode == EditingMode.Script)
+                    delLine = ScriptDelLine();
             }
             else if (key == Keys.Enter)
             {
-                _editMode = EditingMode.None;
+                if (_editMode == EditingMode.Script)
+                {
+                    if (ScriptEnter())
+                        t = "";
+                }
+                else
+                    _editMode = EditingMode.None;
             }
             else
             {
                 t = (t + (char)key).ToLower();
             }
 
-            switch (_editMode)
+            if (!delLine)
             {
-                case EditingMode.Path:
-                    _map.Path = t;
-                    break;
+                switch (_editMode)
+                {
+                    case EditingMode.Path:
+                        _map.Path = t;
+                        break;
+                    case EditingMode.Script:
+                        _map.Scripts[_selScript] = t;
+                        break;
+                }
             }
+            else _selScript--;
         }
 
         protected override void Draw(GameTime gameTime)
@@ -231,6 +272,7 @@ namespace MapEditor
             _graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
 
             #region Part One
+
             /*
             text.Size = 3.0f;
             text.Color = new Color(0, 0, 0, 125);
@@ -242,6 +284,7 @@ namespace MapEditor
                 text.DrawText(25 - i * 2, 250 - i * 2, "Zombie Smashers XNA FTW!");
             }
             */
+
             #endregion
 
             _map.Draw(_spriteBatch, _mapsTex, _scroll);
@@ -297,12 +340,12 @@ namespace MapEditor
 
         private void DrawLedgePalette()
         {
-            for (int i = 0; i < 16; i++)
+            for (var i = 0; i < 16; i++)
             {
                 if (_map.Ledges[i] == null)
                     continue;
 
-                int y = 50 + i * 20;
+                var y = 50 + i * 20;
                 if (_curLedge == i)
                 {
                     _text.Color = Color.Lime;
@@ -327,9 +370,9 @@ namespace MapEditor
         {
             _spriteBatch.Begin();
 
-            for (int y = 0; y < 20; y++)
+            for (var y = 0; y < 20; y++)
             {
-                for (int x = 0; x < 20; x++)
+                for (var x = 0; x < 20; x++)
                 {
                     var dRect = new Rectangle(
                         x * 32 - (int)(_scroll.X / 2),
@@ -377,7 +420,7 @@ namespace MapEditor
             rect.Width = 32;
             rect.Height = 32;
 
-            for (int i = 0; i < 16; i++)
+            for (var i = 0; i < 16; i++)
             {
                 if (_map.Ledges[i] != null && _map.Ledges[i].TotalNodes > 0)
                 {
@@ -398,7 +441,7 @@ namespace MapEditor
                             nVec -= _scroll / 2.0f;
                             nVec.X -= 4.0f;
 
-                            for (int x = 1; x < 20; x++)
+                            for (var x = 1; x < 20; x++)
                             {
                                 var iVec = (nVec - tVec) * (x / 20f) + tVec;
 
@@ -407,7 +450,8 @@ namespace MapEditor
                                 if (_map.Ledges[i].Flags == 1)
                                     nColor = new Color(255, 0, 0, 75);
 
-                                _spriteBatch.Draw(_iconsTex, iVec, rect, nColor, 0.0f, Vector2.Zero, 0.25f, SpriteEffects.None, 0.0f);
+                                _spriteBatch.Draw(_iconsTex, iVec, rect, nColor, 0.0f, Vector2.Zero, 0.25f,
+                                    SpriteEffects.None, 0.0f);
                             }
                         }
                     }
@@ -419,7 +463,7 @@ namespace MapEditor
 
         private void DrawText()
         {
-            string layerName = "map";
+            var layerName = "map";
             switch (_curLayer)
             {
                 case 0:
@@ -447,12 +491,68 @@ namespace MapEditor
                 case DrawingMode.Ledges:
                     layerName = "ledge";
                     break;
+                case DrawingMode.Script:
+                    layerName = "script";
+                    break;
             }
 
             if (_text.DrawClickText(5, 25, "draw: " + layerName, _mosX, _mosY, _mouseClick))
-                _drawType = (DrawingMode)(((int)_drawType + 1) % 3);
+                _drawType = (DrawingMode)(((int)_drawType + 1) % 4);
+
+            if (_drawType == DrawingMode.Script)
+            {
+                _spriteBatch.Begin();
+                _spriteBatch.Draw(_nullTex, new Rectangle(400, 20, 400, 565), new Color(new Vector4(0f, 0f, 0f, .62f)));
+                _spriteBatch.End();
+
+                for (var i = _scriptScroll; i < _scriptScroll + 28; i++)
+                {
+                    if (_selScript == i)
+                    {
+                        _text.Color = Color.White;
+                        _text.DrawText(405, 25 + (i - _scriptScroll) * 20, i + ": " + _map.Scripts[i] + "*");
+                    }
+                    else
+                    {
+                        if (_text.DrawClickText(405, 25 + (i - _scriptScroll) * 20, i + ": " + _map.Scripts[i], _mosX,
+                            _mosY, _mouseClick))
+                        {
+                            _selScript = i;
+                            _editMode = EditingMode.Script;
+                        }
+                    }
+
+                    if (_map.Scripts[i].Length > 0)
+                    {
+                        var split = _map.Scripts[i].Split(' ');
+                        var c = GetCommandColor(split[0]);
+                        if (c > ColorNone)
+                        {
+                            switch (c)
+                            {
+                                case ColorGreen:
+                                    _text.Color = Color.Lime;
+                                    break;
+                                case ColorYellow:
+                                    _text.Color = Color.Yellow;
+                                    break;
+                            }
+                            _text.DrawText(405, 25 + (i - _scriptScroll) * 20, i + ": " + split[0]);
+                        }
+                    }
+
+                    _text.Color = Color.White;
+                    _text.DrawText(405, 25 + (i - _scriptScroll) * 20, i + ": ");
+                }
+
+                var mouseDown = (Mouse.GetState().LeftButton == ButtonState.Pressed);
+                if (DrawButton(770, 20, 1, _mosX, _mosY, mouseDown) && _scriptScroll > 0) _scriptScroll--;
+                if (DrawButton(770, 550, 2, _mosX, _mosY, mouseDown) && _scriptScroll < _map.Scripts.Length - 28)
+                    _scriptScroll++;
+            }
 
             _text.Color = Color.White;
+
             if (_editMode == EditingMode.Path)
                 _text.DrawText(5, 45, _map.Path + "*");
             else
@@ -519,7 +619,7 @@ namespace MapEditor
                     dRect,
                     sRect,
                     Color.White
-                );
+                    );
 
                 _spriteBatch.End();
 
@@ -533,12 +633,12 @@ namespace MapEditor
                     {
                         if (_mouseDragSeg == -1)
                         {
-                            int f = _map.AddSeg(_curLayer, i);
+                            var f = _map.AddSeg(_curLayer, i);
 
                             if (f <= -1)
                                 continue;
 
-                            float layerScalar = 0.5f;
+                            var layerScalar = 0.5f;
                             if (_curLayer == 0)
                                 layerScalar = 0.375f;
                             else if (_curLayer == 2)
@@ -552,6 +652,53 @@ namespace MapEditor
                     }
                 }
             }
+        }
+
+        private int GetCommandColor(string s)
+        {
+            switch (s)
+            {
+                case "fog":
+                case "monster":
+                case "makebucket":
+                case "addbucket":
+                case "ifnotbucketgoto":
+                case "wait":
+                case "setflag":
+                case "iftruegoto":
+                case "iffalsegoto":
+                case "setglobalflag":
+                case "ifglobaltruegoto":
+                case "ifglobalfalsegoto":
+                case "stop":
+                    return ColorGreen;
+                case "tag":
+                    return ColorYellow;
+            }
+            return ColorNone;
+        }
+
+        private bool ScriptEnter()
+        {
+            if (_selScript >= _map.Scripts.Length - 1)
+                return false;
+
+            for (var i = _map.Scripts.Length - 1; i > _selScript; i--)
+                _map.Scripts[i] = _map.Scripts[i - 1];
+
+            _selScript++;
+            return true;
+        }
+
+        private bool ScriptDelLine()
+        {
+            if (_selScript <= 0) 
+                return false;
+
+            for (var i = _selScript; i < _map.Scripts.Length - 1; i++)
+                _map.Scripts[i] = _map.Scripts[i + 1];
+
+            return true;
         }
     }
 }
