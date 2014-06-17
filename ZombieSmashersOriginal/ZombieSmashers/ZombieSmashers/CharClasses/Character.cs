@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using ZombieSmashers.Ais;
 using ZombieSmashers.Audio;
 using ZombieSmashers.Input;
 using ZombieSmashers.MapClasses;
@@ -44,6 +45,17 @@ namespace ZombieSmashers.CharClasses
         public const int TrigWrenchUppercut = 7;
         public const int TrigWrenchSmackdown = 8;
         public const int TrigKick = 9;
+        public const int TrigZombieHit = 10;
+        public const int TrigBloodSquirtUp = 11;
+        public const int TrigBloodSquirtUpForward = 12;
+        public const int TrigBloodSquirtForward = 13;
+        public const int TrigBloodSquirtDownForward = 14;
+        public const int TrigBloodSquirtDown = 15;
+        public const int TrigBloodSquirtDownBack = 16;
+        public const int TrigBloodSquirtBack = 17;
+        public const int TrigBloodSquirtUpBack = 18;
+        public const int TrigBloodCloud = 19;
+        public const int TrigBloodSplat = 20;
         public const int TeamGoodGuys = 0;
         public const int TeamBadGuys = 1;
 
@@ -74,10 +86,15 @@ namespace ZombieSmashers.CharClasses
         public PressedKeys PressedKey;
         private readonly Script _script;
         public float ColMove;
+        public Ai Ai;
+        public bool Ethereal;
+        public float DyingFrame = -1;
 
         public Map Map;
         public int Id;
         public int Team;
+        public int Hp;
+        public int Mhp;
 
         public Character(Vector2 newLoc, CharDef newCharDef, int newId, int newTeam)
         {
@@ -89,12 +106,14 @@ namespace ZombieSmashers.CharClasses
             _charDef = newCharDef;
             Id = newId;
             Team = newTeam;
-
-            SetAnim("fly");
-
-            State = CharState.Air;
-
             _script = new Script(this);
+
+            Ai = null;
+            InitScript();
+            Ethereal = false;
+            AnimName = "";
+            State = CharState.Air;
+            SetAnim("fly");
         }
 
         public CharDef Definition
@@ -111,10 +130,12 @@ namespace ZombieSmashers.CharClasses
             {
                 if (_charDef.Animations[i].Name == newAnim)
                 {
+                    Floating = false;
                     Anim = i;
                     AnimFrame = 0;
                     _frame = 0;
                     AnimName = newAnim;
+                    Ethereal = false;
 
                     break;
                 }
@@ -123,31 +144,48 @@ namespace ZombieSmashers.CharClasses
 
         public void Update(GameTime gameTime, ParticleManager pMan, Character[] c)
         {
+            #region Update AI
+
+            if (Ai != null)
+                Ai.Update(c, Id, Map);
+
+            #endregion
+
+            #region Update Dying
+
+            if (DyingFrame > -1)
+                DyingFrame += Game1.FrameTime;
+
+            #endregion
+
             #region Update animation
 
-            var animation = _charDef.Animations[Anim];
-            var keyFrame = animation.KeyFrames[AnimFrame];
-
-            _frame += Game1.FrameTime * 30;
-
-            if (_frame > keyFrame.Duration)
+            if (DyingFrame < 0)
             {
-                var pFrame = AnimFrame;
-                _script.DoScript(Anim, AnimFrame);
-                CheckTrig(pMan);
+                var animation = _charDef.Animations[Anim];
+                var keyFrame = animation.KeyFrames[AnimFrame];
 
-                _frame -= keyFrame.Duration;
+                _frame += Game1.FrameTime * 30;
 
-                if (AnimFrame == pFrame)
-                    AnimFrame++;
+                if (_frame > keyFrame.Duration)
+                {
+                    var pFrame = AnimFrame;
+                    _script.DoScript(Anim, AnimFrame);
+                    CheckTrig(pMan);
 
-                if (AnimFrame >= animation.KeyFrames.Length)
-                    AnimFrame = 0;
+                    _frame -= keyFrame.Duration;
 
-                keyFrame = animation.KeyFrames[AnimFrame];
+                    if (AnimFrame == pFrame)
+                        AnimFrame++;
 
-                if (keyFrame.FrameRef < 0)
-                    AnimFrame = 0;
+                    if (AnimFrame >= animation.KeyFrames.Length)
+                        AnimFrame = 0;
+
+                    keyFrame = animation.KeyFrames[AnimFrame];
+
+                    if (keyFrame.FrameRef < 0)
+                        AnimFrame = 0;
+                }
             }
 
             #endregion
@@ -160,23 +198,26 @@ namespace ZombieSmashers.CharClasses
                 {
                     if (c[i] != null)
                     {
-                        if (Location.X > c[i].Location.X - 90f * c[i].Scale &&
-                            Location.X < c[i].Location.X + 90f * c[i].Scale &&
-                            Location.Y > c[i].Location.Y - 120f * c[i].Scale &&
-                            Location.Y < c[i].Location.Y + 10f * c[i].Scale)
+                        if (!Ethereal && !c[i].Ethereal)
                         {
-                            var dif = Math.Abs(Location.X - c[i].Location.X);
-                            dif = 180f * c[i].Scale - dif;
-                            dif *= 2f;
-                            if (Location.X < c[i].Location.X)
+                            if (Location.X > c[i].Location.X - 90f * c[i].Scale &&
+                                Location.X < c[i].Location.X + 90f * c[i].Scale &&
+                                Location.Y > c[i].Location.Y - 120f * c[i].Scale &&
+                                Location.Y < c[i].Location.Y + 10f * c[i].Scale)
                             {
-                                ColMove = -dif;
-                                c[i].ColMove = dif;
-                            }
-                            else
-                            {
-                                ColMove = dif;
-                                c[i].ColMove = -dif;
+                                var dif = Math.Abs(Location.X - c[i].Location.X);
+                                dif = 180f * c[i].Scale - dif;
+                                dif *= 2f;
+                                if (Location.X < c[i].Location.X)
+                                {
+                                    ColMove = -dif;
+                                    c[i].ColMove = dif;
+                                }
+                                else
+                                {
+                                    ColMove = dif;
+                                    c[i].ColMove = -dif;
+                                }
                             }
                         }
                     }
@@ -444,6 +485,65 @@ namespace ZombieSmashers.CharClasses
                     pMan.MakeBullet(loc, new Vector2(1400, -1400), Face, Id);
                     Sound.PlayCue("revol");
                     break;
+                case TrigBloodSquirtBack:
+                case TrigBloodSquirtDown:
+                case TrigBloodSquirtDownBack:
+                case TrigBloodSquirtDownForward:
+                case TrigBloodSquirtForward:
+                case TrigBloodSquirtUp:
+                case TrigBloodSquirtUpBack:
+                case TrigBloodSquirtUpForward:
+                    var r = 0.0;
+                    switch (trig)
+                    {
+                        case TrigBloodSquirtForward:
+                            r = 0.0;
+                            break;
+                        case TrigBloodSquirtDownForward:
+                            r = Math.PI * .25;
+                            break;
+                        case TrigBloodSquirtDown:
+                            r = Math.PI * .5;
+                            break;
+                        case TrigBloodSquirtDownBack:
+                            r = Math.PI * .75;
+                            break;
+                        case TrigBloodSquirtBack:
+                            r = Math.PI;
+                            break;
+                        case TrigBloodSquirtUpBack:
+                            r = Math.PI * 1.25;
+                            break;
+                        case TrigBloodSquirtUp:
+                            r = Math.PI * 1.5;
+                            break;
+                        case TrigBloodSquirtUpForward:
+                            r = Math.PI * 1.75;
+                            break;
+                    }
+
+                    for (var i = 0; i < 7; i++)
+                    {
+                        pMan.AddParticle(new Blood(loc,
+                            new Vector2((float)Math.Cos(r) * (Face == CharDir.Right ? 1f : -1f), (float)Math.Sin(r)) *
+                            Rand.GetRandomFloat(10f, 500f) + Rand.GetRandomVector2(-90f, 90f, -90f, 90f), 1f, 0f, 0f, 1f,
+                            Rand.GetRandomFloat(0.1f, 0.5f), Rand.GetRandomInt(0, 4)));
+                    }
+                    pMan.AddParticle(new BloodDust(loc, Rand.GetRandomVector2(-30f, 30f, -30f, 30f), 1f, 0f, 0f, .2f,
+                        Rand.GetRandomFloat(.25f, .5f), Rand.GetRandomInt(0, 4)));
+                    break;
+                case TrigBloodCloud:
+                    pMan.AddParticle(new BloodDust(loc, Rand.GetRandomVector2(-30f, 30f, -30f, 30f), 1f, 0f, 0f, .4f,
+                        Rand.GetRandomFloat(.25f, .75f), Rand.GetRandomInt(0, 4)));
+                    break;
+                case TrigBloodSplat:
+                    for (var i = 0; i < 6; i++)
+                    {
+                        pMan.AddParticle(new BloodDust(loc, Rand.GetRandomVector2(-30f, 30f, -30f, 30f), 1f, 0f, 0f, .4f,
+                            Rand.GetRandomFloat(.025f, .125f), Rand.GetRandomInt(0, 4)));
+                    }
+                    break;
+
                 default:
                     pMan.AddParticle(new Hit(loc, new Vector2(200f * (float)Face - 100f, 0f), Id, trig));
                     break;
@@ -493,6 +593,8 @@ namespace ZombieSmashers.CharClasses
                 case "jmid":
                 case "jfall":
                     SetAnim("hitland");
+                    if (Hp < 0)
+                        SetAnim("dieland");
                     break;
                 default:
                     SetAnim("land");
@@ -529,6 +631,33 @@ namespace ZombieSmashers.CharClasses
             KeyAttack = ControlInput.KeyAttack;
             KeyJump = ControlInput.KeyJump;
             KeySecondary = ControlInput.KeySecondary;
+        }
+
+        private void InitScript()
+        {
+            SetAnim("init");
+            if (AnimName == "init")
+            {
+                for (var i = 0; i < _charDef.Animations[Anim].KeyFrames.Length; i++)
+                {
+                    if (_charDef.Animations[Anim].KeyFrames[i].FrameRef > -1)
+                        _script.DoScript(Anim, i);
+                }
+            }
+        }
+
+        public void KillMe()
+        {
+            if (DyingFrame < 0f)
+                DyingFrame = 0f;
+        }
+
+        public void SetFrame(int newFrame)
+        {
+            AnimFrame = newFrame;
+            _frame = 0f;
+            for (int i = 0; i < GotoGoal.Length; i++)
+                GotoGoal[i] = -1;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -588,7 +717,11 @@ namespace ZombieSmashers.CharClasses
                             break;
                     }
 
-                    var color = new Color(new Vector4(1f, 1f, 1f, 1f));
+                    var color = new Color(new Vector4(1));
+
+                    if (DyingFrame > 0f)
+                        color = new Color(new Vector4(1 - DyingFrame));
+
 
                     var flip = (Face == CharDir.Right && part.Flip == 0) || (Face == CharDir.Left && part.Flip == 1);
 

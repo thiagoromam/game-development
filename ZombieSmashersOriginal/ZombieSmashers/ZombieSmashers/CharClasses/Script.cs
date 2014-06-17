@@ -1,4 +1,5 @@
-﻿using ZombieSmashers.Audio;
+﻿using ZombieSmashers.Ais;
+using ZombieSmashers.Audio;
 
 namespace ZombieSmashers.CharClasses
 {
@@ -103,6 +104,43 @@ namespace ZombieSmashers.CharClasses
                         break;
                     case Commands.PlaySound:
                         Sound.PlayCue(line.SParam);
+                        break;
+                    case Commands.Ethereal:
+                        _character.Ethereal = true;
+                        break;
+                    case Commands.Solid:
+                        _character.Ethereal = false;
+                        break;
+                    case Commands.Speed:
+                        _character.Speed = line.IParam;
+                        break;
+                    case Commands.Hp:
+                        _character.Hp = _character.Mhp = line.IParam;
+                        break;
+                    case Commands.DeathCheck:
+                        if (_character.Hp < 0)
+                            _character.KillMe();
+                        break;
+                    case Commands.IfDyingGoto:
+                        if (_character.Hp < 0)
+                        {
+                            _character.AnimFrame = line.IParam;
+                            done = true;
+                        }
+                        break;
+                    case Commands.KillMe:
+                        _character.KillMe();
+                        break;
+                    case Commands.Ai:
+                        switch (line.SParam)
+                        {
+                            case "zombie":
+                                _character.Ai = new Zombie();
+                                break;
+                            default:
+                                _character.Ai = new Zombie();
+                                break;
+                        }
                         break;
                 }
             }

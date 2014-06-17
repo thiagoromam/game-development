@@ -69,6 +69,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ais\Ai.cs" />
+    <Compile Include="Ais\Zombie.cs" />
     <Compile Include="Audio\Music.cs" />
     <Compile Include="Audio\Sound.cs" />
     <Compile Include="CharClasses\Animation.cs" />
@@ -97,6 +99,7 @@
     <Compile Include="MapClasses\SegmentDefinition.cs" />
     <Compile Include="MapClasses\SegmentFlags.cs" />
     <Compile Include="Particles\Blood.cs" />
+    <Compile Include="Particles\BloodDust.cs" />
     <Compile Include="Particles\Bullet.cs" />
     <Compile Include="Particles\Fire.cs" />
     <Compile Include="Particles\Hit.cs" />

@@ -84,8 +84,36 @@ namespace ZombieSmashers.CharClasses
                         _command = Commands.SetSecDownGoto;
                         _iParam = Convert.ToInt32(split[1]);
                         break;
-                    case "play": 
-                        _command = Commands.PlaySound; 
+                    case "play":
+                        _command = Commands.PlaySound;
+                        _sParam = split[1];
+                        break;
+                    case "ethereal":
+                        _command = Commands.Ethereal;
+                        break;
+                    case "solid":
+                        _command = Commands.Solid;
+                        break;
+                    case "speed":
+                        _command = Commands.Speed;
+                        _iParam = Convert.ToInt32(split[1]);
+                        break;
+                    case "hp":
+                        _command = Commands.Hp;
+                        _iParam = Convert.ToInt32(split[1]);
+                        break;
+                    case "deathcheck":
+                        _command = Commands.DeathCheck;
+                        break;
+                    case "ifdyinggoto":
+                        _command = Commands.IfDyingGoto;
+                        _iParam = Convert.ToInt32(split[1]);
+                        break;
+                    case "killme":
+                        _command = Commands.KillMe;
+                        break;
+                    case "ai":
+                        _command = Commands.Ai;
                         _sParam = split[1];
                         break;
                 }
@@ -100,11 +128,13 @@ namespace ZombieSmashers.CharClasses
         {
             get { return _command; }
         }
+
         // ReSharper disable once InconsistentNaming
         public int IParam
         {
             get { return _iParam; }
         }
+
         public String SParam
         {
             get { return _sParam; }

@@ -26,21 +26,32 @@ namespace CharacterEditor
         private readonly Texture2D[] _headTex = new Texture2D[2];
         private readonly Texture2D[] _weaponTex = new Texture2D[1];
 
-        private const int FaceLeft = 0;
-        private const int FaceRight = 1;
-        private const int AuxScript = 0;
-        private const int AuxTrigs = 1;
-        private const int AuxTextures = 2;
-        private const int TrigPistolAcross = 0;
-        private const int TrigPistolUp = 1;
-        private const int TrigPistolDown = 2;
-        private const int TrigWrenchUp = 3;
-        private const int TrigWrenchDown = 4;
-        private const int TrigWrenchDiagUp = 5;
-        private const int TrigWrenchDiagDown = 6;
-        private const int TrigWrenchUppercut = 7;
-        private const int TrigWrenchSmackdown = 8;
-        private const int TrigKick = 9;
+        public const int FaceLeft = 0;
+        public const int FaceRight = 1;
+        public const int AuxScript = 0;
+        public const int AuxTrigs = 1;
+        public const int AuxTextures = 2;
+        public const int TrigPistolAcross = 0;
+        public const int TrigPistolUp = 1;
+        public const int TrigPistolDown = 2;
+        public const int TrigWrenchUp = 3;
+        public const int TrigWrenchDown = 4;
+        public const int TrigWrenchDiagUp = 5;
+        public const int TrigWrenchDiagDown = 6;
+        public const int TrigWrenchUppercut = 7;
+        public const int TrigWrenchSmackdown = 8;
+        public const int TrigKick = 9;
+        public const int TrigZombieHit = 10;
+        public const int TrigBloodSquirtUp = 11;
+        public const int TrigBloodSquirtUpForward = 12;
+        public const int TrigBloodSquirtForward = 13;
+        public const int TrigBloodSquirtDownForward = 14;
+        public const int TrigBloodSquirtDown = 15;
+        public const int TrigBloodSquirtDownBack = 16;
+        public const int TrigBloodSquirtBack = 17;
+        public const int TrigBloodSquirtUpBack = 18;
+        public const int TrigBloodCloud = 19;
+        public const int TrigBloodSplat = 20;
 
         private int _selPart;
         private int _selFrame;
@@ -953,6 +964,28 @@ namespace CharacterEditor
                     return "wrench uppercut";
                 case TrigKick:
                     return "kick";
+                case TrigZombieHit:
+                    return "zombie hit";
+                case TrigBloodSquirtUp:
+                    return "blood squirt up";
+                case TrigBloodSquirtUpForward:
+                    return "blood squirt up forward";
+                case TrigBloodSquirtForward:
+                    return "blood squirt forward";
+                case TrigBloodSquirtDownForward:
+                    return "blood squirt down forward";
+                case TrigBloodSquirtDown:
+                    return "blood squirt down";
+                case TrigBloodSquirtDownBack:
+                    return "blood squirt down back";
+                case TrigBloodSquirtBack:
+                    return "blood squirt back";
+                case TrigBloodSquirtUpBack:
+                    return "blood squirt up back";
+                case TrigBloodCloud:
+                    return "blood cloud";
+                case TrigBloodSplat:
+                    return "blood splat";
             }
             return "";
         }

@@ -66,7 +66,7 @@ namespace ZombieSmashers
             _characters[0] = new Character(new Vector2(100, 100), _charDefs[(int)CharacterType.Guy], 0,
                 Character.TeamGoodGuys) { Map = _map };
 
-            for (var i = 1; i < 9; i++)
+            for (var i = 1; i < 3; i++)
             {
                 _characters[i] = new Character(new Vector2(i * 100, 100), _charDefs[(int)CharacterType.Zombie], i,
                     Character.TeamBadGuys) { Map = _map };
@@ -141,7 +141,11 @@ namespace ZombieSmashers
             {
                 var character = _characters[i];
                 if (character != null)
+                {
                     character.Update(gameTime, _particleManager, _characters);
+                    if (character.DyingFrame > 1f)
+                        _characters[i] = null;
+                }
             }
 
             _map.Update(_particleManager);

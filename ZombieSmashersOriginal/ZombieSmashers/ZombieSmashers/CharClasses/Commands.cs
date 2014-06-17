@@ -20,6 +20,14 @@
         SetSecondaryGoto,
         SetSecUpGoto,
         SetSecDownGoto,
-        PlaySound
+        PlaySound,
+        Ethereal,
+        Solid,
+        Speed,
+        Hp,
+        DeathCheck,
+        IfDyingGoto,
+        KillMe,
+        Ai
     }
 }

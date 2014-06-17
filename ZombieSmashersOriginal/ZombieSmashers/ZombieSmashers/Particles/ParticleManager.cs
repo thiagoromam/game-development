@@ -132,8 +132,8 @@ namespace ZombieSmashers.Particles
                     traj * Rand.GetRandomFloat(-0.2f, 0f) + Rand.GetRandomVector2(-120f, 120f, -120f, 120f), 1f, 0f, 0f,
                     1f, Rand.GetRandomFloat(0.01f, 0.25f), Rand.GetRandomInt(0, 4)));
             }
-            MakeBulletDust(loc, traj * -20f);
-            MakeBulletDust(loc, traj * 10f);
+            //MakeBulletDust(loc, traj * -20f);
+            //MakeBulletDust(loc, traj * 10f);
         }
     }
 }
