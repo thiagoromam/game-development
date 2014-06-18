@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ZombieSmashers.CharClasses;
 using ZombieSmashers.Particles;
 
 // ReSharper disable ForCanBeConvertedToForeach
@@ -13,8 +14,16 @@ namespace ZombieSmashers.MapClasses
         private const int LayerBack = 0;
         private const int LayerMap = 1;
 
+        public MapScript MapScript;
+        public MapFlags GlobalFlags;
+        public bool Fog;
+        public Bucket Bucket;
+        protected float PFrame;
+        protected float Frame;
+
         public Map(string path)
         {
+            GlobalFlags = new MapFlags(64);
             SegmentDefinitions = new SegmentDefinition[512];
             Segments = new MapSegment[3, 64];
             Grid = new int[20, 20];
@@ -128,7 +137,22 @@ namespace ZombieSmashers.MapClasses
                 }
             }
 
+            MapScript = new MapScript(this);
+
+            for (var i = 0; i < MapScript.Lines.Length; i++)
+            {
+                var s = file.ReadString();
+                if (s.Length > 0)
+                    MapScript.Lines[i] = new MapScriptLine(s);
+                else
+                    MapScript.Lines[i] = null;
+            }
+
             file.Close();
+
+            Fog = false;
+            if (MapScript.GotoTag("init"))
+                MapScript.IsReading = true;
         }
 
         private void ReadSegmentDefinitions()
@@ -286,16 +310,33 @@ namespace ZombieSmashers.MapClasses
                     {
                         int s = GetLedgeSec(i, loc.X);
                         if (s > -1) if (GetLedgeYLoc(i, s, loc.X) < loc.Y)
-                            return true;
+                                return true;
                     }
                 }
             }
-            
-            return false; 
+
+            return false;
         }
 
-        public void Update(ParticleManager pMan)
+        public void Update(ParticleManager pMan, Character[] c)
         {
+            if (MapScript.IsReading)
+                MapScript.DoScript(c);
+
+            if (Bucket != null)
+            {
+                if (!Bucket.IsEmpty)
+                    Bucket.Update(c);
+            }
+
+            Frame += Game1.FrameTime;
+
+            if (Fog)
+            {
+                if ((int)(PFrame * 10f) != (int)(Frame * 10f))
+                    pMan.AddParticle(new Fog(Rand.GetRandomVector2(0f, 1280f, 600f, 1000f)));
+            }
+
             for (var i = 0; i < 64; i++)
             {
                 if (Segments[LayerMap, i] != null)

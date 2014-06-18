@@ -25,7 +25,7 @@ namespace ZombieSmashers
         private readonly Texture2D[] _mapsTex = new Texture2D[1];
         private readonly Texture2D[] _mapBackTex = new Texture2D[1];
         private readonly Character[] _characters = new Character[16];
-        private readonly CharDef[] _charDefs = new CharDef[16];
+        public static readonly CharDef[] CharDefs = new CharDef[16];
         private Map _map;
         private static Vector2 _scroll;
         private static Vector2 _screenSize;
@@ -46,9 +46,7 @@ namespace ZombieSmashers
         {
             get { return _scroll; }
         }
-
         public static float SlowTime { get; set; }
-
         public static float FrameTime { get; private set; }
 
         public static Vector2 ScreenSize
@@ -60,18 +58,12 @@ namespace ZombieSmashers
         {
             _map = new Map("maps/map");
 
-            _charDefs[(int)CharacterType.Guy] = new CharDef("chars/guy");
-            _charDefs[(int)CharacterType.Zombie] = new CharDef("chars/zombie");
+            CharDefs[(int)CharacterType.Guy] = new CharDef("chars/guy");
+            CharDefs[(int)CharacterType.Zombie] = new CharDef("chars/zombie");
 
-            _characters[0] = new Character(new Vector2(100, 100), _charDefs[(int)CharacterType.Guy], 0,
+            _characters[0] = new Character(new Vector2(100, 100), CharDefs[(int)CharacterType.Guy], 0,
                 Character.TeamGoodGuys) { Map = _map };
-
-            for (var i = 1; i < 3; i++)
-            {
-                _characters[i] = new Character(new Vector2(i * 100, 100), _charDefs[(int)CharacterType.Zombie], i,
-                    Character.TeamBadGuys) { Map = _map };
-            }
-
+            
             _screenSize.X = GraphicsDevice.Viewport.Width;
             _screenSize.Y = GraphicsDevice.Viewport.Height;
 
@@ -148,7 +140,7 @@ namespace ZombieSmashers
                 }
             }
 
-            _map.Update(_particleManager);
+            _map.Update(_particleManager, _characters);
 
             Sound.Update();
             Music.Play("music1");

@@ -95,6 +95,7 @@ namespace ZombieSmashers.CharClasses
         public int Team;
         public int Hp;
         public int Mhp;
+        public string Name = "";
 
         public Character(Vector2 newLoc, CharDef newCharDef, int newId, int newTeam)
         {
