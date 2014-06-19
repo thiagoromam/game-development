@@ -1,8 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using ZombieSmashers.Audio;
 using ZombieSmashers.CharClasses;
+using ZombieSmashers.Gui;
 using ZombieSmashers.Input;
 using ZombieSmashers.MapClasses;
 using ZombieSmashers.Particles;
@@ -31,6 +31,13 @@ namespace ZombieSmashers
         private static Vector2 _screenSize;
         private ParticleManager _particleManager;
         private Texture2D _spritesTex;
+        private Texture2D _nullTex;
+
+        private Hud _hud;
+        public static Menu Menu;
+        public static long Score;
+        public static GameModes GameMode;
+        public static float SlowTime;
 
         public Game1()
         {
@@ -46,9 +53,7 @@ namespace ZombieSmashers
         {
             get { return _scroll; }
         }
-        public static float SlowTime { get; set; }
         public static float FrameTime { get; private set; }
-
         public static Vector2 ScreenSize
         {
             get { return _screenSize; }
@@ -56,14 +61,14 @@ namespace ZombieSmashers
 
         protected override void Initialize()
         {
-            _map = new Map("maps/map");
+            _map = new Map("start");
 
             CharDefs[(int)CharacterType.Guy] = new CharDef("chars/guy");
             CharDefs[(int)CharacterType.Zombie] = new CharDef("chars/zombie");
 
             _characters[0] = new Character(new Vector2(100, 100), CharDefs[(int)CharacterType.Guy], 0,
                 Character.TeamGoodGuys) { Map = _map };
-            
+
             _screenSize.X = GraphicsDevice.Viewport.Width;
             _screenSize.Y = GraphicsDevice.Viewport.Height;
 
@@ -94,14 +99,21 @@ namespace ZombieSmashers
                 SurfaceFormat.Color,
                 DepthFormat.Depth24
             );
+
+            _nullTex = Content.Load<Texture2D>(@"gfx/1x1");
+
+            Menu = new Menu(Content.Load<Texture2D>(@"gfx/pose"), Content.Load<Texture2D>(@"gfx/posefore"),
+                Content.Load<Texture2D>(@"gfx/options"), _mapBackTex[0], _spritesTex, _spriteBatch);
+
+            _hud = new Hud(_spriteBatch, _spritesTex, _nullTex, _characters, _map);
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                Exit();
-
+            Sound.Update();
+            Music.Play("music1");
             QuakeManager.Update();
+            ControlInput.Update();
 
             FrameTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (SlowTime > 0f)
@@ -110,48 +122,87 @@ namespace ZombieSmashers
                 FrameTime /= 10f;
             }
 
-            _particleManager.UpdateParticles(FrameTime, _map, _characters);
-
-            if (_characters[0] != null)
+            switch (GameMode)
             {
-                _scroll += (_characters[0].Location - _scrollOffset - _scroll) * FrameTime * 20;
-                _scroll += QuakeManager.Quake.Vector;
-
-                var xLim = _map.GetXLim();
-                var yLim = _map.GetYLim();
-
-                if (_scroll.X < 0) _scroll.X = 0;
-                if (_scroll.X > xLim) _scroll.X = xLim;
-                if (_scroll.Y < 0) _scroll.Y = 0;
-                if (_scroll.Y > yLim) _scroll.Y = yLim;
-
-                ControlInput.Update();
-                _characters[0].DoInput();
+                case GameModes.Playing:
+                    UpdateGame();
+                    break;
+                case GameModes.Menu:
+                    if (Menu.MenuMode == MenuMode.Dead)
+                    {
+                        var pTime = FrameTime;
+                        FrameTime /= 3f;
+                        UpdateGame();
+                        FrameTime = pTime;
+                    }
+                    Menu.Update(this);
+                    break;
             }
 
-            for (var i = 0; i < _characters.Length; i++)
+            base.Update(gameTime);
+        }
+
+        private void UpdateGame()
+        {
+            if (_map.TransOutFrame <= 0f)
             {
-                var character = _characters[i];
-                if (character != null)
+                _particleManager.UpdateParticles(FrameTime, _map, _characters);
+
+                if (_characters[0] != null)
                 {
-                    character.Update(gameTime, _particleManager, _characters);
-                    if (character.DyingFrame > 1f)
-                        _characters[i] = null;
+                    _scroll += (_characters[0].Location - _scrollOffset - _scroll) * FrameTime * 20;
+                    _scroll += QuakeManager.Quake.Vector;
+
+                    var xLim = _map.GetXLim();
+                    var yLim = _map.GetYLim();
+
+                    if (_scroll.X < 0) _scroll.X = 0;
+                    if (_scroll.X > xLim) _scroll.X = xLim;
+                    if (_scroll.Y < 0) _scroll.Y = 0;
+                    if (_scroll.Y > yLim) _scroll.Y = yLim;
+
+                    _characters[0].DoInput();
+                }
+
+                for (var i = 0; i < _characters.Length; i++)
+                {
+                    var character = _characters[i];
+                    if (character != null)
+                    {
+                        character.Update(_particleManager, _characters);
+                        if (character.DyingFrame > 1f)
+                            _characters[i] = null;
+                    }
                 }
             }
 
             _map.Update(_particleManager, _characters);
-
-            Sound.Update();
-            Music.Play("music1");
-
-            base.Update(gameTime);
+            _hud.Update();
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
 
+            switch (GameMode)
+            {
+                case GameModes.Playing:
+                    DrawGame();
+                    _hud.Draw();
+                    break;
+                case GameModes.Menu:
+                    if (Menu.MenuMode == MenuMode.Pause || Menu.MenuMode == MenuMode.Dead)
+                        DrawGame();
+                    
+                    Menu.Draw();
+                    break;
+            }
+
+            base.Draw(gameTime);
+        }
+
+        private void DrawGame()
+        {
             GraphicsDevice.SetRenderTarget(_mainTarget);
             GraphicsDevice.Clear(Color.Black);
 
@@ -195,8 +246,28 @@ namespace ZombieSmashers
 
                 _spriteBatch.End();
             }
+        }
 
-            base.Draw(gameTime);
+        public void NewGame()
+        {
+            GameMode = GameModes.Playing;
+
+            _characters[0] = new Character(new Vector2(100f, 100f), CharDefs[(int)CharacterType.Guy], 0,
+                Character.TeamGoodGuys) { Map = _map };
+            _characters[0].Hp = _characters[0].Mhp = 100;
+            for (var i = 1; i < _characters.Length; i++) _characters[i] = null;
+
+            _particleManager.Reset();
+            _map.Path = "start";
+            _map.GlobalFlags = new MapFlags(64);
+            _map.Read();
+            _map.TransDir = TransitionDirection.Intro;
+            _map.TransInFrame = 1f;
+        }
+
+        public void Quit()
+        {
+            Exit();
         }
     }
 }

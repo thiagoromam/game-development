@@ -15,6 +15,11 @@
         IfGlobalTrueGoto,
         IfGlobalFalseGoto,
         Stop,
-        Tag
+        Tag,
+        SetLeftExit,
+        SetLeftEntrance,
+        SetRightExit,
+        SetRightEntrance,
+        SetIntroEntrance
     }
 }

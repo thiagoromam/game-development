@@ -96,6 +96,7 @@ namespace ZombieSmashers.CharClasses
         public int Hp;
         public int Mhp;
         public string Name = "";
+        public int LastHitBy = -1;
 
         public Character(Vector2 newLoc, CharDef newCharDef, int newId, int newTeam)
         {
@@ -143,7 +144,7 @@ namespace ZombieSmashers.CharClasses
             }
         }
 
-        public void Update(GameTime gameTime, ParticleManager pMan, Character[] c)
+        public void Update(ParticleManager pMan, Character[] c)
         {
             #region Update AI
 
@@ -625,13 +626,13 @@ namespace ZombieSmashers.CharClasses
 
         public void DoInput()
         {
-            KeyLeft = ControlInput.KeyLeft;
-            KeyRight = ControlInput.KeyRight;
-            KeyUp = ControlInput.KeyUp;
-            KeyDown = ControlInput.KeyDown;
-            KeyAttack = ControlInput.KeyAttack;
-            KeyJump = ControlInput.KeyJump;
-            KeySecondary = ControlInput.KeySecondary;
+            KeyLeft = ControlInput.KeyLeftPressing;
+            KeyRight = ControlInput.KeyRightPressing;
+            KeyUp = ControlInput.KeyUpPressing;
+            KeyDown = ControlInput.KeyDownPressing;
+            KeyAttack = ControlInput.KeyAttackPressed;
+            KeyJump = ControlInput.KeyJumpPressed;
+            KeySecondary = ControlInput.KeySecondaryPressed;
         }
 
         private void InitScript()
@@ -649,8 +650,12 @@ namespace ZombieSmashers.CharClasses
 
         public void KillMe()
         {
-            if (DyingFrame < 0f)
-                DyingFrame = 0f;
+            if (DyingFrame >= 0f)
+                return;
+
+            DyingFrame = 0f;
+            if (LastHitBy == 0)
+                Game1.Score += Mhp * 50;
         }
 
         public void SetFrame(int newFrame)

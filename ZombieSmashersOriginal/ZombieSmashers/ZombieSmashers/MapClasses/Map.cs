@@ -21,12 +21,19 @@ namespace ZombieSmashers.MapClasses
         protected float PFrame;
         protected float Frame;
 
+        public float TransInFrame = 0f;
+        public float TransOutFrame = 0f;
+        public string[] TransitionDestination = { "", "", "" };
+        public TransitionDirection TransDir;
+        private const int XSize = 20;
+        private const int YSize = 20;
+
         public Map(string path)
         {
             GlobalFlags = new MapFlags(64);
             SegmentDefinitions = new SegmentDefinition[512];
             Segments = new MapSegment[3, 64];
-            Grid = new int[20, 20];
+            Grid = new int[XSize, YSize];
             Path = path;
 
             Ledges = new Ledge[16];
@@ -98,7 +105,7 @@ namespace ZombieSmashers.MapClasses
 
         public void Read()
         {
-            var file = new BinaryReader(File.Open(@"data/" + Path + ".zmx", FileMode.Open));
+            var file = new BinaryReader(File.Open(@"data/maps/" + Path + ".zmx", FileMode.Open));
 
             for (var i = 0; i < Ledges.Length; i++)
             {
@@ -129,9 +136,9 @@ namespace ZombieSmashers.MapClasses
                 }
             }
 
-            for (var x = 0; x < 20; x++)
+            for (var x = 0; x < XSize; x++)
             {
-                for (var y = 0; y < 20; y++)
+                for (var y = 0; y < YSize; y++)
                 {
                     Grid[x, y] = file.ReadInt32();
                 }
@@ -289,7 +296,7 @@ namespace ZombieSmashers.MapClasses
             var x = (int)loc.X / 64;
             var y = (int)loc.Y / 64;
 
-            if (x >= 0 && y >= 0 && x < 20 && y < 20)
+            if (x >= 0 && y >= 0 && x < XSize && y < YSize)
             {
                 if (Grid[x, y] == 0)
                     return false;
@@ -320,6 +327,27 @@ namespace ZombieSmashers.MapClasses
 
         public void Update(ParticleManager pMan, Character[] c)
         {
+            CheckTransitions(c);
+            if (TransOutFrame > 0f)
+            {
+                TransOutFrame -= Game1.FrameTime * 3f;
+                if (TransOutFrame <= 0f)
+                {
+                    Path = TransitionDestination[(int) TransDir];
+                    Read();
+                    TransInFrame = 1.1f;
+                    
+                    for (var i = 1; i < c.Length; i++)
+                        c[i] = null;
+                    
+                    pMan.Reset();
+                }
+            }
+            if (TransInFrame > 0f)
+            {
+                TransInFrame -= Game1.FrameTime * 3f;
+            }
+
             if (MapScript.IsReading)
                 MapScript.DoScript(c);
 
@@ -375,5 +403,43 @@ namespace ZombieSmashers.MapClasses
         {
             return 1280 - Game1.ScreenSize.Y;
         }
+
+        public float GetTransVal()
+        {
+            if (TransInFrame > 0f)
+                return TransInFrame;
+
+            if (TransOutFrame > 0f)
+                return 1 - TransOutFrame;
+
+            return 0f;
+        }
+
+        public void CheckTransitions(Character[] c)
+        {
+            if (TransOutFrame <= 0f && TransInFrame <= 0f)
+            {
+                if (c[0].DyingFrame > 0f)
+                    return;
+
+                if (c[0].Location.X > XSize * 64f - 32f && c[0].Trajectory.X > 0f)
+                {
+                    if (TransitionDestination[(int)TransitionDirection.Right] != "")
+                    {
+                        TransOutFrame = 1f;
+                        TransDir = TransitionDirection.Right;
+                    }
+                }
+                if (c[0].Location.X < 64f + 16f && c[0].Trajectory.X < 0f)
+                {
+                    if (TransitionDestination[(int)TransitionDirection.Left] != "")
+                    {
+                        TransOutFrame = 1f;
+                        TransDir = TransitionDirection.Left;
+                    }
+                }
+            }
+        }
+
     }
 }

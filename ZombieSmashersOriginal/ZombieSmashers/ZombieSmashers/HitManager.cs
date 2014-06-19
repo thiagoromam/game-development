@@ -24,6 +24,8 @@ namespace ZombieSmashers
                             {
                                 float hVal = 1;
 
+                                c[i].LastHitBy = p.Owner;
+
                                 if (p is Bullet)
                                 {
                                     #region Bullet
@@ -117,6 +119,9 @@ namespace ZombieSmashers
                                     #endregion
                                 }
 
+                                if (c[i].LastHitBy == 0)
+                                    Game1.Score += (int)hVal * 50;
+
                                 if (c[i].State == CharState.Air)
                                 {
                                     if (c[i].AnimName == "hit")
@@ -138,7 +143,6 @@ namespace ZombieSmashers
                                     if (c[i].AnimName == "hit")
                                         c[i].SetAnim("diehit");
                                 }
-
                             }
                         }
                     }

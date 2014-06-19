@@ -2,12 +2,15 @@
 {
     public interface IControlInput
     {
-        bool KeyLeft { get; }
-        bool KeyRight { get; }
-        bool KeyUp { get; }
-        bool KeyDown { get; }
-        bool KeyJump { get; }
-        bool KeyAttack { get; }
-        bool KeySecondary { get; }
+        bool KeyLeftPressing { get; }
+        bool KeyRightPressing { get; }
+        bool KeyUpPressing { get; }
+        bool KeyUpPressed { get; }
+        bool KeyDownPressing { get; }
+        bool KeyDownPressed { get; }
+        bool KeyJumpPressed { get; }
+        bool KeyAttackPressed { get; }
+        bool KeySecondaryPressed { get; }
+        bool KeyStartPressed { get; }
     }
 }

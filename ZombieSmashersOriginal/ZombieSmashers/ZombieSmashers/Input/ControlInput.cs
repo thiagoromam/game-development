@@ -13,33 +13,45 @@
             KeyboardControl = new KeyboardControlInput();
         }
 
-        public static bool KeyLeft
+        public static bool KeyLeftPressing
         {
-            get { return _currentControl.KeyLeft; }
+            get { return _currentControl.KeyLeftPressing; }
         }
-        public static bool KeyRight
+        public static bool KeyRightPressing
         {
-            get { return _currentControl.KeyRight; }
+            get { return _currentControl.KeyRightPressing; }
         }
-        public static bool KeyUp
+        public static bool KeyUpPressing
         {
-            get { return _currentControl.KeyUp; }
+            get { return _currentControl.KeyUpPressing; }
         }
-        public static bool KeyDown
+        public static bool KeyUpPressed
         {
-            get { return _currentControl.KeyDown; }
+            get { return _currentControl.KeyUpPressed; }
         }
-        public static bool KeyJump
+        public static bool KeyDownPressing
         {
-            get { return _currentControl.KeyJump; }
+            get { return _currentControl.KeyDownPressing; }
         }
-        public static bool KeyAttack
+        public static bool KeyDownPressed
         {
-            get { return _currentControl.KeyAttack; }
+            get { return _currentControl.KeyDownPressed; }
         }
-        public static bool KeySecondary
+        public static bool KeyJumpPressed
         {
-            get { return _currentControl.KeySecondary; }
+            get { return _currentControl.KeyJumpPressed; }
+        }
+        public static bool KeyAttackPressed
+        {
+            get { return _currentControl.KeyAttackPressed; }
+        }
+        public static bool KeySecondaryPressed
+        {
+            get { return _currentControl.KeySecondaryPressed; }
+        }
+        public static bool KeyStartPressed
+        {
+            get { return _currentControl.KeyStartPressed; }
         }
 
         public static void Update()
@@ -55,13 +67,14 @@
 
         private static bool HasInput(IControlInput control)
         {
-            return control.KeyLeft ||
-                   control.KeyRight ||
-                   control.KeyUp ||
-                   control.KeyDown ||
-                   control.KeyJump ||
-                   control.KeyAttack ||
-                   control.KeySecondary;
+            return control.KeyLeftPressing ||
+                   control.KeyRightPressing ||
+                   control.KeyUpPressing ||
+                   control.KeyDownPressing ||
+                   control.KeyJumpPressed ||
+                   control.KeyAttackPressed ||
+                   control.KeySecondaryPressed ||
+                   control.KeyStartPressed;
         }
     }
 }

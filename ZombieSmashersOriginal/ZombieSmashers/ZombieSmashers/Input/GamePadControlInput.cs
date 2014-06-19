@@ -8,37 +8,47 @@ namespace ZombieSmashers.Input
         private GamePadState _curState;
         private GamePadState _prevState;
 
-        public bool KeyLeft { get; private set; }
-        public bool KeyRight { get; private set; }
-        public bool KeyUp { get; private set; }
-        public bool KeyDown { get; private set; }
-        public bool KeyJump { get; private set; }
-        public bool KeyAttack { get; private set; }
-        public bool KeySecondary { get; private set; }
+        public bool KeyLeftPressing { get; private set; }
+        public bool KeyRightPressing { get; private set; }
+        public bool KeyUpPressing { get; private set; }
+        public bool KeyUpPressed { get; private set; }
+        public bool KeyDownPressing { get; private set; }
+        public bool KeyDownPressed { get; private set; }
+        public bool KeyJumpPressed { get; private set; }
+        public bool KeyAttackPressed { get; private set; }
+        public bool KeySecondaryPressed { get; private set; }
+        public bool KeyStartPressed { get; private set; }
         
         public void Update()
         {
             _curState = GamePad.GetState(PlayerIndex.One);
 
-            KeyLeft = false;
-            KeyRight = false;
-            KeyUp = false;
-            KeyDown = false;
+            KeyLeftPressing = false;
+            KeyRightPressing = false;
+            KeyUpPressing = false;
+            KeyDownPressing = false;
 
             if (_curState.ThumbSticks.Left.X < -0.1f)
-                KeyLeft = true;
+                KeyLeftPressing = true;
             else if (_curState.ThumbSticks.Left.X > 0.1f)
-                KeyRight = true;
+                KeyRightPressing = true;
 
             if (_curState.ThumbSticks.Left.Y < -0.1f)
-                KeyDown = true;
+            {
+                KeyDownPressing = true;
+                KeyDownPressed = _prevState.ThumbSticks.Left.Y >= 0;
+            }
             else if (_curState.ThumbSticks.Left.Y > 0.1f)
-                KeyUp = true;
+            {
+                KeyUpPressing = true;
+                KeyUpPressed = _prevState.ThumbSticks.Left.Y <= 0;
+            }
 
-            KeyJump = _curState.Buttons.A == ButtonState.Pressed && _prevState.Buttons.A == ButtonState.Released;
-            KeyAttack = _curState.Buttons.Y == ButtonState.Pressed && _prevState.Buttons.Y == ButtonState.Released;
-            KeySecondary = _curState.Buttons.X == ButtonState.Pressed && _prevState.Buttons.X == ButtonState.Released;
-            
+            KeyJumpPressed = _curState.Buttons.A == ButtonState.Pressed && _prevState.Buttons.A == ButtonState.Released;
+            KeyAttackPressed = _curState.Buttons.Y == ButtonState.Pressed && _prevState.Buttons.Y == ButtonState.Released;
+            KeySecondaryPressed = _curState.Buttons.X == ButtonState.Pressed && _prevState.Buttons.X == ButtonState.Released;
+            KeyStartPressed = _curState.Buttons.Start == ButtonState.Pressed && _prevState.Buttons.Start == ButtonState.Released;
+
             _prevState = _curState;
         }
     }

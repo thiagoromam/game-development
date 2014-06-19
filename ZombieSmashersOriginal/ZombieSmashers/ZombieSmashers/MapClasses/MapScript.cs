@@ -1,4 +1,5 @@
-﻿using ZombieSmashers.CharClasses;
+﻿using Microsoft.Xna.Framework;
+using ZombieSmashers.CharClasses;
 
 namespace ZombieSmashers.MapClasses
 {
@@ -13,7 +14,7 @@ namespace ZombieSmashers.MapClasses
 
         public MapScript(Map map)
         {
-            this._map = map;
+            _map = map;
             Flags = new MapFlags(32);
             Lines = new MapScriptLine[128];
         }
@@ -87,6 +88,45 @@ namespace ZombieSmashers.MapClasses
                                 done = true;
                                 break;
                             case MapCommands.Tag:
+                                break;
+                            case MapCommands.SetLeftExit:
+                                _map.TransitionDestination[(int)TransitionDirection.Left] = Lines[_curLine].SParam[1];
+                                break;
+                            case MapCommands.SetRightExit:
+                                _map.TransitionDestination[(int)TransitionDirection.Right] = Lines[_curLine].SParam[1];
+                                break;
+                            case MapCommands.SetLeftEntrance:
+                                if (_map.TransDir == TransitionDirection.Right)
+                                {
+                                    c[0].Location = Lines[_curLine].VParam;
+                                    c[0].Face = CharDir.Right;
+                                    c[0].SetAnim("fly");
+                                    c[0].State = CharState.Air;
+                                    c[0].Trajectory = new Vector2(200f, 0f);
+                                    _map.TransDir = TransitionDirection.None;
+                                }
+                                break;
+                            case MapCommands.SetRightEntrance:
+                                if (_map.TransDir == TransitionDirection.Left)
+                                {
+                                    c[0].Location = Lines[_curLine].VParam;
+                                    c[0].Face = CharDir.Left;
+                                    c[0].SetAnim("fly");
+                                    c[0].State = CharState.Air;
+                                    c[0].Trajectory = new Vector2(-200f, 0f);
+                                    _map.TransDir = TransitionDirection.None;
+                                }
+                                break;
+                            case MapCommands.SetIntroEntrance:
+                                if (_map.TransDir == TransitionDirection.Intro)
+                                {
+                                    c[0].Location = Lines[_curLine].VParam;
+                                    c[0].Face = CharDir.Right;
+                                    c[0].SetAnim("fly");
+                                    c[0].State = CharState.Air;
+                                    c[0].Trajectory = new Vector2(0f, 0f);
+                                    _map.TransDir = TransitionDirection.None;
+                                }
                                 break;
                         }
                     }

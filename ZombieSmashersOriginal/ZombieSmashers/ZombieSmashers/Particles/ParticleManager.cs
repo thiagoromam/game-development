@@ -135,5 +135,11 @@ namespace ZombieSmashers.Particles
             //MakeBulletDust(loc, traj * -20f);
             //MakeBulletDust(loc, traj * 10f);
         }
+
+        public void Reset()
+        {
+            for (var i = 0; i < _particles.Length; i++)
+                _particles[i] = null;
+        }
     }
 }

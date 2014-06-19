@@ -63,6 +63,24 @@ namespace ZombieSmashers.MapClasses
                 case "tag":
                     Command = MapCommands.Tag;
                     break;
+                case "setleftexit":
+                    Command = MapCommands.SetLeftExit;
+                    break;
+                case "setleftentrance":
+                    Command = MapCommands.SetLeftEntrance;
+                    VParam = new Vector2(Convert.ToSingle(SParam[1]), Convert.ToSingle(SParam[2]));
+                    break;
+                case "setrightexit":
+                    Command = MapCommands.SetRightExit;
+                    break;
+                case "setrightentrance":
+                    Command = MapCommands.SetRightEntrance;
+                    VParam = new Vector2(Convert.ToSingle(SParam[1]), Convert.ToSingle(SParam[2]));
+                    break;
+                case "setintroentrance":
+                    Command = MapCommands.SetIntroEntrance;
+                    VParam = new Vector2(Convert.ToSingle(SParam[1]), Convert.ToSingle(SParam[2]));
+                    break;
             }
         }
     }

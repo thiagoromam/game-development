@@ -7,36 +7,46 @@ namespace ZombieSmashers.Input
         private KeyboardState _curState;
         private KeyboardState _prevState;
 
-        public bool KeyLeft { get; private set; }
-        public bool KeyRight { get; private set; }
-        public bool KeyUp { get; private set; }
-        public bool KeyDown { get; private set; }
-        public bool KeyJump { get; private set; }
-        public bool KeyAttack { get; private set; }
-        public bool KeySecondary { get; private set; }
+        public bool KeyLeftPressing { get; private set; }
+        public bool KeyRightPressing { get; private set; }
+        public bool KeyUpPressing { get; private set; }
+        public bool KeyUpPressed { get; private set; }
+        public bool KeyDownPressing { get; private set; }
+        public bool KeyDownPressed { get; private set; }
+        public bool KeyJumpPressed { get; private set; }
+        public bool KeyAttackPressed { get; private set; }
+        public bool KeySecondaryPressed { get; private set; }
+        public bool KeyStartPressed { get; private set; }
         
         public void Update()
         {
             _curState = Keyboard.GetState();
             
-            KeyLeft = false;
-            KeyRight = false;
-            KeyUp = false;
-            KeyDown = false;
+            KeyLeftPressing = false;
+            KeyRightPressing = false;
+            KeyUpPressing = false;
+            KeyDownPressing = false;
 
             if (_curState.IsKeyDown(Keys.A))
-                KeyLeft = true;
+                KeyLeftPressing = true;
             else if (_curState.IsKeyDown(Keys.D))
-                KeyRight = true;
+                KeyRightPressing = true;
 
             if (_curState.IsKeyDown(Keys.W))
-                KeyUp = true;
+            {
+                KeyUpPressing = true;
+                KeyUpPressed = _prevState.IsKeyUp(Keys.W);
+            }
             else if (_curState.IsKeyDown(Keys.S))
-                KeyDown = true;
+            {
+                KeyDownPressing = true;
+                KeyDownPressed = _prevState.IsKeyUp(Keys.S);
+            }
 
-            KeyJump = IsKeyClick(Keys.Space);
-            KeyAttack = IsKeyClick(Keys.J);
-            KeySecondary = IsKeyClick(Keys.K);
+            KeyJumpPressed = IsKeyClick(Keys.Space);
+            KeyAttackPressed = IsKeyClick(Keys.J);
+            KeySecondaryPressed = IsKeyClick(Keys.K);
+            KeyStartPressed = IsKeyClick(Keys.Enter);
 
             _prevState = _curState;
         }
