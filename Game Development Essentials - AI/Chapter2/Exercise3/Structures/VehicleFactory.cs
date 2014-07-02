@@ -1,10 +1,16 @@
-﻿using Exercise3.Builders;
+﻿using System;
 
 namespace Exercise3.Structures
 {
-    [Requeriment(typeof(IronRefinery))]
     public class VehicleFactory : IStructure
     {
-         
+        public Type Requeriment
+        {
+            get { return typeof(IronRefinery); }
+        }
+        public int ProduceTime
+        {
+            get { return 5; }
+        }
     }
 }

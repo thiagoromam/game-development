@@ -43,18 +43,27 @@
   <ItemGroup>
     <Compile Include="Agent\ComputerAgent.cs" />
     <Compile Include="Agent\FiniteStateMachine.cs" />
-    <Compile Include="Builders\RequerimentAttribute.cs" />
+    <Compile Include="Agent\IAgent.cs" />
+    <Compile Include="Agent\IState.cs" />
+    <Compile Include="Agent\State.cs" />
+    <Compile Include="Agent\States\BuildStructureState.cs" />
+    <Compile Include="Agent\States\DirectGroupToAttackState.cs" />
+    <Compile Include="Agent\States\DirectGroupToGuardState.cs" />
+    <Compile Include="Agent\States\Extensions.cs" />
+    <Compile Include="Agent\States\IdleState.cs" />
+    <Compile Include="Agent\States\ProduceUnitState.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Agent\State.cs" />
-    <Compile Include="Agent\States.cs" />
     <Compile Include="Structures\IronRefinery.cs" />
     <Compile Include="Structures\IStructure.cs" />
     <Compile Include="Structures\PowerPlant.cs" />
     <Compile Include="Structures\StructuresManager.cs" />
     <Compile Include="Structures\VehicleFactory.cs" />
-    <Compile Include="Vehicles\ArmoredPersonnelCarrier.cs" />
-    <Compile Include="Vehicles\Tank.cs" />
+    <Compile Include="Units\ArmoredPersonnelCarrier.cs" />
+    <Compile Include="Units\IUnit.cs" />
+    <Compile Include="Units\Tank.cs" />
+    <Compile Include="Units\UnitsManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
