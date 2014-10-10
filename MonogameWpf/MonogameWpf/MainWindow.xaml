@@ -1,0 +1,17 @@
+﻿<Window x:Class="MonogameWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        Title="Editor" Height="700" Width="900">
+    <DockPanel>
+        <Menu Name="MenuBar" DockPanel.Dock="Top" />
+        <StatusBar Name="StatusBar" DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Name="StatusText">Load or create a project to begin.</TextBlock>
+            </StatusBarItem>
+        </StatusBar>
+        <WindowsFormsHost DockPanel.Dock="Bottom" Width="800" Height="600">
+            <wf:Panel x:Name="RenderPanel" />
+        </WindowsFormsHost>
+    </DockPanel>
+</Window>
