@@ -7,10 +7,10 @@
         <Menu Name="MenuBar" DockPanel.Dock="Top" />
         <StatusBar Name="StatusBar" DockPanel.Dock="Bottom">
             <StatusBarItem>
-                <TextBlock Name="StatusText">Load or create a project to begin.</TextBlock>
+                <TextBlock Name="StatusText" Text="Load or create a project to begin." />
             </StatusBarItem>
         </StatusBar>
-        <WindowsFormsHost DockPanel.Dock="Bottom" Width="800" Height="600">
+        <WindowsFormsHost Name="FormsHost" DockPanel.Dock="Bottom" Width="800" Height="600">
             <wf:Panel x:Name="RenderPanel" />
         </WindowsFormsHost>
     </DockPanel>

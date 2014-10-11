@@ -1,4 +1,7 @@
-﻿using System.Threading;
+﻿using System.Diagnostics;
+using System.Threading;
+using System.Windows;
+using System.Windows.Input;
 
 namespace MonogameWpf
 {
