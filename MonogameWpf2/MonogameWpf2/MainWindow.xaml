@@ -1,0 +1,42 @@
+﻿<metro:MetroWindow
+    x:Class="MonogameWpf2.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:MonogameWpf2.Controls"
+    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+    Title="MainWindow" Height="350" Width="525">
+    
+    <metro:MetroWindow.LeftWindowCommands>
+        <metro:WindowCommands>
+            <ToggleButton Content="flyout" Click="OnFlyoutClick" />
+        </metro:WindowCommands>
+    </metro:MetroWindow.LeftWindowCommands>
+    
+    <metro:MetroWindow.Flyouts>
+        <metro:FlyoutsControl OverrideIsPinned="True">
+            <metro:Flyout Name="Flyout" Width="300" Position="Left" Theme="Accent" />
+        </metro:FlyoutsControl>
+    </metro:MetroWindow.Flyouts>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <controls:DrawingSurface
+            x:Name="GraphicsControl"
+            Grid.Row="0" Grid.Column="0"
+            LoadContent="OnLoadContent"
+            Draw="OnDraw"
+            MouseMove="OnMouseMove"
+            MouseDown="OnMouseDown"/>
+        
+        <ScrollBar Grid.Row="0" Grid.Column="1" Width="20" Minimum="0" Maximum="10" />
+        <ScrollBar Grid.Row="1" Grid.Column="0" Height="20" Orientation="Horizontal" Minimum="0" Maximum="10" />
+    </Grid>
+</metro:MetroWindow>
