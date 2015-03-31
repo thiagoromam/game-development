@@ -46,7 +46,7 @@
 using System;
 using System.Windows;
 using System.Windows.Interop;
-using Gemini.Modules.MonoGame.Util;
+using MonogameWpf2.Util;
 using SharpDX.Direct3D9;
 
 namespace MonogameWpf2.Services

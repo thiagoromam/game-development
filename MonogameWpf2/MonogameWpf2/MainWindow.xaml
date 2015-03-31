@@ -4,25 +4,47 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:MonogameWpf2.Controls"
     xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
-    Title="MainWindow" Height="350" Width="525">
+    xmlns:viewModels="clr-namespace:MonogameWpf2.ViewModels"
+    Title="MonoGame Interop" Height="480" Width="800"
+    BorderBrush="{DynamicResource AccentColorBrush}"
+    BorderThickness="1">
+    
+    <Window.DataContext>
+        <viewModels:MainViewModel />
+    </Window.DataContext>
     
     <metro:MetroWindow.LeftWindowCommands>
         <metro:WindowCommands>
-            <ToggleButton Content="flyout" Click="OnFlyoutClick" />
+            <ToggleButton Content="effect" IsChecked="{Binding IsEffectFlayoutOpen}" />
         </metro:WindowCommands>
     </metro:MetroWindow.LeftWindowCommands>
     
     <metro:MetroWindow.Flyouts>
         <metro:FlyoutsControl OverrideIsPinned="True">
-            <metro:Flyout Name="Flyout" Width="300" Position="Left" Theme="Accent" />
+            <metro:Flyout Header="effect" Width="300" Position="Left" Theme="Accent" IsOpen="{Binding IsEffectFlayoutOpen}">
+                <StackPanel Margin="10">
+                    <ListBox ItemsSource="{Binding Effects.Collection}"
+                             SelectedItem="{Binding Effects.Selected, Mode=TwoWay}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <TextBlock Text="You can use the arrows to change the effect that will be applied to the stamp."
+                               TextWrapping="Wrap"
+                               Margin="0 10"/>
+                    
+                    <TextBlock Text="For Cutting Effect, use the +/- keys to change the visible percent."
+                               TextWrapping="Wrap"
+                               Margin="0 10" />
+                </StackPanel>
+            </metro:Flyout>
         </metro:FlyoutsControl>
     </metro:MetroWindow.Flyouts>
     
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -30,13 +52,13 @@
 
         <controls:DrawingSurface
             x:Name="GraphicsControl"
-            Grid.Row="0" Grid.Column="0"
             LoadContent="OnLoadContent"
             Draw="OnDraw"
             MouseMove="OnMouseMove"
-            MouseDown="OnMouseDown"/>
+            MouseDown="OnMouseDown"
+            Grid.Row="0" />
         
-        <ScrollBar Grid.Row="0" Grid.Column="1" Width="20" Minimum="0" Maximum="10" />
-        <ScrollBar Grid.Row="1" Grid.Column="0" Height="20" Orientation="Horizontal" Minimum="0" Maximum="10" />
+        <TextBlock Text="{Binding Effects.Selected.Name, StringFormat='{}Current Effect: {0}'}"
+                   Grid.Row="1" />
     </Grid>
 </metro:MetroWindow>

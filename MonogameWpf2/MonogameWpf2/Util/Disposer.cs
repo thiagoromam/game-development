@@ -20,7 +20,7 @@
 
 using System;
 
-namespace Gemini.Modules.MonoGame.Util
+namespace MonogameWpf2.Util
 {
 	internal static class Disposer
 	{
