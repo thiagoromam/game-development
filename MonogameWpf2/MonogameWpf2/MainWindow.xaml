@@ -15,14 +15,20 @@
     
     <metro:MetroWindow.LeftWindowCommands>
         <metro:WindowCommands>
-            <ToggleButton Content="effect" IsChecked="{Binding IsEffectFlayoutOpen}" />
+            <ToggleButton Content="effect" IsChecked="{Binding IsEffectFlyoutOpen}" />
         </metro:WindowCommands>
     </metro:MetroWindow.LeftWindowCommands>
+    <metro:MetroWindow.RightWindowCommands>
+        <metro:WindowCommands>
+            <ToggleButton Content="help" IsChecked="{Binding IsHelpFlyoutOpen}" />
+        </metro:WindowCommands>
+    </metro:MetroWindow.RightWindowCommands>
     
     <metro:MetroWindow.Flyouts>
         <metro:FlyoutsControl OverrideIsPinned="True">
-            <metro:Flyout Header="effect" Width="300" Position="Left" Theme="Accent" IsOpen="{Binding IsEffectFlayoutOpen}">
-                <StackPanel Margin="10">
+            <metro:Flyout Header="effect" Width="300" Theme="Accent" IsOpen="{Binding IsEffectFlyoutOpen}">
+                <StackPanel Margin="10 0 10 10">
+                    <TextBlock Text="Current effect:" Margin="0 0 0 10" />
                     <ListBox ItemsSource="{Binding Effects.Collection}"
                              SelectedItem="{Binding Effects.Selected, Mode=TwoWay}">
                         <ListBox.ItemTemplate>
@@ -32,13 +38,27 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <TextBlock Text="You can use the arrows to change the effect that will be applied to the stamp."
+                    <TextBlock Text="* Use the mouse left button to stamp."
+                               Margin="0 10 0 3"/>
+                    <TextBlock Text="* You can use the arrows to change the effect that will be applied to the stamp."
                                TextWrapping="Wrap"
-                               Margin="0 10"/>
-                    
-                    <TextBlock Text="For Cutting Effect, use the +/- keys to change the visible percent."
+                               Margin="0 3"/>
+                    <TextBlock Text="* For Cutting Effect, use the +/- keys to change the visible percent."
                                TextWrapping="Wrap"
-                               Margin="0 10" />
+                               Margin="0 3" />
+                </StackPanel>
+            </metro:Flyout>
+            <metro:Flyout Header="help" Width="200" Theme="Accent" IsOpen="{Binding IsHelpFlyoutOpen}" Position="Right">
+                <StackPanel Margin="10">
+                    <TextBlock Text="This sample was made using code from the monogame module found in the Gemini Framework." 
+                               TextWrapping="Wrap" />
+                    <TextBlock TextWrapping="Wrap" Margin="0 10">
+                        <Hyperlink Foreground="White"
+                                   NavigateUri="http://documentup.com/tgjones/gemini" 
+                                   RequestNavigate="OnGeminiUrlRequest">
+                            http://documentup.com/tgjones/gemini
+                        </Hyperlink>
+                    </TextBlock>
                 </StackPanel>
             </metro:Flyout>
         </metro:FlyoutsControl>

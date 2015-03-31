@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.Windows.Input;
+using System.Windows.Navigation;
 using Microsoft.Xna.Framework.Graphics;
 using MonogameWpf2.Controls;
 using MonogameWpf2.GameModules;
@@ -46,6 +48,12 @@ namespace MonogameWpf2
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             _gameModule.OnKeyDown(e);
+        }
+
+        private void OnGeminiUrlRequest(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
     }
 }

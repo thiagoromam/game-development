@@ -6,6 +6,7 @@ namespace MonogameWpf2.ViewModels
     public class MainViewModel : NotificationObject
     {
         private bool _isFlayoutOpen;
+        private bool _isHelpFlyoutOpen;
 
         public MainViewModel()
         {
@@ -15,13 +16,23 @@ namespace MonogameWpf2.ViewModels
         }
 
         public EffectsCollection Effects { get; private set; }
-        public bool IsEffectFlayoutOpen
+        public bool IsEffectFlyoutOpen
         {
             get { return _isFlayoutOpen; }
             set
             {
                 if (value.Equals(_isFlayoutOpen)) return;
                 _isFlayoutOpen = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool IsHelpFlyoutOpen
+        {
+            get { return _isHelpFlyoutOpen; }
+            set
+            {
+                if (value == _isHelpFlyoutOpen) return;
+                _isHelpFlyoutOpen = value;
                 OnPropertyChanged();
             }
         }
