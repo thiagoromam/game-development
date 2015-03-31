@@ -16,11 +16,10 @@ namespace MonogameWpf2.GameModules
         private List<Stamp> _stamps;
         private Effect _cuttingEffect;
 
-        public MainGameModule()
-            : base("Content")
+        public MainGameModule(DrawingSurface drawingSurface)
+            : base(drawingSurface, "Content")
         {
             _effects = Injection.Container.Resolve<EffectsCollection>();
-
             _effects.PropertyChanged += (s, e) => { MouseStamp.Effect = _effects.Selected.Effect; };
         }
 
@@ -52,9 +51,9 @@ namespace MonogameWpf2.GameModules
             //_effects.Collection.Add(new StampEffect("Texture Replace", textureReplaceEffect));
             _effects.Selected = _effects.Collection.First();
         }
-        public override void Draw(DrawEventArgs e)
+        protected override void Draw()
         {
-            e.GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
             foreach (var stamp in _stamps)
             {
@@ -70,8 +69,6 @@ namespace MonogameWpf2.GameModules
 
                 SpriteBatch.End();
             }
-
-            e.InvalidateSurface();
         }
 
         // events

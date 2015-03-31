@@ -10,13 +10,11 @@ namespace MonogameWpf2
 {
     public partial class MainWindow
     {
-        private readonly IGameModule _gameModule;
+        private IGameModule _gameModule;
 
         public MainWindow()
         {
             InitializeComponent();
-
-            _gameModule = new MainGameModule();
 
             KeyDown += OnKeyDown;
         }
@@ -27,6 +25,7 @@ namespace MonogameWpf2
             container.AddService(typeof(IGraphicsDeviceService), Injection.Container.Resolve<GraphicsDeviceService>());
             container.AddService(typeof(GraphicsDevice), e.GraphicsDevice);
 
+            _gameModule = new MainGameModule(GraphicsControl);
             _gameModule.Initialize(container);
             _gameModule.LoadContent();
         }

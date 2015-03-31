@@ -81,6 +81,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\GameUpdater.cs" />
     <Compile Include="GameModules\IGameModule.cs" />
     <Compile Include="GameModules\MainGameModule.cs" />
     <Compile Include="Injection.cs" />
