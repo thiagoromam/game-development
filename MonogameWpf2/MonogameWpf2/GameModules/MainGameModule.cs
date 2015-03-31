@@ -81,7 +81,7 @@ namespace MonogameWpf2.GameModules
         }
         public override void OnMouseDown(GameMouseButtonEventArgs e)
         {
-            _stamps.Insert(0, new Stamp
+            _stamps.Insert(_stamps.Count - 1, new Stamp
             {
                 Position = MouseStamp.Position, 
                 Effect = MouseStamp.Effect,
