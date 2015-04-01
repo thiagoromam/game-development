@@ -60,15 +60,8 @@
       <HintPath>$(MSBuildProgramFiles32)\MonoGame\v3.0\Assemblies\Windows\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.1.1.2.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -81,22 +74,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\GameUpdater.cs" />
+    <Compile Include="Controls\GameControl.cs" />
+    <Compile Include="Module\BaseGameModule.cs" />
+    <Compile Include="Module\GameUpdater.cs" />
     <Compile Include="GameModules\BlurGameModule.cs" />
     <Compile Include="GameModules\FrameRateCounter.cs" />
-    <Compile Include="GameModules\IGameModule.cs" />
+    <Compile Include="Module\IGameModule.cs" />
     <Compile Include="GameModules\MainGameModule.cs" />
     <Compile Include="Injection.cs" />
     <Compile Include="Models\Stamp.cs" />
     <Compile Include="Models\StampEffect.cs" />
     <Compile Include="Models\EffectsCollection.cs" />
+    <Compile Include="Module\IInternalGameModule.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Services\DeviceService.cs" />
     <Compile Include="Services\GraphicsDeviceService.cs" />
     <Compile Include="Util\Disposer.cs" />
     <Compile Include="Util\GameControlHelper.cs" />
-    <Compile Include="Util\GameMouseButtonEventArgs.cs" />
-    <Compile Include="Util\GameMouseEventArgs.cs" />
+    <Compile Include="Arguments\GameMouseButtonEventArgs.cs" />
+    <Compile Include="Arguments\GameMouseEventArgs.cs" />
     <Compile Include="Util\NotificationObject.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Page Include="MainWindow.xaml">
@@ -107,9 +103,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\DrawEventArgs.cs" />
+    <Compile Include="Arguments\DrawEventArgs.cs" />
     <Compile Include="Controls\DrawingSurface.cs" />
-    <Compile Include="Controls\GraphicsDeviceEventArgs.cs" />
+    <Compile Include="Arguments\GraphicsDeviceEventArgs.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

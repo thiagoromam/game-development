@@ -9,7 +9,7 @@
 using System;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonogameWpf2.Controls
+namespace MonogameWpf2.Arguments
 {
     /// <summary>
     /// Arguments used for Device related events.

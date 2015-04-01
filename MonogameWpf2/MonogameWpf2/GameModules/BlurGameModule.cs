@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonogameWpf2.Controls;
+using MonogameWpf2.Module;
 
 namespace MonogameWpf2.GameModules
 {
@@ -21,13 +22,16 @@ namespace MonogameWpf2.GameModules
         Vector2 pos = Vector2.Zero;
         Vector2 vel = new Vector2(1.0f, 1.5f);
 
-        public BlurGameModule(DrawingSurface drawingSurface)
-            : base(drawingSurface, "Content")
+        public BlurGameModule()
+            : base("Content")
         {
-            drawingSurface.Width = 1280;
-            drawingSurface.Height = 720;
         }
 
+        public override void Initialize()
+        {
+            Width = 1280;
+            Height = 720;
+        }
         public override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
@@ -44,14 +48,14 @@ namespace MonogameWpf2.GameModules
             if (type == 2)
                 invertSnowman();
         }
-        protected override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             g_frameRate.Update(gameTime);
 
             if (type == 2)
                 modifyTexture2(gameTime);
         }
-        protected override void Draw()
+        public override void Draw()
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 

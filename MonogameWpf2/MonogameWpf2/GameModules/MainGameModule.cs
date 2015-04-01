@@ -3,9 +3,9 @@ using System.Linq;
 using System.Windows.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonogameWpf2.Controls;
+using MonogameWpf2.Arguments;
 using MonogameWpf2.Models;
-using MonogameWpf2.Util;
+using MonogameWpf2.Module;
 
 namespace MonogameWpf2.GameModules
 {
@@ -16,14 +16,11 @@ namespace MonogameWpf2.GameModules
         private List<Stamp> _stamps;
         private Effect _cuttingEffect;
 
-        public MainGameModule(DrawingSurface drawingSurface)
-            : base(drawingSurface, "Content")
+        public MainGameModule()
+            : base("Content")
         {
             _effects = Injection.Container.Resolve<EffectsCollection>();
             _effects.PropertyChanged += (s, e) => { MouseStamp.Effect = _effects.Selected.Effect; };
-
-            drawingSurface.Height = 480;
-            drawingSurface.Width = 800;
         }
 
         private Stamp MouseStamp
@@ -31,6 +28,11 @@ namespace MonogameWpf2.GameModules
             get { return _stamps.Last(); }
         }
 
+        public override void Initialize()
+        {
+            Height = 480;
+            Width = 800;
+        }
         public override void LoadContent()
         {
             _surge = Content.Load<Texture2D>("Images/surge");
@@ -54,7 +56,7 @@ namespace MonogameWpf2.GameModules
             //_effects.Collection.Add(new StampEffect("Texture Replace", textureReplaceEffect));
             _effects.Selected = _effects.Collection.First();
         }
-        protected override void Draw()
+        public override void Draw()
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 

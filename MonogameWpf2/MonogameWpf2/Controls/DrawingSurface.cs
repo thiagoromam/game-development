@@ -24,36 +24,38 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
+using MonogameWpf2.Arguments;
 using MonogameWpf2.Services;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonogameWpf2.Controls
 {
-	public class DrawingSurface : ContentControl, IDisposable
-	{
-		/// <summary>
-		/// Occurs when the control has initialized the GraphicsDevice.
-		/// </summary>
-		public event EventHandler<GraphicsDeviceEventArgs> LoadContent;
+    public sealed class DrawingSurface : ContentControl, IDisposable
+    {
+        /// <summary>
+        /// Occurs when the control has initialized the GraphicsDevice.
+        /// </summary>
+        public event EventHandler<GraphicsDeviceEventArgs> LoadContent;
 
-		/// <summary>
-		/// Occurs when the DrawingSurface has been invalidated.
-		/// </summary>
-		public event EventHandler<DrawEventArgs> Draw;
+        /// <summary>
+        /// Occurs when the DrawingSurface has been invalidated.
+        /// </summary>
+        public event EventHandler<DrawEventArgs> Draw;
 
-	    private GraphicsDeviceService _graphicsDeviceService;
-	    private readonly D3DImage _d3dImage;
-	    private readonly Image _image;
-		private RenderTarget2D _renderTarget;
-	    private SharpDX.Direct3D9.Texture _renderTargetD3D9;
+        private GraphicsDeviceService _graphicsDeviceService;
+        private readonly D3DImage _d3DImage;
+        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
+        private readonly Image _image;
+        private RenderTarget2D _renderTarget;
+        private SharpDX.Direct3D9.Texture _renderTargetD3D9;
 
-		private bool _contentNeedsRefresh;
+        private bool _contentNeedsRefresh;
 
-		/// <summary>
-		/// Gets or sets a value indicating whether this control will redraw every time the CompositionTarget.Rendering event is fired.
-		/// Defaults to false.
-		/// </summary>
-		public bool AlwaysRefresh { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether this control will redraw every time the CompositionTarget.Rendering event is fired.
+        /// Defaults to false.
+        /// </summary>
+        public bool AlwaysRefresh { get; set; }
 
         public GraphicsDevice GraphicsDevice
         {
@@ -62,12 +64,12 @@ namespace MonogameWpf2.Controls
 
         public DrawingSurface()
         {
-            _d3dImage = new D3DImage();
+            _d3DImage = new D3DImage();
 
-            _image = new Image { Source = _d3dImage, Stretch = Stretch.None };
+            _image = new Image { Source = _d3DImage, Stretch = Stretch.None };
             AddChild(_image);
 
-            _d3dImage.IsFrontBufferAvailableChanged += OnD3DImageIsFrontBufferAvailableChanged;
+            _d3DImage.IsFrontBufferAvailableChanged += OnD3DImageIsFrontBufferAvailableChanged;
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
@@ -140,17 +142,17 @@ namespace MonogameWpf2.Controls
                 _renderTargetD3D9 = null;
             }
 
-            _d3dImage.Lock();
-            _d3dImage.SetBackBuffer(D3DResourceType.IDirect3DSurface9, IntPtr.Zero);
-            _d3dImage.Unlock();
+            _d3DImage.Lock();
+            _d3DImage.SetBackBuffer(D3DResourceType.IDirect3DSurface9, IntPtr.Zero);
+            _d3DImage.Unlock();
         }
 
         private void EnsureRenderTarget()
         {
             if (_renderTarget == null)
             {
-                _renderTarget = new RenderTarget2D(GraphicsDevice, (int) ActualWidth, (int) ActualHeight,
-                    false, SurfaceFormat.Bgra32, DepthFormat.Depth24Stencil8, 1, 
+                _renderTarget = new RenderTarget2D(GraphicsDevice, (int)ActualWidth, (int)ActualHeight,
+                    false, SurfaceFormat.Bgra32, DepthFormat.Depth24Stencil8, 1,
                     RenderTargetUsage.PlatformContents, true);
 
                 var handle = _renderTarget.GetSharedHandle();
@@ -164,16 +166,16 @@ namespace MonogameWpf2.Controls
 
                 using (SharpDX.Direct3D9.Surface surface = _renderTargetD3D9.GetSurfaceLevel(0))
                 {
-                    _d3dImage.Lock();
-                    _d3dImage.SetBackBuffer(D3DResourceType.IDirect3DSurface9, surface.NativePointer);
-                    _d3dImage.Unlock();
+                    _d3DImage.Lock();
+                    _d3DImage.SetBackBuffer(D3DResourceType.IDirect3DSurface9, surface.NativePointer);
+                    _d3DImage.Unlock();
                 }
             }
         }
 
         private void OnD3DImageIsFrontBufferAvailableChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (_d3dImage.IsFrontBufferAvailable)
+            if (_d3DImage.IsFrontBufferAvailable)
                 _contentNeedsRefresh = true;
         }
 
@@ -183,7 +185,7 @@ namespace MonogameWpf2.Controls
             {
                 _contentNeedsRefresh = false;
 
-                _d3dImage.Lock();
+                _d3DImage.Lock();
 
                 EnsureRenderTarget();
                 GraphicsDevice.SetRenderTarget(_renderTarget);
@@ -194,22 +196,22 @@ namespace MonogameWpf2.Controls
 
                 _graphicsDeviceService.GraphicsDevice.Flush();
 
-                _d3dImage.AddDirtyRect(new Int32Rect(0, 0, (int) ActualWidth, (int) ActualHeight));
+                _d3DImage.AddDirtyRect(new Int32Rect(0, 0, (int)ActualWidth, (int)ActualHeight));
 
-                _d3dImage.Unlock();
+                _d3DImage.Unlock();
 
                 GraphicsDevice.SetRenderTarget(null);
             }
         }
 
-        protected virtual void RaiseLoadContent(GraphicsDeviceEventArgs args)
+        private void RaiseLoadContent(GraphicsDeviceEventArgs args)
         {
             var handler = LoadContent;
             if (handler != null)
                 handler(this, args);
         }
 
-        protected virtual void RaiseDraw(DrawEventArgs args)
+        private void RaiseDraw(DrawEventArgs args)
         {
             var handler = Draw;
             if (handler != null)
@@ -222,7 +224,7 @@ namespace MonogameWpf2.Controls
             if (_graphicsDeviceService == null)
                 return false;
 
-            if (!_d3dImage.IsFrontBufferAvailable)
+            if (!_d3DImage.IsFrontBufferAvailable)
                 return false;
 
             // Make sure the graphics device is big enough, and is not lost.
@@ -240,7 +242,7 @@ namespace MonogameWpf2.Controls
             // a smaller control? To avoid unwanted stretching, we set the
             // viewport to only use the top left portion of the full backbuffer.
             _graphicsDeviceService.GraphicsDevice.Viewport = new Viewport(
-                0, 0, Math.Max(1, (int) ActualWidth), Math.Max(1, (int) ActualHeight));
+                0, 0, Math.Max(1, (int)ActualWidth), Math.Max(1, (int)ActualHeight));
         }
 
         private bool HandleDeviceReset()
@@ -262,7 +264,7 @@ namespace MonogameWpf2.Controls
             if (deviceNeedsReset)
             {
                 Debug.WriteLine("Resetting Device");
-                _graphicsDeviceService.ResetDevice((int) ActualWidth, (int) ActualHeight);
+                _graphicsDeviceService.ResetDevice((int)ActualWidth, (int)ActualHeight);
                 return false;
             }
 
@@ -289,7 +291,7 @@ namespace MonogameWpf2.Controls
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!_isDisposed)
             {
@@ -309,5 +311,5 @@ namespace MonogameWpf2.Controls
         }
 
         #endregion
-	}
+    }
 }

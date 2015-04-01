@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using MonogameWpf2.Annotations;
+using MonogameWpf2.Properties;
 
 namespace MonogameWpf2.Util
 {

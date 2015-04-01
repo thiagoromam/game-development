@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
-namespace MonogameWpf2.Controls
+namespace MonogameWpf2.Module
 {
     public class GameUpdater
     {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using MonogameWpf2.Controls;
 
-namespace MonogameWpf2.Controls
+namespace MonogameWpf2.Arguments
 {
     /// <summary>
     /// Provides data for the Draw event.

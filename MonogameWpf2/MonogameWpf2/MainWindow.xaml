@@ -84,13 +84,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <controls:DrawingSurface
-            x:Name="GraphicsControl"
-            LoadContent="OnLoadContent"
-            Draw="OnDraw"
-            MouseMove="OnMouseMove"
-            MouseDown="OnMouseDown"
-            Grid.Row="0" />
+        <controls:GameControl GameModule="{Binding GameModule}" />
         
         <TextBlock Text="{Binding Effects.Selected.Name, StringFormat='{}Current Effect: {0}'}"
                    Grid.Row="1" />

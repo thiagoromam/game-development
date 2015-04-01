@@ -1,4 +1,6 @@
-﻿using MonogameWpf2.Models;
+﻿using MonogameWpf2.GameModules;
+using MonogameWpf2.Models;
+using MonogameWpf2.Module;
 using MonogameWpf2.Util;
 
 namespace MonogameWpf2.ViewModels
@@ -11,8 +13,9 @@ namespace MonogameWpf2.ViewModels
         public MainViewModel()
         {
             Effects = new EffectsCollection();
-
             Injection.Container.Map<EffectsCollection>().To(Effects);
+
+            GameModule = new MainGameModule();
         }
 
         public EffectsCollection Effects { get; private set; }
@@ -36,5 +39,6 @@ namespace MonogameWpf2.ViewModels
                 OnPropertyChanged();
             }
         }
+        public IGameModule GameModule { get; private set; }
     }
 }
