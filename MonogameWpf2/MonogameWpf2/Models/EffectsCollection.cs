@@ -1,5 +1,5 @@
-﻿using MonogameWpf2.Util;
-using SharpDX.Collections;
+﻿using System.Collections.ObjectModel;
+using MonogameWpf2.Util;
 
 namespace MonogameWpf2.Models
 {
