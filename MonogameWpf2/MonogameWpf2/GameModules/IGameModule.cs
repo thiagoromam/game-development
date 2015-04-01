@@ -12,6 +12,7 @@ namespace MonogameWpf2.GameModules
     {
         void Initialize(IServiceProvider provider);
         void LoadContent();
+        void Run();
         void Draw(DrawEventArgs e);
 
         // events
@@ -30,7 +31,6 @@ namespace MonogameWpf2.GameModules
             GraphicsDevice = drawingSurface.GraphicsDevice;
             _contentDirectory = contentDirectory;
             _updater = new GameUpdater(Update, drawingSurface.Invalidate);
-            _updater.Start();
         }
 
         protected GraphicsDevice GraphicsDevice { get; private set; }
@@ -43,11 +43,15 @@ namespace MonogameWpf2.GameModules
             Content = new ContentManager(provider, _contentDirectory);
         }
         public abstract void LoadContent();
+        void IGameModule.Run()
+        {
+            _updater.Start();
+        }
         protected virtual void Update(GameTime gameTime) { }
         void IGameModule.Draw(DrawEventArgs e)
         {
             Draw();
-            _updater.DrawExecuted = true;
+            _updater.Drawing = false;
         }
         protected abstract void Draw();
 

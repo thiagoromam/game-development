@@ -30,6 +30,7 @@ namespace MonogameWpf2
             _gameModule = new MainGameModule(GraphicsControl);
             _gameModule.Initialize(container);
             _gameModule.LoadContent();
+            _gameModule.Run();
         }
         private void OnDraw(object sender, DrawEventArgs e)
         {
@@ -50,7 +51,7 @@ namespace MonogameWpf2
             _gameModule.OnKeyDown(e);
         }
 
-        private void OnGeminiUrlRequest(object sender, RequestNavigateEventArgs e)
+        private void OnUrlRequest(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;

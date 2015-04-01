@@ -5,7 +5,7 @@
     xmlns:controls="clr-namespace:MonogameWpf2.Controls"
     xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:viewModels="clr-namespace:MonogameWpf2.ViewModels"
-    Title="MonoGame Interop" Height="480" Width="800"
+    Title="MonoGame Interop"
     BorderBrush="{DynamicResource AccentColorBrush}"
     BorderThickness="1">
     
@@ -48,15 +48,25 @@
                                Margin="0 3" />
                 </StackPanel>
             </metro:Flyout>
-            <metro:Flyout Header="help" Width="200" Theme="Accent" IsOpen="{Binding IsHelpFlyoutOpen}" Position="Right">
+            <metro:Flyout Header="help" Width="250" Theme="Accent" IsOpen="{Binding IsHelpFlyoutOpen}" Position="Right">
                 <StackPanel Margin="10">
                     <TextBlock Text="This sample was made using code from the monogame module found in the Gemini Framework." 
                                TextWrapping="Wrap" />
                     <TextBlock TextWrapping="Wrap" Margin="0 10">
                         <Hyperlink Foreground="White"
                                    NavigateUri="http://documentup.com/tgjones/gemini" 
-                                   RequestNavigate="OnGeminiUrlRequest">
+                                   RequestNavigate="OnUrlRequest">
                             http://documentup.com/tgjones/gemini
+                        </Hyperlink>
+                    </TextBlock>
+                    <TextBlock Text="There is a sample with an advanced effect that I use to test the manual GameUpdater class. The blur effect and the BlurGameModule and FrameRateCounter classes can be found in the exercises repository from John Pile's book '2D Graphics Programming for Games'"
+                               TextWrapping="Wrap"
+                               Margin="0 20 0 0" />
+                    <TextBlock TextWrapping="Wrap" Margin="0 10">
+                        <Hyperlink Foreground="White"
+                                   NavigateUri="http://www.2dgraphicsprogramming.com/" 
+                                   RequestNavigate="OnUrlRequest">
+                            http://www.2dgraphicsprogramming.com/
                         </Hyperlink>
                     </TextBlock>
                 </StackPanel>

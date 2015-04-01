@@ -28,7 +28,7 @@ namespace MonogameWpf2.Controls
             _gameTime = new GameTime();
         }
 
-        public bool DrawExecuted { get; set; }
+        public bool Drawing { get; set; }
 
         public void Start()
         {
@@ -45,28 +45,16 @@ namespace MonogameWpf2.Controls
         private void RunLoop()
         {
             while (_runLoop)
-            {
-                if (DrawExecuted)
-                {
-                    Debug.WriteLine("Ticking");
-                    Tick();
-                    DrawExecuted = false;
-                    _requestDraw();
-                }
-                else
-                {
-                    Debug.WriteLine("Drawing");
-                }
-            }
+                Tick();
         }
         private void Tick()
         {
-            RetryTick:
+        RetryTick:
 
             var currentTicks = _gameTimer.Elapsed.Ticks;
             _accumulatedElapsedTime += TimeSpan.FromTicks(currentTicks - _previousTicks);
             _previousTicks = currentTicks;
-            
+
             if (_accumulatedElapsedTime < _targetElapsedTime)
             {
                 var sleepTime = (int)(_targetElapsedTime - _accumulatedElapsedTime).TotalMilliseconds;
@@ -107,6 +95,10 @@ namespace MonogameWpf2.Controls
                 _updateFrameLag--;
 
             _gameTime.ElapsedGameTime = TimeSpan.FromTicks(_targetElapsedTime.Ticks * stepCount);
+
+            while (Drawing) { }
+            Drawing = true;
+            _requestDraw();
         }
     }
 }

@@ -21,6 +21,9 @@ namespace MonogameWpf2.GameModules
         {
             _effects = Injection.Container.Resolve<EffectsCollection>();
             _effects.PropertyChanged += (s, e) => { MouseStamp.Effect = _effects.Selected.Effect; };
+
+            drawingSurface.Height = 480;
+            drawingSurface.Width = 800;
         }
 
         private Stamp MouseStamp
