@@ -7,7 +7,8 @@
     xmlns:viewModels="clr-namespace:MonogameWpf2.ViewModels"
     Title="MonoGame Interop"
     BorderBrush="{DynamicResource AccentColorBrush}"
-    BorderThickness="1">
+    BorderThickness="1"
+    SizeToContent="WidthAndHeight">
     
     <Window.DataContext>
         <viewModels:MainViewModel />
@@ -75,6 +76,9 @@
     </metro:MetroWindow.Flyouts>
     
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
