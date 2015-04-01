@@ -2,9 +2,9 @@
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Xna.Framework;
-using MonogameWpf2.Util;
+using MonoGame.Interop.Helpers;
 
-namespace MonogameWpf2.Arguments
+namespace MonoGame.Interop.Arguments
 {
     public class GameMouseButtonEventArgs
     {
@@ -14,7 +14,7 @@ namespace MonogameWpf2.Arguments
         public GameMouseButtonEventArgs(MouseButtonEventArgs args, IInputElement inputElement)
         {
             _args = args;
-            _position = new Lazy<Vector2>(() => GameControlHelper.GetPosition(_args, inputElement));
+            _position = new Lazy<Vector2>(() => _args.GetPosition(inputElement).ToVector());
         }
 
         public Vector2 Position

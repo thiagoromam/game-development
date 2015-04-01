@@ -24,13 +24,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
-using MonogameWpf2.Arguments;
-using MonogameWpf2.Services;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Interop.Arguments;
+using MonoGame.Interop.Services;
 
-namespace MonogameWpf2.Controls
+namespace MonoGame.Interop.Controls
 {
-    public sealed class DrawingSurface : ContentControl, IDisposable
+    internal sealed class DrawingSurface : ContentControl, IDisposable
     {
         /// <summary>
         /// Occurs when the control has initialized the GraphicsDevice.

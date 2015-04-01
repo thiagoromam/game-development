@@ -4,9 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
-namespace MonogameWpf2.Module
+namespace MonoGame.Interop.Module
 {
-    public class GameUpdater
+    internal class GameUpdater
     {
         private readonly Action<GameTime> _updateMethod;
         private readonly Action _requestDraw;

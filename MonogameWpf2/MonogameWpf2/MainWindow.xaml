@@ -2,7 +2,7 @@
     x:Class="MonogameWpf2.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:MonogameWpf2.Controls"
+    xmlns:controls="clr-namespace:MonoGame.Interop.Controls;assembly=MonoGame.Interop"
     xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:viewModels="clr-namespace:MonogameWpf2.ViewModels"
     Title="MonoGame Interop"

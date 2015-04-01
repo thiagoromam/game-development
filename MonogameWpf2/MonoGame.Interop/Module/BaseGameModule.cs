@@ -3,10 +3,10 @@ using System.Windows.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonogameWpf2.Arguments;
-using MonogameWpf2.Controls;
+using MonoGame.Interop.Arguments;
+using MonoGame.Interop.Controls;
 
-namespace MonogameWpf2.Module
+namespace MonoGame.Interop.Module
 {
     public abstract class BaseGameModule : IGameModule, IInternalGameModule
     {

@@ -1,8 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonogameWpf2.Controls;
-using MonogameWpf2.Module;
+using MonoGame.Interop.Module;
 
 namespace MonogameWpf2.GameModules
 {

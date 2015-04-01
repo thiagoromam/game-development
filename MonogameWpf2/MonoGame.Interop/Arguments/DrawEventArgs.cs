@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using MonogameWpf2.Controls;
+using MonoGame.Interop.Controls;
 
-namespace MonogameWpf2.Arguments
+namespace MonoGame.Interop.Arguments
 {
     /// <summary>
     /// Provides data for the Draw event.
     /// </summary>
-    public sealed class DrawEventArgs : GraphicsDeviceEventArgs
+    internal sealed class DrawEventArgs : GraphicsDeviceEventArgs
     {
         private readonly DrawingSurface _drawingSurface;
 	    

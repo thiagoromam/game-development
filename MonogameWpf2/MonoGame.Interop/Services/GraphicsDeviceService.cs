@@ -12,7 +12,7 @@ using System.Windows;
 using System.Windows.Interop;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonogameWpf2.Services
+namespace MonoGame.Interop.Services
 {
     /// <summary>
     /// Helper class responsible for creating and managing the GraphicsDevice.
@@ -22,7 +22,7 @@ namespace MonogameWpf2.Services
     /// interface, which provides notification events for when the device is reset
     /// or disposed.
     /// </summary>
-    public class GraphicsDeviceService : IGraphicsDeviceService
+    internal class GraphicsDeviceService : IGraphicsDeviceService
     {
         // Keep track of how many controls are sharing the singletonInstance.
         private static int _referenceCount;
@@ -52,7 +52,7 @@ namespace MonogameWpf2.Services
 
         static GraphicsDeviceService()
         {
-            Injection.Container.Map<GraphicsDeviceService>().ToSelf().AsService();
+            MonoGameInteropInjection.Container.Map<GraphicsDeviceService>().ToSelf().AsService();
         }
         /// <summary>
         /// Constructor is private, because this is a singleton class:
@@ -101,7 +101,7 @@ namespace MonogameWpf2.Services
         /// </summary>
         public static GraphicsDeviceService AddRef(int width, int height)
         {
-            var singletonInstance = Injection.Container.Resolve<GraphicsDeviceService>();
+            var singletonInstance = MonoGameInteropInjection.Container.Resolve<GraphicsDeviceService>();
 
             // Increment the "how many controls sharing the device" reference count.
             if (Interlocked.Increment(ref _referenceCount) == 1)

@@ -1,8 +1,8 @@
 ﻿using System;
-using MonogameWpf2.Arguments;
-using MonogameWpf2.Controls;
+using MonoGame.Interop.Arguments;
+using MonoGame.Interop.Controls;
 
-namespace MonogameWpf2.Module
+namespace MonoGame.Interop.Module
 {
     internal interface IInternalGameModule
     {

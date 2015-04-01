@@ -1,6 +1,6 @@
-﻿using MonogameWpf2.GameModules;
+﻿using MonoGame.Interop.Module;
+using MonogameWpf2.GameModules;
 using MonogameWpf2.Models;
-using MonogameWpf2.Module;
 using MonogameWpf2.Util;
 
 namespace MonogameWpf2.ViewModels

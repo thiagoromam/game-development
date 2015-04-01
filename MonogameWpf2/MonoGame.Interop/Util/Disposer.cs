@@ -20,7 +20,7 @@
 
 using System;
 
-namespace MonogameWpf2.Util
+namespace MonoGame.Interop.Util
 {
 	internal static class Disposer
 	{

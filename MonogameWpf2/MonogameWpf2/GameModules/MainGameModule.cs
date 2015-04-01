@@ -3,9 +3,9 @@ using System.Linq;
 using System.Windows.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonogameWpf2.Arguments;
+using MonoGame.Interop.Arguments;
+using MonoGame.Interop.Module;
 using MonogameWpf2.Models;
-using MonogameWpf2.Module;
 
 namespace MonogameWpf2.GameModules
 {

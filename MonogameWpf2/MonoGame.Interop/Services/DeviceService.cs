@@ -46,10 +46,10 @@
 using System;
 using System.Windows;
 using System.Windows.Interop;
-using MonogameWpf2.Util;
+using MonoGame.Interop.Util;
 using SharpDX.Direct3D9;
 
-namespace MonogameWpf2.Services
+namespace MonoGame.Interop.Services
 {
 	internal static class DeviceService
 	{

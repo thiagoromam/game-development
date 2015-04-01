@@ -9,12 +9,12 @@
 using System;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonogameWpf2.Arguments
+namespace MonoGame.Interop.Arguments
 {
     /// <summary>
     /// Arguments used for Device related events.
     /// </summary>
-    public class GraphicsDeviceEventArgs : EventArgs
+    internal class GraphicsDeviceEventArgs : EventArgs
     {
         /// <summary>
         /// Gets the GraphicsDevice.
