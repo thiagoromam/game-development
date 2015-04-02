@@ -17,7 +17,6 @@ namespace MonoGame.Interop.Module
         private TimeSpan _accumulatedElapsedTime;
         private long _previousTicks;
         private int _updateFrameLag;
-        private bool _runLoop;
 
         public GameUpdater(Action<GameTime> updateMethod, Action requestDraw)
         {
@@ -28,28 +27,33 @@ namespace MonoGame.Interop.Module
             _gameTime = new GameTime();
         }
 
+        public bool IsRunning { get; private set; }
         public bool Drawing { get; set; }
 
         public void Start()
         {
-            _runLoop = true;
+            IsRunning = true;
             _gameTimer = Stopwatch.StartNew();
 
             Task.Factory.StartNew(RunLoop);
         }
-        public void Finish()
+        public void Stop()
         {
-            _runLoop = false;
+            IsRunning = false;
+            _gameTimer.Stop();
         }
 
         private void RunLoop()
         {
-            while (_runLoop)
+            while (IsRunning)
                 Tick();
         }
         private void Tick()
         {
         RetryTick:
+
+            if (!IsRunning)
+                return;
 
             var currentTicks = _gameTimer.Elapsed.Ticks;
             _accumulatedElapsedTime += TimeSpan.FromTicks(currentTicks - _previousTicks);
@@ -72,6 +76,9 @@ namespace MonoGame.Interop.Module
             // Perform as many full fixed length time steps as we can.
             while (_accumulatedElapsedTime >= _targetElapsedTime)
             {
+                if (!IsRunning)
+                    return;
+
                 _gameTime.TotalGameTime += _targetElapsedTime;
                 _accumulatedElapsedTime -= _targetElapsedTime;
                 ++stepCount;
@@ -96,7 +103,11 @@ namespace MonoGame.Interop.Module
 
             _gameTime.ElapsedGameTime = TimeSpan.FromTicks(_targetElapsedTime.Ticks * stepCount);
 
-            while (Drawing) { }
+            while (Drawing)
+            {
+                if (!IsRunning)
+                    return;
+            }
             Drawing = true;
             _requestDraw();
         }

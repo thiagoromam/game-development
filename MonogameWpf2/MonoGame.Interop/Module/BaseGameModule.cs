@@ -32,6 +32,10 @@ namespace MonoGame.Interop.Module
             get { return _drawingSurface.Height; }
             set { _drawingSurface.Height = value; }
         }
+        bool IInternalGameModule.IsRunning
+        {
+            get { return _updater.IsRunning; }
+        }
 
         void IInternalGameModule.Prepare(DrawingSurface drawingSurface, IServiceProvider provider)
         {
@@ -49,6 +53,10 @@ namespace MonoGame.Interop.Module
         {
             Draw();
             _updater.Drawing = false;
+        }
+        void IInternalGameModule.Stop()
+        {
+            _updater.Stop();
         }
 
         public virtual void Initialize() { }

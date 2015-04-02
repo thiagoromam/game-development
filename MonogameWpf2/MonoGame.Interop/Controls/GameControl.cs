@@ -41,6 +41,9 @@ namespace MonoGame.Interop.Controls
             _internalModule = (IInternalGameModule)GameModule;
 
             _drawingSurface = new DrawingSurface();
+            _drawingSurface.Loaded += OnDrawingSurfaceLoaded;
+            _drawingSurface.Unloaded += OnDrawingSurfaceUnloaded;
+
             _drawingSurface.LoadContent += OnLoadContent;
             _drawingSurface.Draw += OnDraw;
             _drawingSurface.MouseMove += OnMouseMove;
@@ -48,6 +51,17 @@ namespace MonoGame.Interop.Controls
 
             KeyDown += OnKeyDown;
             Content = _drawingSurface;
+        }
+
+        private void OnDrawingSurfaceLoaded(object sender, RoutedEventArgs e)
+        {
+            if (!_internalModule.IsRunning)
+                _internalModule.Run();
+        }
+        private void OnDrawingSurfaceUnloaded(object sender, RoutedEventArgs e)
+        {
+            if (_internalModule.IsRunning)
+                _internalModule.Stop();
         }
 
         private void OnLoadContent(object sender, GraphicsDeviceEventArgs e)
