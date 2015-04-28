@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParallaxTest", "ParallaxTest\ParallaxTest\ParallaxTest.csproj", "{18F86CC4-A83F-4DF0-92F3-2380F1168A5B}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "ParallaxTestContent", "ParallaxTest\ParallaxTestContent\ParallaxTestContent.contentproj", "{FD7C9F26-A91E-4E0F-97AC-738BBCA410F1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{18F86CC4-A83F-4DF0-92F3-2380F1168A5B}.Debug|x86.ActiveCfg = Debug|x86
+		{18F86CC4-A83F-4DF0-92F3-2380F1168A5B}.Debug|x86.Build.0 = Debug|x86
+		{18F86CC4-A83F-4DF0-92F3-2380F1168A5B}.Release|x86.ActiveCfg = Release|x86
+		{18F86CC4-A83F-4DF0-92F3-2380F1168A5B}.Release|x86.Build.0 = Release|x86
+		{FD7C9F26-A91E-4E0F-97AC-738BBCA410F1}.Debug|x86.ActiveCfg = Debug|x86
+		{FD7C9F26-A91E-4E0F-97AC-738BBCA410F1}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
